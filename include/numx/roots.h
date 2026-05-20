@@ -34,12 +34,11 @@
  *         NUMX_ERR_NO_CONVERGE if NUMX_MAX_ITER exceeded before |b-a| < tol.
  */
 numx_status_t numx_root_bisect(
-    numx_func1d_t  f,
-    numx_real_t    a,
-    numx_real_t    b,
-    numx_real_t    tol,
-    numx_real_t   *root
-);
+    numx_func1d_t f,
+    numx_real_t a,
+    numx_real_t b,
+    numx_real_t tol,
+    numx_real_t *root);
 
 /**
  * @brief Find a root of f near x0 via Newton-Raphson.
@@ -63,12 +62,11 @@ numx_status_t numx_root_bisect(
  *         NUMX_ERR_NO_CONVERGE if NUMX_MAX_ITER exceeded before |f(x)| < tol.
  */
 numx_status_t numx_root_newton(
-    numx_func1d_t  f,
-    numx_func1d_t  df,
-    numx_real_t    x0,
-    numx_real_t    tol,
-    numx_real_t   *root
-);
+    numx_func1d_t f,
+    numx_func1d_t df,
+    numx_real_t x0,
+    numx_real_t tol,
+    numx_real_t *root);
 
 /**
  * @brief Find a root of f in [a, b] via Brent's method.
@@ -89,11 +87,10 @@ numx_status_t numx_root_newton(
  *         NUMX_ERR_NO_CONVERGE if NUMX_MAX_ITER exceeded.
  */
 numx_status_t numx_root_brent(
-    numx_func1d_t  f,
-    numx_real_t    a,
-    numx_real_t    b,
-    numx_real_t    tol,
-    numx_real_t   *root
-);
+    numx_func1d_t f,
+    numx_real_t a,
+    numx_real_t b,
+    numx_real_t tol,
+    numx_real_t *root);
 
 #endif /* NUMX_ROOTS_H */

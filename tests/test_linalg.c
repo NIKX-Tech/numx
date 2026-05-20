@@ -13,8 +13,8 @@
 #include "numx/numx_types.h"
 #include "numx/linalg.h"
 
-#define TOL     1e-5f
-#define TOL_LU  1e-4f   /* slightly looser for multi-step LU solve */
+#define TOL 1e-5f
+#define TOL_LU 1e-4f /* slightly looser for multi-step LU solve */
 
 /* ════════════════════════════════════════════════════════════════════
  *  numx_vec_dot
@@ -27,7 +27,7 @@ void test_vec_dot_known(void)
     numx_real_t b[] = {4.0f, 5.0f, 6.0f};
     numx_real_t r;
     TEST_ASSERT_EQUAL(NUMX_OK, numx_vec_dot(a, b, 3, &r));
-    TEST_ASSERT_FLOAT_WITHIN(TOL, 32.0f, r);  /* 4+10+18 */
+    TEST_ASSERT_FLOAT_WITHIN(TOL, 32.0f, r); /* 4+10+18 */
 }
 
 void test_vec_dot_orthogonal(void)
@@ -212,7 +212,7 @@ void test_vec_cross3_alias_safe(void)
     /* result may alias a — must not corrupt intermediate values */
     numx_real_t a[] = {1.0f, 0.0f, 0.0f};
     numx_real_t b[] = {0.0f, 1.0f, 0.0f};
-    numx_vec_cross3(a, b, a);  /* write result into a */
+    numx_vec_cross3(a, b, a); /* write result into a */
     TEST_ASSERT_FLOAT_WITHIN(TOL, 0.0f, a[0]);
     TEST_ASSERT_FLOAT_WITHIN(TOL, 0.0f, a[1]);
     TEST_ASSERT_FLOAT_WITHIN(TOL, 1.0f, a[2]);
@@ -232,10 +232,10 @@ void test_vec_cross3_null(void)
 /* L1 */
 void test_mat_mul_2x2(void)
 {
-    numx_real_t A[] = {1.0f,2.0f, 3.0f,4.0f};
-    numx_real_t B[] = {5.0f,6.0f, 7.0f,8.0f};
+    numx_real_t A[] = {1.0f, 2.0f, 3.0f, 4.0f};
+    numx_real_t B[] = {5.0f, 6.0f, 7.0f, 8.0f};
     numx_real_t C[4];
-    TEST_ASSERT_EQUAL(NUMX_OK, numx_mat_mul(A,2,2, B,2,2, C));
+    TEST_ASSERT_EQUAL(NUMX_OK, numx_mat_mul(A, 2, 2, B, 2, 2, C));
     TEST_ASSERT_FLOAT_WITHIN(TOL, 19.0f, C[0]);
     TEST_ASSERT_FLOAT_WITHIN(TOL, 22.0f, C[1]);
     TEST_ASSERT_FLOAT_WITHIN(TOL, 43.0f, C[2]);
@@ -244,12 +244,12 @@ void test_mat_mul_2x2(void)
 
 void test_mat_mul_2x3_times_3x2(void)
 {
-    numx_real_t A[] = {1.0f,2.0f,3.0f, 4.0f,5.0f,6.0f};
-    numx_real_t B[] = {7.0f,8.0f, 9.0f,10.0f, 11.0f,12.0f};
+    numx_real_t A[] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f};
+    numx_real_t B[] = {7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f};
     numx_real_t C[4];
-    TEST_ASSERT_EQUAL(NUMX_OK, numx_mat_mul(A,2,3, B,3,2, C));
-    TEST_ASSERT_FLOAT_WITHIN(TOL,  58.0f, C[0]);
-    TEST_ASSERT_FLOAT_WITHIN(TOL,  64.0f, C[1]);
+    TEST_ASSERT_EQUAL(NUMX_OK, numx_mat_mul(A, 2, 3, B, 3, 2, C));
+    TEST_ASSERT_FLOAT_WITHIN(TOL, 58.0f, C[0]);
+    TEST_ASSERT_FLOAT_WITHIN(TOL, 64.0f, C[1]);
     TEST_ASSERT_FLOAT_WITHIN(TOL, 139.0f, C[2]);
     TEST_ASSERT_FLOAT_WITHIN(TOL, 154.0f, C[3]);
 }
@@ -257,10 +257,10 @@ void test_mat_mul_2x3_times_3x2(void)
 /* L2 */
 void test_mat_mul_identity(void)
 {
-    numx_real_t A[] = {1.0f,2.0f, 3.0f,4.0f};
-    numx_real_t I[] = {1.0f,0.0f, 0.0f,1.0f};
+    numx_real_t A[] = {1.0f, 2.0f, 3.0f, 4.0f};
+    numx_real_t I[] = {1.0f, 0.0f, 0.0f, 1.0f};
     numx_real_t C[4];
-    numx_mat_mul(A,2,2, I,2,2, C);
+    numx_mat_mul(A, 2, 2, I, 2, 2, C);
     TEST_ASSERT_FLOAT_WITHIN(TOL, A[0], C[0]);
     TEST_ASSERT_FLOAT_WITHIN(TOL, A[1], C[1]);
     TEST_ASSERT_FLOAT_WITHIN(TOL, A[2], C[2]);
@@ -272,13 +272,13 @@ void test_mat_mul_dim_mismatch(void)
 {
     numx_real_t A[6], B[4], C[4];
     /* ca=3 != rb=2 */
-    TEST_ASSERT_EQUAL(NUMX_ERR_INVALID_ARG, numx_mat_mul(A,2,3, B,2,2, C));
+    TEST_ASSERT_EQUAL(NUMX_ERR_INVALID_ARG, numx_mat_mul(A, 2, 3, B, 2, 2, C));
 }
 
 void test_mat_mul_null_A(void)
 {
     numx_real_t B[4], C[4];
-    TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_mat_mul(NULL,2,2, B,2,2, C));
+    TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_mat_mul(NULL, 2, 2, B, 2, 2, C));
 }
 
 /* ════════════════════════════════════════════════════════════════════
@@ -288,7 +288,7 @@ void test_mat_mul_null_A(void)
 /* L1 */
 void test_mat_transpose_2x3(void)
 {
-    numx_real_t A[]  = {1.0f,2.0f,3.0f, 4.0f,5.0f,6.0f};
+    numx_real_t A[] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f};
     numx_real_t AT[6];
     TEST_ASSERT_EQUAL(NUMX_OK, numx_mat_transpose(A, 2, 3, AT));
     /* AT is 3x2: [[1,4],[2,5],[3,6]] */
@@ -303,10 +303,10 @@ void test_mat_transpose_2x3(void)
 /* L2 */
 void test_mat_transpose_double_is_identity(void)
 {
-    numx_real_t A[]   = {1.0f,2.0f,3.0f, 4.0f,5.0f,6.0f};
+    numx_real_t A[] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f};
     numx_real_t AT[6], ATT[6];
     numx_size_t i;
-    numx_mat_transpose(A,  2, 3, AT);
+    numx_mat_transpose(A, 2, 3, AT);
     numx_mat_transpose(AT, 3, 2, ATT);
     for (i = 0; i < 6; i++)
         TEST_ASSERT_FLOAT_WITHIN(TOL, A[i], ATT[i]);
@@ -314,7 +314,7 @@ void test_mat_transpose_double_is_identity(void)
 
 void test_mat_transpose_sq_inplace(void)
 {
-    numx_real_t A[] = {1.0f,2.0f, 3.0f,4.0f};
+    numx_real_t A[] = {1.0f, 2.0f, 3.0f, 4.0f};
     TEST_ASSERT_EQUAL(NUMX_OK, numx_mat_transpose_sq(A, 2));
     TEST_ASSERT_FLOAT_WITHIN(TOL, 1.0f, A[0]);
     TEST_ASSERT_FLOAT_WITHIN(TOL, 3.0f, A[1]);
@@ -324,10 +324,11 @@ void test_mat_transpose_sq_inplace(void)
 
 void test_mat_transpose_sq_twice_is_identity(void)
 {
-    numx_real_t A[] = {1.0f,2.0f,3.0f, 4.0f,5.0f,6.0f, 7.0f,8.0f,9.0f};
+    numx_real_t A[] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f};
     numx_real_t orig[9];
     numx_size_t i;
-    for (i = 0; i < 9; i++) orig[i] = A[i];
+    for (i = 0; i < 9; i++)
+        orig[i] = A[i];
     numx_mat_transpose_sq(A, 3);
     numx_mat_transpose_sq(A, 3);
     for (i = 0; i < 9; i++)
@@ -362,7 +363,7 @@ void test_mat_det_1x1(void)
 void test_mat_det_2x2(void)
 {
     /* det([[1,2],[3,4]]) = 4-6 = -2 */
-    numx_real_t A[] = {1.0f,2.0f, 3.0f,4.0f};
+    numx_real_t A[] = {1.0f, 2.0f, 3.0f, 4.0f};
     numx_real_t r;
     TEST_ASSERT_EQUAL(NUMX_OK, numx_mat_det(A, 2, &r));
     TEST_ASSERT_FLOAT_WITHIN(TOL, -2.0f, r);
@@ -371,7 +372,7 @@ void test_mat_det_2x2(void)
 void test_mat_det_3x3(void)
 {
     /* det([[1,2,3],[4,5,6],[7,8,10]]) = -3 */
-    numx_real_t A[] = {1.0f,2.0f,3.0f, 4.0f,5.0f,6.0f, 7.0f,8.0f,10.0f};
+    numx_real_t A[] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 10.0f};
     numx_real_t r;
     TEST_ASSERT_EQUAL(NUMX_OK, numx_mat_det(A, 3, &r));
     TEST_ASSERT_FLOAT_WITHIN(TOL, -3.0f, r);
@@ -380,7 +381,7 @@ void test_mat_det_3x3(void)
 /* L3 */
 void test_mat_det_identity_is_one(void)
 {
-    numx_real_t I[] = {1.0f,0.0f,0.0f, 0.0f,1.0f,0.0f, 0.0f,0.0f,1.0f};
+    numx_real_t I[] = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
     numx_real_t r;
     numx_mat_det(I, 3, &r);
     TEST_ASSERT_FLOAT_WITHIN(TOL, 1.0f, r);
@@ -389,7 +390,7 @@ void test_mat_det_identity_is_one(void)
 void test_mat_det_singular_is_zero(void)
 {
     /* Row 1 = 2 * Row 0, rank 1. */
-    numx_real_t A[] = {1.0f,2.0f, 2.0f,4.0f};
+    numx_real_t A[] = {1.0f, 2.0f, 2.0f, 4.0f};
     numx_real_t r;
     TEST_ASSERT_EQUAL(NUMX_OK, numx_mat_det(A, 2, &r));
     TEST_ASSERT_FLOAT_WITHIN(TOL, 0.0f, r);
@@ -416,27 +417,27 @@ void test_mat_det_null_result(void)
 void test_lu_solve_3x3_textbook(void)
 {
     /* A * x = b, solution x = [2, 3, -1] */
-    numx_real_t A[]  = { 2.0f, 1.0f,-1.0f,
-                        -3.0f,-1.0f, 2.0f,
-                        -2.0f, 1.0f, 2.0f};
-    numx_real_t b[]  = { 8.0f,-11.0f,-3.0f};
+    numx_real_t A[] = {2.0f, 1.0f, -1.0f,
+                       -3.0f, -1.0f, 2.0f,
+                       -2.0f, 1.0f, 2.0f};
+    numx_real_t b[] = {8.0f, -11.0f, -3.0f};
     numx_real_t LU[9];
-    numx_idx_t  pivot[3];
+    numx_idx_t pivot[3];
     numx_real_t x[3];
     TEST_ASSERT_EQUAL(NUMX_OK, numx_lu_decompose(A, 3, LU, pivot));
     TEST_ASSERT_EQUAL(NUMX_OK, numx_lu_solve(LU, pivot, 3, b, x));
-    TEST_ASSERT_FLOAT_WITHIN(TOL_LU,  2.0f, x[0]);
-    TEST_ASSERT_FLOAT_WITHIN(TOL_LU,  3.0f, x[1]);
+    TEST_ASSERT_FLOAT_WITHIN(TOL_LU, 2.0f, x[0]);
+    TEST_ASSERT_FLOAT_WITHIN(TOL_LU, 3.0f, x[1]);
     TEST_ASSERT_FLOAT_WITHIN(TOL_LU, -1.0f, x[2]);
 }
 
 void test_lu_solve_identity_system(void)
 {
     /* I * x = b => x = b */
-    numx_real_t A[]  = {1.0f,0.0f, 0.0f,1.0f};
-    numx_real_t b[]  = {5.0f, 7.0f};
+    numx_real_t A[] = {1.0f, 0.0f, 0.0f, 1.0f};
+    numx_real_t b[] = {5.0f, 7.0f};
     numx_real_t LU[4];
-    numx_idx_t  pivot[2];
+    numx_idx_t pivot[2];
     numx_real_t x[2];
     numx_lu_decompose(A, 2, LU, pivot);
     numx_lu_solve(LU, pivot, 2, b, x);
@@ -448,12 +449,12 @@ void test_lu_solve_identity_system(void)
 void test_lu_solve_residual_is_zero(void)
 {
     /* Verify A * x - b = 0 element-wise after solve. */
-    numx_real_t A[]  = { 2.0f, 1.0f,-1.0f,
-                        -3.0f,-1.0f, 2.0f,
-                        -2.0f, 1.0f, 2.0f};
-    numx_real_t b[]  = { 8.0f,-11.0f,-3.0f};
+    numx_real_t A[] = {2.0f, 1.0f, -1.0f,
+                       -3.0f, -1.0f, 2.0f,
+                       -2.0f, 1.0f, 2.0f};
+    numx_real_t b[] = {8.0f, -11.0f, -3.0f};
     numx_real_t LU[9];
-    numx_idx_t  pivot[3];
+    numx_idx_t pivot[3];
     numx_real_t x[3], Ax[3];
     numx_lu_decompose(A, 3, LU, pivot);
     numx_lu_solve(LU, pivot, 3, b, x);
@@ -467,9 +468,9 @@ void test_lu_solve_residual_is_zero(void)
 void test_lu_decompose_singular(void)
 {
     /* Rank-1 matrix — columns linearly dependent. */
-    numx_real_t A[]  = {1.0f,2.0f, 2.0f,4.0f};
+    numx_real_t A[] = {1.0f, 2.0f, 2.0f, 4.0f};
     numx_real_t LU[4];
-    numx_idx_t  pivot[2];
+    numx_idx_t pivot[2];
     TEST_ASSERT_EQUAL(NUMX_ERR_SINGULAR, numx_lu_decompose(A, 2, LU, pivot));
 }
 
@@ -477,29 +478,29 @@ void test_lu_decompose_singular(void)
 void test_lu_decompose_null_A(void)
 {
     numx_real_t LU[4];
-    numx_idx_t  pivot[2];
+    numx_idx_t pivot[2];
     TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_lu_decompose(NULL, 2, LU, pivot));
 }
 
 void test_lu_decompose_null_LU(void)
 {
     numx_real_t A[4];
-    numx_idx_t  pivot[2];
+    numx_idx_t pivot[2];
     TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_lu_decompose(A, 2, NULL, pivot));
 }
 
 void test_lu_solve_null_LU(void)
 {
     numx_real_t b[2], x[2];
-    numx_idx_t  pivot[2] = {0,1};
+    numx_idx_t pivot[2] = {0, 1};
     TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_lu_solve(NULL, pivot, 2, b, x));
 }
 
 void test_lu_solve_null_x(void)
 {
-    numx_real_t LU[4] = {1,0,0,1};
-    numx_real_t b[2]  = {1,1};
-    numx_idx_t  pivot[2] = {0,1};
+    numx_real_t LU[4] = {1, 0, 0, 1};
+    numx_real_t b[2] = {1, 1};
+    numx_idx_t pivot[2] = {0, 1};
     TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_lu_solve(LU, pivot, 2, b, NULL));
 }
 

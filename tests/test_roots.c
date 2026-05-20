@@ -13,27 +13,31 @@
 #include "numx/numx_types.h"
 #include "numx/roots.h"
 
-#define TOL      1e-5f
-#define ROOT_TOL 1e-5f   /* tolerance passed to solvers */
+#define TOL 1e-5f
+#define ROOT_TOL 1e-5f /* tolerance passed to solvers */
 
 /* ── Test functions ────────────────────────────────────────────────── */
 
 /* f(x) = x - 2,  root at x = 2 */
-static numx_real_t f_linear(numx_real_t x)  { return x - (numx_real_t)2.0; }
-static numx_real_t df_linear(numx_real_t x) { (void)x; return (numx_real_t)1.0; }
+static numx_real_t f_linear(numx_real_t x) { return x - (numx_real_t)2.0; }
+static numx_real_t df_linear(numx_real_t x)
+{
+    (void)x;
+    return (numx_real_t)1.0;
+}
 
 /* f(x) = x^2 - 4,  roots at +/-2 */
-static numx_real_t f_quadratic(numx_real_t x)  { return x*x - (numx_real_t)4.0; }
+static numx_real_t f_quadratic(numx_real_t x) { return x * x - (numx_real_t)4.0; }
 static numx_real_t df_quadratic(numx_real_t x) { return (numx_real_t)2.0 * x; }
 
 /* f(x) = x^3 - x,  roots at -1, 0, 1 */
 static numx_real_t f_cubic(numx_real_t x)
 {
-    return x*x*x - x;
+    return x * x * x - x;
 }
 static numx_real_t df_cubic(numx_real_t x)
 {
-    return (numx_real_t)3.0 * x*x - (numx_real_t)1.0;
+    return (numx_real_t)3.0 * x * x - (numx_real_t)1.0;
 }
 
 /* f(x) = (x-1)^2 — touches zero; derivative is zero at root */
@@ -79,7 +83,8 @@ void test_bisect_residual_near_zero(void)
     numx_real_t root;
     numx_root_bisect(f_cubic, 0.5f, 2.0f, ROOT_TOL, &root);
     numx_real_t residual = f_cubic(root);
-    if (residual < 0.0f) residual = -residual;
+    if (residual < 0.0f)
+        residual = -residual;
     TEST_ASSERT_TRUE(residual < 1e-3f);
 }
 
@@ -153,7 +158,8 @@ void test_newton_residual_near_zero(void)
     numx_real_t root;
     numx_root_newton(f_cubic, df_cubic, 2.0f, ROOT_TOL, &root);
     numx_real_t res = f_cubic(root);
-    if (res < 0.0f) res = -res;
+    if (res < 0.0f)
+        res = -res;
     TEST_ASSERT_TRUE(res < 1e-3f);
 }
 
@@ -187,7 +193,7 @@ void test_newton_zero_derivative(void)
     /* (x-1)^2: derivative is zero at the double root x=1 */
     numx_real_t root;
     numx_status_t s = numx_root_newton(f_double_root, df_double_root,
-                                        1.0f, ROOT_TOL, &root);
+                                       1.0f, ROOT_TOL, &root);
     /* Either converges (|f| < tol) or returns SINGULAR — both are acceptable */
     TEST_ASSERT_TRUE(s == NUMX_OK || s == NUMX_ERR_SINGULAR);
 }
@@ -232,7 +238,8 @@ void test_brent_residual_near_zero(void)
     numx_real_t root;
     numx_root_brent(f_cubic, -1.5f, -0.5f, ROOT_TOL, &root);
     numx_real_t res = f_cubic(root);
-    if (res < 0.0f) res = -res;
+    if (res < 0.0f)
+        res = -res;
     TEST_ASSERT_TRUE(res < 1e-3f);
 }
 

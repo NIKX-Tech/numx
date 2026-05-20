@@ -16,8 +16,8 @@
 /* float32 round-off dominates at small h; forward O(h) error with h=1e-3
  * and degree-3 f gives ~6e-3 truncation.  Central/Richardson are limited
  * to ~5e-4 by cancellation noise at float32 precision. */
-#define TOL_FWD  1e-2f
-#define TOL_CTR  1e-3f
+#define TOL_FWD 1e-2f
+#define TOL_CTR 1e-3f
 #define TOL_RICH 1e-3f
 
 static const numx_real_t H = 1e-3f;
@@ -25,13 +25,17 @@ static const numx_real_t H = 1e-3f;
 /* ── Test functions ────────────────────────────────────────────────── */
 
 /* f(x) = x^2,  f'(x) = 2x */
-static numx_real_t f_quad(numx_real_t x)  { return x * x; }
+static numx_real_t f_quad(numx_real_t x) { return x * x; }
 
 /* f(x) = x^3,  f'(x) = 3x^2 */
 static numx_real_t f_cubic(numx_real_t x) { return x * x * x; }
 
 /* f(x) = 1  (constant),  f'(x) = 0 */
-static numx_real_t f_const(numx_real_t x) { (void)x; return (numx_real_t)1.0; }
+static numx_real_t f_const(numx_real_t x)
+{
+    (void)x;
+    return (numx_real_t)1.0;
+}
 
 /* f(x) = x  (linear),  f'(x) = 1 */
 static numx_real_t f_linear(numx_real_t x) { return x; }
@@ -83,7 +87,7 @@ void test_fwd_null(void)
 void test_fwd_nonpositive_h(void)
 {
     numx_real_t r;
-    TEST_ASSERT_EQUAL(NUMX_ERR_INVALID_ARG, numx_diff_forward(f_quad, 1.0f,  0.0f, &r));
+    TEST_ASSERT_EQUAL(NUMX_ERR_INVALID_ARG, numx_diff_forward(f_quad, 1.0f, 0.0f, &r));
     TEST_ASSERT_EQUAL(NUMX_ERR_INVALID_ARG, numx_diff_forward(f_quad, 1.0f, -1.0f, &r));
 }
 
@@ -173,8 +177,12 @@ void test_richardson_more_accurate_than_central(void)
     numx_real_t h_large = 0.1f;
     numx_diff_central(f_cubic, 2.0f, h_large, &rc);
     numx_diff_richardson(f_cubic, 2.0f, h_large, &rr);
-    numx_real_t err_c = rc - 12.0f; if (err_c < 0.0f) err_c = -err_c;
-    numx_real_t err_r = rr - 12.0f; if (err_r < 0.0f) err_r = -err_r;
+    numx_real_t err_c = rc - 12.0f;
+    if (err_c < 0.0f)
+        err_c = -err_c;
+    numx_real_t err_r = rr - 12.0f;
+    if (err_r < 0.0f)
+        err_r = -err_r;
     TEST_ASSERT_TRUE(err_r < err_c);
 }
 
@@ -196,7 +204,7 @@ void test_richardson_null(void)
 void test_richardson_nonpositive_h(void)
 {
     numx_real_t r;
-    TEST_ASSERT_EQUAL(NUMX_ERR_INVALID_ARG, numx_diff_richardson(f_quad, 1.0f, 0.0f,  &r));
+    TEST_ASSERT_EQUAL(NUMX_ERR_INVALID_ARG, numx_diff_richardson(f_quad, 1.0f, 0.0f, &r));
     TEST_ASSERT_EQUAL(NUMX_ERR_INVALID_ARG, numx_diff_richardson(f_quad, 1.0f, -1e-3f, &r));
 }
 

@@ -120,7 +120,7 @@ void test_stats_variance_sample_ge_population(void)
     numx_real_t a[] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
     numx_real_t rpop, rsamp;
     numx_stats_variance(a, 5, NUMX_VAR_POPULATION, &rpop);
-    numx_stats_variance(a, 5, NUMX_VAR_SAMPLE,     &rsamp);
+    numx_stats_variance(a, 5, NUMX_VAR_SAMPLE, &rsamp);
     TEST_ASSERT_TRUE(rsamp > rpop);
 }
 
@@ -247,14 +247,14 @@ void test_stats_percentile_null(void)
     numx_real_t a[] = {1.0f, 2.0f};
     numx_real_t r;
     TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_stats_percentile(NULL, 2, 50.0f, &r));
-    TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_stats_percentile(a,    2, 50.0f, NULL));
+    TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_stats_percentile(a, 2, 50.0f, NULL));
 }
 
 void test_stats_percentile_out_of_range(void)
 {
     numx_real_t a[] = {1.0f, 2.0f, 3.0f};
     numx_real_t r;
-    TEST_ASSERT_EQUAL(NUMX_ERR_INVALID_ARG, numx_stats_percentile(a, 3, -1.0f,  &r));
+    TEST_ASSERT_EQUAL(NUMX_ERR_INVALID_ARG, numx_stats_percentile(a, 3, -1.0f, &r));
     TEST_ASSERT_EQUAL(NUMX_ERR_INVALID_ARG, numx_stats_percentile(a, 3, 101.0f, &r));
 }
 

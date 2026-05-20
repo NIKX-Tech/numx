@@ -33,7 +33,7 @@ void numx_test_ode(void);
 /* void numx_test_sketch(void);             */
 /* void numx_test_ntt(void);                */
 
-void setUp(void)    {}
+void setUp(void) {}
 void tearDown(void) {}
 
 int main(void)

@@ -13,14 +13,18 @@
 #include "numx/numx_types.h"
 #include "numx/interpolate.h"
 
-#define TOL      1e-4f
+#define TOL 1e-4f
 #define TOL_CHEB 1e-4f
 
 /* ── Helper for Chebyshev tests ────────────────────────────────────── */
 
-static numx_real_t f_quad(numx_real_t x)   { return x * x; }
+static numx_real_t f_quad(numx_real_t x) { return x * x; }
 static numx_real_t f_linear(numx_real_t x) { return x; }
-static numx_real_t f_const(numx_real_t x)  { (void)x; return (numx_real_t)3.0; }
+static numx_real_t f_const(numx_real_t x)
+{
+    (void)x;
+    return (numx_real_t)3.0;
+}
 
 /* ════════════════════════════════════════════════════════════════════
  *  numx_interp_linear
@@ -33,7 +37,7 @@ void test_linear_midpoint_known(void)
     numx_real_t ys[] = {0.0f, 1.0f, 4.0f};
     numx_real_t r;
     TEST_ASSERT_EQUAL(NUMX_OK, numx_interp_linear(xs, ys, 3, 0.5f, &r));
-    TEST_ASSERT_FLOAT_WITHIN(TOL, 0.5f, r);  /* linear between 0 and 1 */
+    TEST_ASSERT_FLOAT_WITHIN(TOL, 0.5f, r); /* linear between 0 and 1 */
 }
 
 void test_linear_second_interval(void)
@@ -53,7 +57,8 @@ void test_linear_at_knots(void)
     numx_real_t ys[] = {1.0f, 3.0f, 2.0f, 5.0f};
     numx_real_t r;
     numx_size_t i;
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < 4; i++)
+    {
         numx_interp_linear(xs, ys, 4, xs[i], &r);
         TEST_ASSERT_FLOAT_WITHIN(TOL, ys[i], r);
     }
@@ -144,7 +149,8 @@ void test_spline_at_knots(void)
     numx_real_t m[5], r;
     numx_size_t i;
     numx_interp_spline_precompute(xs, ys, 5, m);
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < 5; i++)
+    {
         numx_interp_spline_eval(xs, ys, m, 5, xs[i], &r);
         TEST_ASSERT_FLOAT_WITHIN(TOL, ys[i], r);
     }

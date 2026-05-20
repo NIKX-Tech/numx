@@ -15,9 +15,10 @@
 
 /* ── Variance type ─────────────────────────────────────────────────── */
 
-typedef enum {
-    NUMX_VAR_POPULATION = 0,   /* divide by n     */
-    NUMX_VAR_SAMPLE     = 1    /* divide by n - 1 */
+typedef enum
+{
+    NUMX_VAR_POPULATION = 0, /* divide by n     */
+    NUMX_VAR_SAMPLE = 1      /* divide by n - 1 */
 } numx_var_type_t;
 
 /* ── Functions ─────────────────────────────────────────────────────── */
@@ -38,9 +39,8 @@ typedef enum {
  */
 numx_status_t numx_stats_mean(
     const numx_real_t *a,
-    numx_size_t        n,
-    numx_real_t       *result
-);
+    numx_size_t n,
+    numx_real_t *result);
 
 /**
  * @brief Compute population or sample variance using Welford's algorithm.
@@ -63,10 +63,9 @@ numx_status_t numx_stats_mean(
  */
 numx_status_t numx_stats_variance(
     const numx_real_t *a,
-    numx_size_t        n,
-    numx_var_type_t    type,
-    numx_real_t       *result
-);
+    numx_size_t n,
+    numx_var_type_t type,
+    numx_real_t *result);
 
 /**
  * @brief Compute the median of a vector.
@@ -88,9 +87,8 @@ numx_status_t numx_stats_variance(
  */
 numx_status_t numx_stats_median(
     const numx_real_t *a,
-    numx_size_t        n,
-    numx_real_t       *result
-);
+    numx_size_t n,
+    numx_real_t *result);
 
 /**
  * @brief Compute the p-th percentile of a vector (0 <= p <= 100).
@@ -109,9 +107,8 @@ numx_status_t numx_stats_median(
  */
 numx_status_t numx_stats_percentile(
     const numx_real_t *a,
-    numx_size_t        n,
-    numx_real_t        p,
-    numx_real_t       *result
-);
+    numx_size_t n,
+    numx_real_t p,
+    numx_real_t *result);
 
 #endif /* NUMX_STATS_H */

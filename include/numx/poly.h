@@ -34,10 +34,9 @@
  */
 numx_status_t numx_poly_eval(
     const numx_real_t *coeffs,
-    numx_size_t        degree,
-    numx_real_t        x,
-    numx_real_t       *result
-);
+    numx_size_t degree,
+    numx_real_t x,
+    numx_real_t *result);
 
 /**
  * @brief Find real roots of a polynomial using Newton-Raphson with deflation.
@@ -61,10 +60,9 @@ numx_status_t numx_poly_eval(
  */
 numx_status_t numx_poly_roots(
     const numx_real_t *coeffs,
-    numx_size_t        degree,
-    numx_real_t       *roots,
-    numx_size_t       *nroots,
-    numx_real_t        tol
-);
+    numx_size_t degree,
+    numx_real_t *roots,
+    numx_size_t *nroots,
+    numx_real_t tol);
 
 #endif /* NUMX_POLY_H */
