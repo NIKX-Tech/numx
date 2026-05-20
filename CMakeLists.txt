@@ -19,12 +19,13 @@ set(NUMX_SOURCES
     src/numx.c
     # Phase 1 — Foundation (add as implemented):
     src/linalg.c
-    # src/stats.c
-    # src/roots.c
-    # src/integrate.c
-    # src/differentiate.c
-    # src/interpolate.c
-    # src/ode.c
+    src/stats.c
+    src/roots.c
+    src/integrate.c
+    src/differentiate.c
+    src/interpolate.c
+    src/poly.c
+    src/ode.c
     # Phase 2 — Signal Processing:
     # src/signal.c
     # src/fft.c
@@ -47,12 +48,13 @@ set(TEST_SOURCES
     tests/unity/unity.c
     # Phase 1 tests (add as implemented):
     tests/test_linalg.c
-    # tests/test_stats.c
-    # tests/test_roots.c
-    # tests/test_integrate.c
-    # tests/test_differentiate.c
-    # tests/test_interpolate.c
-    # tests/test_ode.c
+    tests/test_stats.c
+    tests/test_roots.c
+    tests/test_integrate.c
+    tests/test_differentiate.c
+    tests/test_interpolate.c
+    tests/test_poly.c
+    tests/test_ode.c
     # Phase 2 tests:
     # tests/test_signal.c
     # tests/test_fft.c

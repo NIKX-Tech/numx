@@ -13,14 +13,15 @@
 
 #include "unity.h"
 
-/* Phase 1 suite declarations (uncomment as modules are added):      */
+/* Phase 1 suite declarations:                                        */
 void numx_test_linalg(void);
-/* void numx_test_stats(void);        */
-/* void numx_test_roots(void);        */
-/* void numx_test_integrate(void);    */
-/* void numx_test_differentiate(void);*/
-/* void numx_test_interpolate(void);  */
-/* void numx_test_ode(void);          */
+void numx_test_stats(void);
+void numx_test_roots(void);
+void numx_test_integrate(void);
+void numx_test_differentiate(void);
+void numx_test_interpolate(void);
+void numx_test_poly(void);
+void numx_test_ode(void);
 
 /* Phase 2 suite declarations:                                        */
 /* void numx_test_signal(void);       */
@@ -39,14 +40,15 @@ int main(void)
 {
     UNITY_BEGIN();
 
-    /* Phase 1 (uncomment as modules are added): */
+    /* Phase 1: */
     numx_test_linalg();
-    /* numx_test_stats();         */
-    /* numx_test_roots();         */
-    /* numx_test_integrate();     */
-    /* numx_test_differentiate(); */
-    /* numx_test_interpolate();   */
-    /* numx_test_ode();           */
+    numx_test_stats();
+    numx_test_roots();
+    numx_test_integrate();
+    numx_test_differentiate();
+    numx_test_interpolate();
+    numx_test_poly();
+    numx_test_ode();
 
     /* Phase 2: */
     /* numx_test_signal(); */

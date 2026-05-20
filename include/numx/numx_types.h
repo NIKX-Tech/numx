@@ -46,6 +46,11 @@ typedef enum {
     NUMX_ERR_NOT_IMPL    = -99   /* not yet implemented               */
 } numx_status_t;
 
+/* ── Shared function-pointer types ────────────────────────────────── */
+
+/* A 1-D real-valued function y = f(x). Used by roots, integrate, diff. */
+typedef numx_real_t (*numx_func1d_t)(numx_real_t x);
+
 /* ── Epsilon and limit constants ───────────────────────────────────── */
 
 #ifdef NUMX_USE_DOUBLE
