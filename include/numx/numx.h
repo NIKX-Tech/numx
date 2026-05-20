@@ -16,12 +16,13 @@
 
 /* Phase 1 — Foundation */
 #include "linalg.h"
-/* #include "stats.h"        */
-/* #include "roots.h"        */
-/* #include "integrate.h"    */
-/* #include "differentiate.h"*/
-/* #include "interpolate.h"  */
-/* #include "ode.h"          */
+#include "stats.h"
+#include "roots.h"
+#include "integrate.h"
+#include "differentiate.h"
+#include "interpolate.h"
+#include "poly.h"
+#include "ode.h"
 
 /* Phase 2 — Signal Processing */
 /* #include "signal.h"       */
