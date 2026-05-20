@@ -37,21 +37,22 @@ Every function is reentrant, allocation-free, and returns a typed status code. T
 
 ## Module status
 
-| Module | Functions | Status |
-|---|---|---|
-| **linalg** | dot, norm, cross, mat_mul, transpose, det, LU | 🔧 planned |
-| **stats** | mean, variance, median, percentile | 🔧 planned |
-| **roots** | bisect, newton, brent | 🔧 planned |
-| **integrate** | trap, simpson, gauss | 🔧 planned |
-| **differentiate** | forward, central, richardson | 🔧 planned |
-| **interpolate** | linear, cubic spline, chebyshev | 🔧 planned |
-| **ode** | rk4, rk45 (adaptive) | 🔧 planned |
-| **signal** | windows, FIR, IIR, convolve, correlate, peaks, EMA | 🔧 planned |
-| **fft** | Cooley-Tukey f32, Q15, IFFT | 🔧 planned |
-| **autodiff** | forward-mode (dual numbers), reverse-mode (static tape) | 🔧 planned |
-| **compressed_sensing** | OMP, ISTA | 🔧 planned |
-| **sketch** | randomized SVD (Halko-Martinsson-Tropp) | 🔧 planned |
-| **ntt** | Number Theoretic Transform (constant-time, Kyber/Dilithium params) | 🔧 planned |
+| Module | Functions | Docs | Status |
+|---|---|---|---|
+| **linalg** | dot, norm, cross, mat_mul, transpose, det, LU | [docs](docs/algorithms/linalg.md) | ✅ complete |
+| **stats** | mean, variance, median, percentile | [docs](docs/algorithms/stats.md) | ✅ complete |
+| **roots** | bisect, newton, brent | [docs](docs/algorithms/roots.md) | ✅ complete |
+| **integrate** | trap, simpson, gauss | [docs](docs/algorithms/integrate.md) | ✅ complete |
+| **differentiate** | forward, central, richardson | [docs](docs/algorithms/differentiate.md) | ✅ complete |
+| **interpolate** | linear, cubic spline, chebyshev | [docs](docs/algorithms/interpolate.md) | ✅ complete |
+| **poly** | eval (Horner), roots (Newton + deflation) | [docs](docs/algorithms/poly.md) | ✅ complete |
+| **ode** | rk4, rk45 (adaptive) | [docs](docs/algorithms/ode.md) | ✅ complete |
+| **signal** | windows, FIR, IIR, convolve, correlate, peaks, EMA | — | 🔧 planned |
+| **fft** | Cooley-Tukey f32, Q15, IFFT | — | 🔧 planned |
+| **autodiff** | forward-mode (dual numbers), reverse-mode (static tape) | — | 🔧 planned |
+| **compressed_sensing** | OMP, ISTA | — | 🔧 planned |
+| **sketch** | randomized SVD (Halko-Martinsson-Tropp) | — | 🔧 planned |
+| **ntt** | Number Theoretic Transform (constant-time, Kyber/Dilithium params) | — | 🔧 planned |
 
 ---
 
