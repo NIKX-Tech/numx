@@ -15,7 +15,7 @@
 /* ── Module headers (uncommented as each module is implemented) ────── */
 
 /* Phase 1 — Foundation */
-/* #include "linalg.h"       */
+#include "linalg.h"
 /* #include "stats.h"        */
 /* #include "roots.h"        */
 /* #include "integrate.h"    */

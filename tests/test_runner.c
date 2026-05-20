@@ -14,7 +14,7 @@
 #include "unity.h"
 
 /* Phase 1 suite declarations (uncomment as modules are added):      */
-/* void numx_test_linalg(void);       */
+void numx_test_linalg(void);
 /* void numx_test_stats(void);        */
 /* void numx_test_roots(void);        */
 /* void numx_test_integrate(void);    */
@@ -40,7 +40,7 @@ int main(void)
     UNITY_BEGIN();
 
     /* Phase 1 (uncomment as modules are added): */
-    /* numx_test_linalg();        */
+    numx_test_linalg();
     /* numx_test_stats();         */
     /* numx_test_roots();         */
     /* numx_test_integrate();     */

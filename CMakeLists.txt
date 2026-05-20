@@ -18,7 +18,7 @@ endif()
 set(NUMX_SOURCES
     src/numx.c
     # Phase 1 — Foundation (add as implemented):
-    # src/linalg.c
+    src/linalg.c
     # src/stats.c
     # src/roots.c
     # src/integrate.c
@@ -46,7 +46,7 @@ set(TEST_SOURCES
     tests/test_runner.c
     tests/unity/unity.c
     # Phase 1 tests (add as implemented):
-    # tests/test_linalg.c
+    tests/test_linalg.c
     # tests/test_stats.c
     # tests/test_roots.c
     # tests/test_integrate.c
