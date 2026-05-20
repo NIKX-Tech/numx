@@ -66,11 +66,15 @@
 /* ── Compressed sensing ────────────────────────────────────────────── */
 
 #ifndef NUMX_MAX_CS_MEASUREMENTS
-#define NUMX_MAX_CS_MEASUREMENTS 256
+#define NUMX_MAX_CS_MEASUREMENTS 256 /* max rows of A (measurements)      */
+#endif
+
+#ifndef NUMX_MAX_CS_SIGNAL_DIM
+#define NUMX_MAX_CS_SIGNAL_DIM 256   /* max cols of A (signal dimension)  */
 #endif
 
 #ifndef NUMX_MAX_CS_SPARSITY
-#define NUMX_MAX_CS_SPARSITY 32
+#define NUMX_MAX_CS_SPARSITY 32      /* max sparsity level for OMP        */
 #endif
 
 /* ── Automatic differentiation ─────────────────────────────────────── */

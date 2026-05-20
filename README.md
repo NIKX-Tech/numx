@@ -50,7 +50,7 @@ Every function is reentrant, allocation-free, and returns a typed status code. T
 | [**signal**](docs/algorithms/signal.md) | windows, FIR, IIR, convolve, correlate, peaks, EMA | ✅ complete |
 | [**fft**](docs/algorithms/fft.md) | Cooley-Tukey f32, Q15, IFFT, magnitude | ✅ complete |
 | [**autodiff**](docs/algorithms/autodiff.md) | forward-mode (dual numbers), reverse-mode (static tape) | ✅ complete |
-| **compressed_sensing** | OMP, ISTA | 🔧 planned |
+| [**compressed_sensing**](docs/algorithms/compressed_sensing.md) | OMP, ISTA | ✅ complete |
 | **sketch** | randomized SVD (Halko-Martinsson-Tropp) | 🔧 planned |
 | **ntt** | Number Theoretic Transform (constant-time, Kyber/Dilithium params) | 🔧 planned |
 

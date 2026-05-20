@@ -31,7 +31,7 @@ set(NUMX_SOURCES
     src/fft.c
     # Phase 3 — Unicorn Algorithms:
     src/autodiff.c
-    # src/compressed_sensing.c
+    src/compressed_sensing.c
     # src/sketch.c
     # src/ntt.c
 )
@@ -60,7 +60,7 @@ set(TEST_SOURCES
     tests/test_fft.c
     # Phase 3 tests:
     tests/test_autodiff.c
-    # tests/test_compressed_sensing.c
+    tests/test_compressed_sensing.c
     # tests/test_sketch.c
     # tests/test_ntt.c
 )

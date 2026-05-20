@@ -30,7 +30,7 @@
 
 /* Phase 3 — Unicorn Algorithms */
 #include "autodiff.h"
-/* #include "compressed_sensing.h" */
+#include "compressed_sensing.h"
 /* #include "sketch.h"             */
 /* #include "ntt.h"                */
 

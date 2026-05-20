@@ -29,7 +29,7 @@ void numx_test_fft(void);
 
 /* Phase 3 suite declarations:                                        */
 void numx_test_autodiff(void);
-/* void numx_test_compressed_sensing(void); */
+void numx_test_compressed_sensing(void);
 /* void numx_test_sketch(void);             */
 /* void numx_test_ntt(void);                */
 
@@ -56,7 +56,7 @@ int main(void)
 
     /* Phase 3: */
     numx_test_autodiff();
-    /* numx_test_compressed_sensing(); */
+    numx_test_compressed_sensing();
     /* numx_test_sketch();             */
     /* numx_test_ntt();                */
 
