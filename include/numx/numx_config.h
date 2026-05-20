@@ -77,6 +77,20 @@
 #define NUMX_MAX_CS_SPARSITY 32      /* max sparsity level for OMP        */
 #endif
 
+/* ── Randomized sketch ─────────────────────────────────────────────── */
+
+#ifndef NUMX_MAX_SKETCH_M
+#define NUMX_MAX_SKETCH_M 64    /* max rows of input matrix              */
+#endif
+
+#ifndef NUMX_MAX_SKETCH_N
+#define NUMX_MAX_SKETCH_N 64    /* max cols of input matrix              */
+#endif
+
+#ifndef NUMX_MAX_SKETCH_RANK
+#define NUMX_MAX_SKETCH_RANK 16 /* max (rank + oversample)               */
+#endif
+
 /* ── Automatic differentiation ─────────────────────────────────────── */
 
 #ifndef NUMX_MAX_AD_TAPE_LEN
