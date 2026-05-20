@@ -31,11 +31,10 @@
  *         NUMX_ERR_INVALID_ARG if h <= 0.
  */
 numx_status_t numx_diff_forward(
-    numx_func1d_t  f,
-    numx_real_t    x,
-    numx_real_t    h,
-    numx_real_t   *result
-);
+    numx_func1d_t f,
+    numx_real_t x,
+    numx_real_t h,
+    numx_real_t *result);
 
 /**
  * @brief Approximate f'(x) using the central difference formula.
@@ -56,11 +55,10 @@ numx_status_t numx_diff_forward(
  *         NUMX_ERR_INVALID_ARG if h <= 0.
  */
 numx_status_t numx_diff_central(
-    numx_func1d_t  f,
-    numx_real_t    x,
-    numx_real_t    h,
-    numx_real_t   *result
-);
+    numx_func1d_t f,
+    numx_real_t x,
+    numx_real_t h,
+    numx_real_t *result);
 
 /**
  * @brief Approximate f'(x) via Richardson extrapolation on central differences.
@@ -83,10 +81,9 @@ numx_status_t numx_diff_central(
  *         NUMX_ERR_INVALID_ARG if h <= 0.
  */
 numx_status_t numx_diff_richardson(
-    numx_func1d_t  f,
-    numx_real_t    x,
-    numx_real_t    h,
-    numx_real_t   *result
-);
+    numx_func1d_t f,
+    numx_real_t x,
+    numx_real_t h,
+    numx_real_t *result);
 
 #endif /* NUMX_DIFFERENTIATE_H */

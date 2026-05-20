@@ -18,10 +18,11 @@
 
 /* ── Norm type ─────────────────────────────────────────────────────── */
 
-typedef enum {
-    NUMX_NORM_L1  = 1,   /* sum of absolute values           */
-    NUMX_NORM_L2  = 2,   /* Euclidean norm (sqrt of dot self) */
-    NUMX_NORM_INF = 0    /* maximum absolute value            */
+typedef enum
+{
+    NUMX_NORM_L1 = 1, /* sum of absolute values           */
+    NUMX_NORM_L2 = 2, /* Euclidean norm (sqrt of dot self) */
+    NUMX_NORM_INF = 0 /* maximum absolute value            */
 } numx_norm_t;
 
 /* ── Vector operations ─────────────────────────────────────────────── */
@@ -46,9 +47,8 @@ typedef enum {
 numx_status_t numx_vec_dot(
     const numx_real_t *a,
     const numx_real_t *b,
-    numx_size_t        n,
-    numx_real_t       *result
-);
+    numx_size_t n,
+    numx_real_t *result);
 
 /**
  * @brief Compute a vector norm (L1, L2, or L-infinity).
@@ -72,10 +72,9 @@ numx_status_t numx_vec_dot(
  */
 numx_status_t numx_vec_norm(
     const numx_real_t *a,
-    numx_size_t        n,
-    numx_norm_t        type,
-    numx_real_t       *result
-);
+    numx_size_t n,
+    numx_norm_t type,
+    numx_real_t *result);
 
 /**
  * @brief Compute the 3-D cross product: result = a x b.
@@ -99,8 +98,7 @@ numx_status_t numx_vec_norm(
 numx_status_t numx_vec_cross3(
     const numx_real_t *a,
     const numx_real_t *b,
-    numx_real_t       *result
-);
+    numx_real_t *result);
 
 /* ── Matrix operations ─────────────────────────────────────────────── */
 
@@ -129,8 +127,7 @@ numx_status_t numx_vec_cross3(
 numx_status_t numx_mat_mul(
     const numx_real_t *A, numx_size_t ra, numx_size_t ca,
     const numx_real_t *B, numx_size_t rb, numx_size_t cb,
-    numx_real_t       *C
-);
+    numx_real_t *C);
 
 /**
  * @brief Transpose a matrix out-of-place: AT = A^T.
@@ -149,10 +146,9 @@ numx_status_t numx_mat_mul(
  */
 numx_status_t numx_mat_transpose(
     const numx_real_t *A,
-    numx_size_t        rows,
-    numx_size_t        cols,
-    numx_real_t       *AT
-);
+    numx_size_t rows,
+    numx_size_t cols,
+    numx_real_t *AT);
 
 /**
  * @brief Transpose a square matrix in-place.
@@ -168,8 +164,7 @@ numx_status_t numx_mat_transpose(
  */
 numx_status_t numx_mat_transpose_sq(
     numx_real_t *A,
-    numx_size_t  n
-);
+    numx_size_t n);
 
 /**
  * @brief Compute the determinant of a square matrix.
@@ -190,9 +185,8 @@ numx_status_t numx_mat_transpose_sq(
  */
 numx_status_t numx_mat_det(
     const numx_real_t *A,
-    numx_size_t        n,
-    numx_real_t       *result
-);
+    numx_size_t n,
+    numx_real_t *result);
 
 /* ── LU decomposition ──────────────────────────────────────────────── */
 
@@ -216,10 +210,9 @@ numx_status_t numx_mat_det(
  */
 numx_status_t numx_lu_decompose(
     const numx_real_t *A,
-    numx_size_t        n,
-    numx_real_t       *LU,
-    numx_idx_t        *pivot
-);
+    numx_size_t n,
+    numx_real_t *LU,
+    numx_idx_t *pivot);
 
 /**
  * @brief Solve A*x = b given an LU factorisation from numx_lu_decompose().
@@ -244,10 +237,9 @@ numx_status_t numx_lu_decompose(
  */
 numx_status_t numx_lu_solve(
     const numx_real_t *LU,
-    const numx_idx_t  *pivot,
-    numx_size_t        n,
+    const numx_idx_t *pivot,
+    numx_size_t n,
     const numx_real_t *b,
-    numx_real_t       *x
-);
+    numx_real_t *x);
 
 #endif /* NUMX_LINALG_H */

@@ -13,17 +13,21 @@
 #include "numx/numx_types.h"
 #include "numx/integrate.h"
 
-#define TOL_TRAP  1e-3f   /* trapezoid O(h^2) with n=100 */
-#define TOL_SIMP  1e-5f   /* Simpson exact for degree<=3 polynomials */
-#define TOL_GAUSS 1e-5f   /* Gauss-8 exact for degree<=15 polynomials */
+#define TOL_TRAP 1e-3f  /* trapezoid O(h^2) with n=100 */
+#define TOL_SIMP 1e-5f  /* Simpson exact for degree<=3 polynomials */
+#define TOL_GAUSS 1e-5f /* Gauss-8 exact for degree<=15 polynomials */
 
 /* ── Test functions ────────────────────────────────────────────────── */
 
-static numx_real_t f_one(numx_real_t x)    { (void)x; return (numx_real_t)1.0; }
+static numx_real_t f_one(numx_real_t x)
+{
+    (void)x;
+    return (numx_real_t)1.0;
+}
 static numx_real_t f_linear(numx_real_t x) { return x; }
-static numx_real_t f_quad(numx_real_t x)   { return x * x; }
-static numx_real_t f_cubic(numx_real_t x)  { return x * x * x; }
-static numx_real_t f_neg(numx_real_t x)    { return -x; }
+static numx_real_t f_quad(numx_real_t x) { return x * x; }
+static numx_real_t f_cubic(numx_real_t x) { return x * x * x; }
+static numx_real_t f_neg(numx_real_t x) { return -x; }
 
 /* ════════════════════════════════════════════════════════════════════
  *  numx_integrate_trap
@@ -59,7 +63,7 @@ void test_trap_linearity(void)
     /* integral(-x) = -integral(x) */
     numx_real_t r1, r2;
     numx_integrate_trap(f_linear, 0.0f, 2.0f, 100, &r1);
-    numx_integrate_trap(f_neg,    0.0f, 2.0f, 100, &r2);
+    numx_integrate_trap(f_neg, 0.0f, 2.0f, 100, &r2);
     TEST_ASSERT_FLOAT_WITHIN(TOL_TRAP, r1, -r2);
 }
 

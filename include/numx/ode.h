@@ -23,11 +23,10 @@
  * @return NUMX_OK on success, or an error code to abort the solver.
  */
 typedef numx_status_t (*numx_ode_func_t)(
-    numx_real_t        t,
+    numx_real_t t,
     const numx_real_t *y,
-    numx_size_t        n,
-    numx_real_t       *dydt
-);
+    numx_size_t n,
+    numx_real_t *dydt);
 
 /**
  * @brief Advance an ODE system by fixed steps using classical 4th-order Runge-Kutta.
@@ -49,14 +48,13 @@ typedef numx_status_t (*numx_ode_func_t)(
  *         Any error code returned by f (propagated immediately).
  */
 numx_status_t numx_ode_rk4(
-    numx_ode_func_t    f,
-    numx_real_t        t0,
+    numx_ode_func_t f,
+    numx_real_t t0,
     const numx_real_t *y0,
-    numx_size_t        n,
-    numx_real_t        h,
-    numx_size_t        steps,
-    numx_real_t       *y
-);
+    numx_size_t n,
+    numx_real_t h,
+    numx_size_t steps,
+    numx_real_t *y);
 
 /**
  * @brief Advance an ODE system from t0 to t1 using adaptive Runge-Kutta-Fehlberg.
@@ -84,13 +82,12 @@ numx_status_t numx_ode_rk4(
  *         Any error code returned by f.
  */
 numx_status_t numx_ode_rk45(
-    numx_ode_func_t    f,
-    numx_real_t        t0,
-    numx_real_t        t1,
+    numx_ode_func_t f,
+    numx_real_t t0,
+    numx_real_t t1,
     const numx_real_t *y0,
-    numx_size_t        n,
-    numx_real_t        tol,
-    numx_real_t       *y
-);
+    numx_size_t n,
+    numx_real_t tol,
+    numx_real_t *y);
 
 #endif /* NUMX_ODE_H */

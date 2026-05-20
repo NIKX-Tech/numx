@@ -32,10 +32,9 @@
 numx_status_t numx_interp_linear(
     const numx_real_t *xs,
     const numx_real_t *ys,
-    numx_size_t        n,
-    numx_real_t        x,
-    numx_real_t       *result
-);
+    numx_size_t n,
+    numx_real_t x,
+    numx_real_t *result);
 
 /**
  * @brief Precompute second derivatives (moments) for a natural cubic spline.
@@ -56,9 +55,8 @@ numx_status_t numx_interp_linear(
 numx_status_t numx_interp_spline_precompute(
     const numx_real_t *xs,
     const numx_real_t *ys,
-    numx_size_t        n,
-    numx_real_t       *m
-);
+    numx_size_t n,
+    numx_real_t *m);
 
 /**
  * @brief Evaluate a natural cubic spline at x given precomputed moments.
@@ -81,10 +79,9 @@ numx_status_t numx_interp_spline_eval(
     const numx_real_t *xs,
     const numx_real_t *ys,
     const numx_real_t *m,
-    numx_size_t        n,
-    numx_real_t        x,
-    numx_real_t       *result
-);
+    numx_size_t n,
+    numx_real_t x,
+    numx_real_t *result);
 
 /**
  * @brief One-shot natural cubic spline: precompute moments on the stack and evaluate.
@@ -108,10 +105,9 @@ numx_status_t numx_interp_spline_eval(
 numx_status_t numx_interp_spline_cubic(
     const numx_real_t *xs,
     const numx_real_t *ys,
-    numx_size_t        n,
-    numx_real_t        x,
-    numx_real_t       *result
-);
+    numx_size_t n,
+    numx_real_t x,
+    numx_real_t *result);
 
 /**
  * @brief Interpolate f on [a, b] using n Chebyshev nodes (barycentric form).
@@ -132,12 +128,11 @@ numx_status_t numx_interp_spline_cubic(
  *         NUMX_ERR_INVALID_ARG if n < 2, n > NUMX_MAX_INTERP_NODES, or b <= a.
  */
 numx_status_t numx_interp_chebyshev(
-    numx_func1d_t  f,
-    numx_size_t    n,
-    numx_real_t    a,
-    numx_real_t    b,
-    numx_real_t    x,
-    numx_real_t   *result
-);
+    numx_func1d_t f,
+    numx_size_t n,
+    numx_real_t a,
+    numx_real_t b,
+    numx_real_t x,
+    numx_real_t *result);
 
 #endif /* NUMX_INTERPOLATE_H */
