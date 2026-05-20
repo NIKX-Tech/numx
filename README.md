@@ -37,22 +37,22 @@ Every function is reentrant, allocation-free, and returns a typed status code. T
 
 ## Module status
 
-| Module | Functions | Docs | Status |
-|---|---|---|---|
-| **linalg** | dot, norm, cross, mat_mul, transpose, det, LU | [docs](docs/algorithms/linalg.md) | ✅ complete |
-| **stats** | mean, variance, median, percentile | [docs](docs/algorithms/stats.md) | ✅ complete |
-| **roots** | bisect, newton, brent | [docs](docs/algorithms/roots.md) | ✅ complete |
-| **integrate** | trap, simpson, gauss | [docs](docs/algorithms/integrate.md) | ✅ complete |
-| **differentiate** | forward, central, richardson | [docs](docs/algorithms/differentiate.md) | ✅ complete |
-| **interpolate** | linear, cubic spline, chebyshev | [docs](docs/algorithms/interpolate.md) | ✅ complete |
-| **poly** | eval (Horner), roots (Newton + deflation) | [docs](docs/algorithms/poly.md) | ✅ complete |
-| **ode** | rk4, rk45 (adaptive) | [docs](docs/algorithms/ode.md) | ✅ complete |
-| **signal** | windows, FIR, IIR, convolve, correlate, peaks, EMA | — | 🔧 planned |
-| **fft** | Cooley-Tukey f32, Q15, IFFT | — | 🔧 planned |
-| **autodiff** | forward-mode (dual numbers), reverse-mode (static tape) | — | 🔧 planned |
-| **compressed_sensing** | OMP, ISTA | — | 🔧 planned |
-| **sketch** | randomized SVD (Halko-Martinsson-Tropp) | — | 🔧 planned |
-| **ntt** | Number Theoretic Transform (constant-time, Kyber/Dilithium params) | — | 🔧 planned |
+| Module | Functions | Status |
+|---|---|---|
+| [**linalg**](docs/algorithms/linalg.md) | dot, norm, cross, mat_mul, transpose, det, LU | ✅ complete |
+| [**stats**](docs/algorithms/stats.md) | mean, variance, median, percentile | ✅ complete |
+| [**roots**](docs/algorithms/roots.md) | bisect, newton, brent | ✅ complete |
+| [**integrate**](docs/algorithms/integrate.md) | trap, simpson, gauss | ✅ complete |
+| [**differentiate**](docs/algorithms/differentiate.md) | forward, central, richardson | ✅ complete |
+| [**interpolate**](docs/algorithms/interpolate.md) | linear, cubic spline, chebyshev | ✅ complete |
+| [**poly**](docs/algorithms/poly.md) | eval (Horner), roots (Newton + deflation) | ✅ complete |
+| [**ode**](docs/algorithms/ode.md) | rk4, rk45 (adaptive) | ✅ complete |
+| **signal** | windows, FIR, IIR, convolve, correlate, peaks, EMA | 🔧 planned |
+| **fft** | Cooley-Tukey f32, Q15, IFFT | 🔧 planned |
+| **autodiff** | forward-mode (dual numbers), reverse-mode (static tape) | 🔧 planned |
+| **compressed_sensing** | OMP, ISTA | 🔧 planned |
+| **sketch** | randomized SVD (Halko-Martinsson-Tropp) | 🔧 planned |
+| **ntt** | Number Theoretic Transform (constant-time, Kyber/Dilithium params) | 🔧 planned |
 
 ---
 
