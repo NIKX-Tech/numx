@@ -49,7 +49,7 @@ Every function is reentrant, allocation-free, and returns a typed status code. T
 | [**ode**](docs/algorithms/ode.md) | rk4, rk45 (adaptive) | ✅ complete |
 | [**signal**](docs/algorithms/signal.md) | windows, FIR, IIR, convolve, correlate, peaks, EMA | ✅ complete |
 | [**fft**](docs/algorithms/fft.md) | Cooley-Tukey f32, Q15, IFFT, magnitude | ✅ complete |
-| **autodiff** | forward-mode (dual numbers), reverse-mode (static tape) | 🔧 planned |
+| [**autodiff**](docs/algorithms/autodiff.md) | forward-mode (dual numbers), reverse-mode (static tape) | ✅ complete |
 | **compressed_sensing** | OMP, ISTA | 🔧 planned |
 | **sketch** | randomized SVD (Halko-Martinsson-Tropp) | 🔧 planned |
 | **ntt** | Number Theoretic Transform (constant-time, Kyber/Dilithium params) | 🔧 planned |
