@@ -87,3 +87,8 @@ set(BENCH_SOURCES
 add_executable(numx_bench ${BENCH_SOURCES})
 target_include_directories(numx_bench PRIVATE include)
 target_link_libraries(numx_bench PRIVATE numx)
+
+# ── Validation runner ─────────────────────────────────────────────────
+add_executable(numx_val_runner validation/c/val_runner.c)
+target_include_directories(numx_val_runner PRIVATE include)
+target_link_libraries(numx_val_runner PRIVATE numx m)
