@@ -79,5 +79,74 @@
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
+
+### Test cases — linear
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| linear rc | rc=0 | rc=0 | — | ✅ |
+| linear x=0.5 → 0.5 | 0.5 | 0.5000000 | 0.00e+00 | ✅ |
+| linear x=1.5 → 2.5 | 2.5 | 2.5000000 | 0.00e+00 | ✅ |
+| linear at knots | exact | exact | — | ✅ |
+| linear clamp-below | 10.0 | 10.0000000 | 0.00e+00 | ✅ |
+| linear clamp-above | 30.0 | 30.0000000 | 0.00e+00 | ✅ |
+| linear n=2 midpoint=4 | 4.0 | 4.0000000 | 0.00e+00 | ✅ |
+| linear null-xs | rc=-1 | rc=-1 | — | ✅ |
+| linear null-ys | rc=-1 | rc=-1 | — | ✅ |
+| linear null-out | rc=-1 | rc=-1 | — | ✅ |
+| linear n<2 | rc=-2 | rc=-2 | — | ✅ |
+| linear n=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — spline_cubic
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| spline precompute rc | rc=0 | rc=0 | — | ✅ |
+| spline linear data x=0.5 | 0.5 | 0.5000000 | 0.00e+00 | ✅ |
+| spline linear data x=1.7 | 1.7 | 1.7000000 | 0.00e+00 | ✅ |
+| spline cubic oneshot rc | rc=0 | rc=0 | — | ✅ |
+| spline cubic at 0.5 | 0.35 | 0.3500000 | 2.98e-08 | ✅ |
+| spline at knots | exact | exact | — | ✅ |
+| spline clamp-below | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| spline clamp-above | 9.0 | 9.0000000 | 0.00e+00 | ✅ |
+| spline n=2 linear midpoint=2 | 2.0 | 2.0000000 | 0.00e+00 | ✅ |
+| spline precompute null-xs | rc=-1 | rc=-1 | — | ✅ |
+| spline precompute null-ys | rc=-1 | rc=-1 | — | ✅ |
+| spline precompute null-m | rc=-1 | rc=-1 | — | ✅ |
+| spline precompute n<2 | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — chebyshev
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| cheb const rc | rc=0 | rc=0 | — | ✅ |
+| cheb constant=3 | 3.0 | 3.0000002 | 2.38e-07 | ✅ |
+| cheb linear=1.0 | 1.0 | 1.0000001 | 1.19e-07 | ✅ |
+| cheb x²  at 0.5 | 0.25 | 0.2500000 | 0.00e+00 | ✅ |
+| cheb x²  at 0 | 0.0 | 0.0000000 | 7.45e-09 | ✅ |
+| cheb n=2 x²  at 0 ≈ 0.5 | 0.5 | 0.5000000 | 0.00e+00 | ✅ |
+| cheb null-f | rc=-1 | rc=-1 | — | ✅ |
+| cheb null-out | rc=-1 | rc=-1 | — | ✅ |
+| cheb b<=a | rc=-2 | rc=-2 | — | ✅ |
+| cheb a=b | rc=-2 | rc=-2 | — | ✅ |
+| cheb n<2 | rc=-2 | rc=-2 | — | ✅ |
+| cheb n=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Precision vs reference
+
+| Function | Input | Exact | Computed | Error |
+|----------|-------|-------|----------|-------|
+| linear | x=0.5 | 0.5 | 0.5000000 | 0.00e+00 |
+| linear | x=1.5 | 2.5 | 2.5000000 | 0.00e+00 |
+| spline linear | x=0.5 | 0.5 | 0.5000000 | 0.00e+00 |
+| spline cubic | x=0.5 | 0.35 | 0.3500000 | 2.98e-08 |
+| chebyshev | constant=3 | 3.0 | 3.0000002 | 2.38e-07 |
+| chebyshev | linear x=1 | 1.0 | 1.0000001 | 1.19e-07 |
+| chebyshev | x² at 0.5 | 0.25 | 0.2500000 | 0.00e+00 |
+| chebyshev | x² at 0 | 0.0 | 0.0000000 | 7.45e-09 |
+
+*Chebyshev errors of 2.38e-07 and 1.19e-07 are at float32 machine epsilon (~1.2e-07) — expected for polynomial interpolation in floating-point arithmetic. Spline cubic error of 2.98e-08 is sub-epsilon.*
+
+**RESULTS: 37 PASS / 0 FAIL / 37 TOTAL**
