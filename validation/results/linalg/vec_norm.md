@@ -1,42 +1,69 @@
 # Validation: numx_vec_norm
 
-**Validator:** Amir Ab Khoshk
-**Date:** 2026-05-25
-**numx version:** d81b386
+---
 
-## Hardware: ESP32
-*⚠️ Pending.*
+## x86-64 — Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-25 | **Commit:** d81b386
 
-## Hardware: Host
-- OS: Ubuntu 22.04 / Intel i7-13700H
-- Compiler: gcc 11.4.0 -O2 / float32
+### Test cases
 
-## Test results
-
-| Test case               | Input      | Expected   | numx output  | Pass/Fail | Notes |
-|-------------------------|-----------|------------|--------------|-----------|-------|
-| L2 Pythagorean 3-4-5    | [3,4], L2  | 5.0        | 5.00000000   | ✅        | Uses Newton-Raphson sqrt (no libm) |
-| L1 known                | [3,4], L1  | 7.0        | 7.00000000   | ✅        |       |
-| Linf known              | [3,4], Linf| 4.0        | 4.00000000   | ✅        |       |
-| null / invalid          | NULL, n=0  | errors     | errors       | ✅        |       |
+| Input | Norm | Expected | Computed | Error | Pass |
+|-------|------|----------|----------|-------|------|
+| [3,4] | L2 | 5.0 | 5.00000000 | 0.00e+00 | ✅ |
+| [3,4] | L1 | 7.0 | 7.00000000 | 0.00e+00 | ✅ |
+| [3,4] | Linf | 4.0 | 4.00000000 | 0.00e+00 | ✅ |
+| NULL / n=0 | — | errors | errors | — | ✅ |
 
 *All 8 Unity tests: PASS (test_linalg.c:526–533)*
 
-## Performance (x86-64)
+### Performance
 
-| Variant | N        | Total   | Per call |
-|---------|----------|---------|----------|
-| L2 n=64 | 100,000  | 4,373 µs | 43 ns   |
-| L1 n=64 | 100,000  | 3,743 µs | 37 ns   |
-| ESP32   | —        | *pending* | *pending* |
+| Variant | N | Total | Per call |
+|---------|---|-------|----------|
+| L2 n=64 | 100,000 | 4,373 µs | 43 ns |
+| L1 n=64 | 100,000 | 3,743 µs | 37 ns |
 
-## Python comparison
+### Precision vs numpy reference
 
-| Input  | Norm | numpy     | numx      | Error    | OK     |
-|--------|------|-----------|-----------|----------|--------|
-| [3,4]  | L2   | 5.0       | 5.0       | 0.00e+00 | ✅     |
-| [3,4]  | L1   | 7.0       | 7.0       | 0.00e+00 | ✅     |
-| [3,4]  | Linf | 4.0       | 4.0       | 0.00e+00 | ✅     |
+| Input | Norm | numpy | numx | Error |
+|-------|------|-------|------|-------|
+| [3,4] | L2 | 5.0 | 5.0 | 0.00e+00 |
+| [3,4] | L1 | 7.0 | 7.0 | 0.00e+00 |
+| [3,4] | Linf | 4.0 | 4.0 | 0.00e+00 |
 
-## Notes
-L2 uses internal Newton-Raphson sqrt; exact for integer inputs that are perfect 3-4-5 triples.
+*L2 uses internal Newton-Raphson sqrt — no libm dependency.*
+
+---
+
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-05-29 | **Commit:** 37e581f
+
+### Test cases
+
+| Input | Norm | Expected | Computed | Error | Pass |
+|-------|------|----------|----------|-------|------|
+| [3,4] | L2 | 5.0 | 5.00000000 | 0.00e+00 | ✅ |
+| [3,4] | L1 | 7.0 | 7.00000000 | 0.00e+00 | ✅ |
+| [3,4] | Linf | 4.0 | 4.00000000 | 0.00e+00 | ✅ |
+| [1,2,3,4,5] | L2 | sqrt(55)=7.41619849 | 7.41619873 | 4.77e-07 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Variant | N | Total | Per call |
+|---------|---|-------|----------|
+| L2 n=2 | 100,000 | 1,283 µs | 12 ns |
+
+### Precision vs numpy reference
+
+| Input | Norm | numpy | numx | Error |
+|-------|------|-------|------|-------|
+| [3,4] | L2 | 5.0 | 5.00000000 | 0.00e+00 |
+| [3,4] | L1 | 7.0 | 7.00000000 | 0.00e+00 |
+| [3,4] | Linf | 4.0 | 4.00000000 | 0.00e+00 |
+
+---
+
+## ESP32-S3
+**Status:** ⚠️ Pending

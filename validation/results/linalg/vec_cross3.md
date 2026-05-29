@@ -1,40 +1,65 @@
 # Validation: numx_vec_cross3
 
-**Validator:** Amir Ab Khoshk
-**Date:** 2026-05-25
-**numx version:** d81b386
+---
 
-## Hardware: ESP32
-*⚠️ Pending.*
+## x86-64 — Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-25 | **Commit:** d81b386
 
-## Hardware: Host
-- OS: Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 -O2 / float32
+### Test cases
 
-## Test results
-
-| Test case             | Input            | Expected    | numx output        | Pass/Fail |
-|-----------------------|-----------------|-------------|---------------------|-----------|
-| x × y = z            | [1,0,0]×[0,1,0] | [0,0,1]     | [0,0,1]             | ✅        |
-| anti-commutative      | y × x           | [0,0,-1]    | [0,0,-1]            | ✅        |
-| parallel → zero       | [1,2,3]×[2,4,6] | [0,0,0]     | [0,0,0]             | ✅        |
-| alias-safe            | result=a        | correct     | correct             | ✅        |
-| [1,2,3]×[4,5,6]      | see above       | [-3,6,-3]   | [-3, 6, -3]         | ✅        |
+| Input | Expected | Computed | Pass |
+|-------|----------|----------|------|
+| [1,0,0]×[0,1,0] | [0,0,1] | [0,0,1] | ✅ |
+| [0,1,0]×[1,0,0] (anti-commutative) | [0,0,-1] | [0,0,-1] | ✅ |
+| [1,2,3]×[2,4,6] (parallel) | [0,0,0] | [0,0,0] | ✅ |
+| alias-safe (result=a) | correct | correct | ✅ |
+| [1,2,3]×[4,5,6] | [-3,6,-3] | [-3,6,-3] | ✅ |
 
 *All 5 Unity tests: PASS (test_linalg.c:536–540)*
 
-## Performance (x86-64)
+### Performance
 
-| N        | Total  | Per call |
-|----------|--------|----------|
-| 100,000  | 125 µs | 1 ns     |
+| N | Total | Per call |
+|---|-------|----------|
+| 100,000 | 125 µs | 1 ns |
 
-## Python comparison
+### Precision vs numpy reference
 
-| Input           | component | numpy | numx | Error    | OK |
-|-----------------|-----------|-------|------|----------|----|
-| [1,2,3]×[4,5,6] | [0]       | -3.0  | -3.0 | 0.00e+00 | ✅ |
-| [1,2,3]×[4,5,6] | [1]       |  6.0  |  6.0 | 0.00e+00 | ✅ |
-| [1,2,3]×[4,5,6] | [2]       | -3.0  | -3.0 | 0.00e+00 | ✅ |
+| Input | component | numpy | numx | Error |
+|-------|-----------|-------|------|-------|
+| [1,2,3]×[4,5,6] | [0] | -3.0 | -3.0 | 0.00e+00 |
+| [1,2,3]×[4,5,6] | [1] | 6.0 | 6.0 | 0.00e+00 |
+| [1,2,3]×[4,5,6] | [2] | -3.0 | -3.0 | 0.00e+00 |
 
-## Notes
-Intermediate values computed before write — alias safety confirmed.
+---
+
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-05-29 | **Commit:** 37e581f
+
+### Test cases
+
+| Input | Expected | Computed | Pass |
+|-------|----------|----------|------|
+| [1,0,0]×[0,1,0] | [0,0,1] | [0.000000, 0.000000, 1.000000] | ✅ |
+| [1,2,3]×[4,5,6] | [-3,6,-3] | [-3.000000, 6.000000, -3.000000] | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| N | Total | Per call |
+|---|-------|----------|
+| 100,000 | 265 µs | 2 ns |
+
+### Precision vs numpy reference
+
+| Input | component | numpy | numx | Error |
+|-------|-----------|-------|------|-------|
+| [1,2,3]×[4,5,6] | [0] | -3.0 | -3.0 | 0.00e+00 |
+| [1,2,3]×[4,5,6] | [1] | 6.0 | 6.0 | 0.00e+00 |
+| [1,2,3]×[4,5,6] | [2] | -3.0 | -3.0 | 0.00e+00 |
+
+---
+
+## ESP32-S3
+**Status:** ⚠️ Pending

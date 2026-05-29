@@ -1,43 +1,74 @@
 # Validation: numx_lu_decompose + numx_lu_solve
 
-**Validator:** Amir Ab Khoshk
-**Date:** 2026-05-25
-**numx version:** d81b386
+---
 
-## Hardware: ESP32
-*⚠️ Pending.*
+## x86-64 — Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-25 | **Commit:** d81b386
 
-## Hardware: Host
-- OS: Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 -O2 / float32
+### Test cases (A·x = b, 4×4 system)
 
-## Test results
-
-| Test case              | Input             | Expected x    | numx x         | Pass/Fail | Notes        |
-|------------------------|------------------|---------------|----------------|-----------|--------------|
-| 4×4 standard A*x=b     | b=[1,2,4,5]       | [1,0,-1,1]    | [1.00000012, 0, -1.00000012, 1] | ✅ | err=1.2e-7 within float32 limit |
-| 3×3 textbook           | textbook system   | known         | known          | ✅        |              |
-| identity system        | I*x=b             | b             | b              | ✅        |              |
-| residual \|\|Ax-b\|\|  | 4×4               | ~0            | < 1e-5         | ✅        |              |
-| singular → ERR_SINGULAR|                   | -3            | -3             | ✅        |              |
+| Test | Expected x | Computed x | Pass |
+|------|-----------|-----------|------|
+| 4×4 standard | [1, 0, -1, 1] | [1.00000012, 0, -1.00000012, 1] | ✅ |
+| 3×3 textbook | known | known | ✅ |
+| identity I·x=b | b | b | ✅ |
+| residual ‖Ax−b‖ | ~0 | < 1e-5 | ✅ |
+| singular → ERR_SINGULAR | -3 | -3 | ✅ |
 
 *All 8 Unity tests: PASS (test_linalg.c:567–574)*
 
-## Performance (x86-64)
+### Performance
 
-| Function             | N       | Total    | Per call |
-|----------------------|---------|----------|----------|
-| lu_decompose 4×4     | 100,000 | 2,989 µs | 29 ns    |
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| lu_decompose 4×4 | 100,000 | 2,989 µs | 29 ns |
 | lu_solve 4×4 (pre-factored) | 100,000 | 1,156 µs | 11 ns |
-| ESP32                |         | *pending*| *pending*|
 
-## Python comparison
+### Precision vs numpy reference
 
-| Component | numpy ref  | numx       | Error    | OK |
-|-----------|-----------|------------|----------|----|
-| x[0]      | 1.0       | 1.00000012 | 1.19e-07 | ✅ |
-| x[1]      | 0.0       | 0.00000000 | 0.00e+00 | ✅ |
-| x[2]      | -1.0      | -1.00000012| 1.19e-07 | ✅ |
-| x[3]      | 1.0       | 1.00000000 | 0.00e+00 | ✅ |
+| Component | numpy | numx | Error |
+|-----------|-------|------|-------|
+| x[0] | 1.0 | 1.00000012 | 1.19e-07 |
+| x[1] | 0.0 | 0.00000000 | 0.00e+00 |
+| x[2] | -1.0 | -1.00000012 | 1.19e-07 |
+| x[3] | 1.0 | 1.00000000 | 0.00e+00 |
 
-## Notes
-Errors of 1.19e-07 on x[0] and x[2] are within single-precision machine epsilon (~1.2e-7). This is expected for float32 LU with partial pivoting on a near-unity condition-number system. **Not a bug.**
+*Errors of 1.19e-07 are within float32 machine epsilon (~1.2e-7). Not a bug.*
+
+---
+
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-05-29 | **Commit:** 37e581f
+
+### Test cases (A·x = b, 4×4 system)
+
+| Component | Expected | Computed | Error | Pass |
+|-----------|----------|----------|-------|------|
+| x[0] | 1.0 | 1.00000000 | 0.00e+00 | ✅ |
+| x[1] | 0.0 | 0.00000000 | 0.00e+00 | ✅ |
+| x[2] | -1.0 | -1.00000000 | 0.00e+00 | ✅ |
+| x[3] | 1.0 | 1.00000000 | 0.00e+00 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| lu_decompose + lu_solve 4×4 (combined) | 100,000 | 14,297 µs | 142 ns |
+
+### Precision vs numpy reference
+
+| Component | numpy | numx | Error |
+|-----------|-------|------|-------|
+| x[0] | 1.0 | 1.00000000 | 0.00e+00 |
+| x[1] | 0.0 | 0.00000000 | 0.00e+00 |
+| x[2] | -1.0 | -1.00000000 | 0.00e+00 |
+| x[3] | 1.0 | 1.00000000 | 0.00e+00 |
+
+*ARM64 combined benchmark measures both decompose+solve together; individual breakdown pending.*
+
+---
+
+## ESP32-S3
+**Status:** ⚠️ Pending

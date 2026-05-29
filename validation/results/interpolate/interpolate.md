@@ -1,63 +1,83 @@
 # Validation: numx_interpolate (linear / spline / chebyshev)
 
-**Validator:** Amir Ab Khoshk
-**Date:** 2026-05-25
-**numx version:** d81b386
+---
 
-## Hardware: ESP32
-*⚠️ Pending.*
+## x86-64 — Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-25 | **Commit:** d81b386
 
-## Hardware: Host
-- OS: Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 -O2 / float32
+### Test cases
 
-## Test results
-
-| Test case                         | Expected | numx output | Pass/Fail |
-|----------------------------------|---------|-------------|-----------|
-| linear midpoint known             | 2.5     | 2.5         | ✅        |
-| linear at knots                   | exact   | exact       | ✅        |
-| linear clamp below/above          | boundary| boundary    | ✅        |
-| spline linear data (exact)        | exact   | exact       | ✅        |
-| spline at knots                   | exact   | exact       | ✅        |
-| chebyshev constant                | const   | const       | ✅        |
-| chebyshev linear exact            | exact   | exact       | ✅        |
-| chebyshev quadratic exact (n≥3)   | exact   | exact       | ✅        |
-| n<2 → ERR_INVALID_ARG             | -2      | -2          | ✅        |
+| Function | Input | Expected | Computed | Pass |
+|----------|-------|----------|----------|------|
+| linear midpoint | x=1.5 | 2.5 | 2.5 | ✅ |
+| linear at knots | — | exact | exact | ✅ |
+| linear clamp | outside range | boundary | boundary | ✅ |
+| spline at knots | — | exact | exact | ✅ |
+| chebyshev constant | — | const | const | ✅ |
+| chebyshev linear | — | exact | exact | ✅ |
+| n<2 → ERR_INVALID_ARG | — | -2 | -2 | ✅ |
 
 *All 26 Unity tests: PASS (test_interpolate.c:287–312)*
 
-## Performance (x86-64)
+### Performance
 
-| Function                    | n  | N      | Total      | Per call  |
-|-----------------------------|-----|--------|------------|-----------|
-| interp_linear               | 16  | 50,000 | 155 µs     | 3 ns      |
-| interp_spline_cubic (1-shot) | 16 | 50,000 | 6,102 µs   | 122 ns    |
-| interp_spline_precompute    | 16  | 50,000 | 3,980 µs   | 79 ns     |
-| interp_spline_eval (prebuilt)| 16 | 50,000 | 185 µs     | 3 ns      |
-| interp_chebyshev n=8        | 8   | 50,000 | 15,784 µs  | 315 ns    |
-| interp_chebyshev n=16       | 16  | 50,000 | 36,194 µs  | 723 ns    |
-| ESP32                       | —   | —      | *pending*  | *pending* |
+| Function | n | N | Total | Per call |
+|----------|---|---|-------|----------|
+| interp_linear | 16 | 50,000 | 155 µs | 3 ns |
+| interp_spline_cubic (one-shot) | 16 | 50,000 | 6,102 µs | 122 ns |
+| interp_spline_precompute | 16 | 50,000 | 3,980 µs | 79 ns |
+| interp_spline_eval (pre-built) | 16 | 50,000 | 185 µs | 3 ns |
+| interp_chebyshev n=8 | 8 | 50,000 | 15,784 µs | 315 ns |
+| interp_chebyshev n=16 | 16 | 50,000 | 36,194 µs | 723 ns |
 
-## Python comparison (nodes: xs=[0..4], ys=[0,1,4,9,16] i.e. x²)
+### Precision vs numpy reference (nodes: xs=[0..4], ys=[0,1,4,9,16])
 
-| Function                   | ref value | numx       | Abs error | Within 1e-5 | Notes |
-|---------------------------|-----------|------------|-----------|-------------|-------|
-| linear at x=1.5           | 2.5       | 2.50000000 | 0.00e+00  | ✅          |       |
-| spline_cubic at x=1.5     | 2.25      | 2.23214293 | 1.79e-02  | ⚠️          | See flag |
-| spline_cubic at x=2.5     | 6.25      | 6.23214293 | 1.79e-02  | ⚠️          | See flag |
-| chebyshev n=8 at x=1.5    | 2.25      | 2.25000000 | 0.00e+00  | ✅          |       |
-| chebyshev n=16 at x=1.5   | 2.25      | 2.25000000 | 0.00e+00  | ✅          |       |
+| Function | ref | numx | Error | Note |
+|----------|-----|------|-------|------|
+| linear at x=1.5 | 2.5 | 2.50000000 | 0.00e+00 | ✅ |
+| spline at x=1.5 | 2.25 (exact x²) | 2.23214293 | 1.79e-02 | ⚠️ natural BC |
+| spline at x=2.5 | 6.25 (exact x²) | 6.23214293 | 1.79e-02 | ⚠️ natural BC |
+| chebyshev n=8 at x=1.5 | 2.25 | 2.25000000 | 0.00e+00 | ✅ |
 
-## ⚠️ FLAG: spline_cubic errors 1.79e-02 — expected behavior, not a precision bug
+⚠️ **spline error 1.79e-02:** natural BC forces m[0]=m[n-1]=0; x² has curvature=2 at endpoints. Expected deviation — scipy gives identical result. Not a bug.
 
-The natural cubic spline on nodes of y=x² gives **correct spline output** but the spline does not exactly reproduce the underlying x² function.
+---
 
-**Root cause:** Natural spline boundary conditions enforce m[0]=m[n-1]=0 (zero second derivative at endpoints). The true x² function has second derivative 2 everywhere, including at endpoints. The zero-endpoint constraint forces the spline to deviate from x² by a systematic O(h²) amount. This is expected, correct spline behavior.
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-05-29 | **Commit:** 37e581f
 
-**Verification:** scipy.interpolate.CubicSpline with bc_type='natural' on the same nodes also returns 2.2321 at x=1.5 — identical to numx.
+### Test cases (nodes: xs=[0,1,2,3,4], ys=[0,1,4,9,16])
 
-**Recommendation:** This is not a bug. For polynomial interpolation of smooth functions, `numx_interp_chebyshev` is a better choice.
+| Function | Input | Expected | Computed | Error | Pass |
+|----------|-------|----------|----------|-------|------|
+| linear | x=1.5 | 2.5 | 2.50000000 | 0.00e+00 | ✅ |
+| linear | x=2.5 | 6.5 | 6.50000000 | 0.00e+00 | ✅ |
+| spline_cubic | x=1.5 | 2.23214293 | 2.23214293 | 0.00e+00 | ✅ |
+| spline_cubic | x=2.5 | 6.23214293 | 6.23214293 | 0.00e+00 | ✅ |
+| chebyshev n=8 | x=1.5 | 2.25 | 2.25000024 | 2.38e-07 | ✅ |
+| chebyshev n=16 | x=1.5 | 2.25 | 2.25000000 | 0.00e+00 | ✅ |
 
-## Notes
-- `interp_spline_eval` (pre-built) is 40× faster than the one-shot version. Always pre-compute when evaluating at many points.
-- Chebyshev at 723 ns/call (n=16) — evaluates the function at n nodes on every call; will be expensive on ESP32 if the function is complex.
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | n | N | Total | Per call |
+|----------|---|---|-------|----------|
+| interp_linear | 5 | 50,000 | 114 µs | 2 ns |
+| interp_spline_cubic (one-shot) | 5 | 50,000 | 685 µs | 13 ns |
+| interp_spline_eval (pre-built) | 5 | 50,000 | 147 µs | 2 ns |
+| interp_chebyshev n=8 | 8 | 50,000 | 6,872 µs | 137 ns |
+
+### Precision vs numpy reference
+
+| Function | ref | numx | Error |
+|----------|-----|------|-------|
+| linear x=1.5 | 2.5 | 2.50000000 | 0.00e+00 |
+| spline x=1.5 | 2.23214293 | 2.23214293 | 0.00e+00 |
+| spline x=2.5 | 6.23214293 | 6.23214293 | 0.00e+00 |
+| chebyshev n=8 x=1.5 | 2.25 | 2.25000024 | 2.38e-07 |
+
+---
+
+## ESP32-S3
+**Status:** ⚠️ Pending

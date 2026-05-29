@@ -1,57 +1,85 @@
 # Validation: numx_poly (poly_eval / poly_roots)
 
-**Validator:** Amir Ab Khoshk
-**Date:** 2026-05-25
-**numx version:** d81b386
+---
 
-## Hardware: ESP32
-*⚠️ Pending.*
+## x86-64 — Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-25 | **Commit:** d81b386
 
-## Hardware: Host
-- OS: Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 -O2 / float32
+### Test cases (p(x) = x³-6x²+11x-6, roots: [1, 2, 3])
 
-## Test results
-
-| Test case                       | Expected     | numx output  | Pass/Fail |
-|--------------------------------|-------------|--------------|-----------|
-| poly_eval quadratic at 3        | 9.0         | 9.0          | ✅        |
-| poly_eval cubic at 2            | exact       | exact        | ✅        |
-| poly_eval at zero               | coeffs[deg] | exact        | ✅        |
-| poly_eval degree-0              | constant    | constant     | ✅        |
-| poly_roots linear (1 root)      | known       | known        | ✅        |
-| poly_roots quadratic 2 reals    | exact       | exact        | ✅        |
-| poly_roots cubic 3 reals        | [1,2,3]     | [1,2,3]±ε   | ✅        |
-| poly_roots degree-0 → rejected  | ERR         | -2           | ✅        |
-| null args → ERR_NULL_PTR        | -1          | -1           | ✅        |
+| Function | Input | Expected | Computed | Pass |
+|----------|-------|----------|----------|------|
+| poly_eval | x=1 | 0.0 | 0.0 | ✅ |
+| poly_eval | x=2 | 0.0 | 0.0 | ✅ |
+| poly_eval | x=3 | 0.0 | 0.0 | ✅ |
+| poly_eval | x=2.5 | -0.375 | -0.37500000 | ✅ |
+| poly_eval | x=0 | -6.0 | -6.00000000 | ✅ |
+| poly_roots | — | [1,2,3] | [1,2,3]±ε | ✅ |
+| degree-0 → ERR | — | -2 | -2 | ✅ |
 
 *All 17 Unity tests: PASS (test_poly.c:229–245)*
 
-## Performance (x86-64)
+### Performance
 
-| Function              | N       | Total   | Per call  |
-|-----------------------|---------|---------|-----------|
-| poly_eval degree=3    | 100,000 | 132 µs  | 1 ns      |
-| poly_eval degree=8    | 100,000 | 211 µs  | 2 ns      |
-| poly_roots degree=3   | 1,000   | 104 µs  | 104 ns    |
-| ESP32                 | —       | *pending*| *pending*|
+| Function | degree | N | Total | Per call |
+|----------|--------|---|-------|----------|
+| poly_eval | 3 | 100,000 | 132 µs | 1 ns |
+| poly_eval | 8 | 100,000 | 211 µs | 2 ns |
+| poly_roots | 3 | 1,000 | 104 µs | 104 ns |
 
-## Python comparison (p(x)=x³-6x²+11x-6, roots=[1,2,3])
+### Precision vs numpy reference (p(x)=x³-6x²+11x-6)
 
-| Input  | numpy p(x)   | numx p(x)    | Error    | OK |
-|--------|-------------|--------------|----------|----|
-| x=1.0  | 0.0         | 0.00000000   | 0.00e+00 | ✅ |
-| x=2.0  | 0.0         | 0.00000000   | 0.00e+00 | ✅ |
-| x=3.0  | 0.0         | 0.00000000   | 0.00e+00 | ✅ |
-| x=2.5  | -0.375      | -0.37500000  | 0.00e+00 | ✅ |
-| x=0.0  | -6.0        | -6.00000000  | 0.00e+00 | ✅ |
+| x | numpy | numx | Error |
+|---|-------|------|-------|
+| 1.0 | 0.0 | 0.00000000 | 0.00e+00 |
+| 2.0 | 0.0 | 0.00000000 | 0.00e+00 |
+| 3.0 | 0.0 | 0.00000000 | 0.00e+00 |
+| 2.5 | -0.375 | -0.37500000 | 0.00e+00 |
+| 0.0 | -6.0 | -6.00000000 | 0.00e+00 |
 
-| Root | numpy ref | numx found   | Error    | OK |
-|------|-----------|-------------|----------|----|
-| 1    | 1.000000  | 1.000000    | 0.00e+00 | ✅ |
-| 2    | 2.000000  | 2.000001    | 1.00e-06 | ✅ |
-| 3    | 3.000000  | 2.999999    | 1.00e-06 | ✅ |
+| Root | numpy | numx | Error |
+|------|-------|------|-------|
+| r[0] | 1.0 | 1.000000 | 0.00e+00 |
+| r[1] | 2.0 | 2.000001 | 1.00e-06 |
+| r[2] | 3.0 | 2.999999 | 1.00e-06 |
 
-Degree-8 eval at x=1.5: numpy=12.44140625, numx=12.44140625, error=0.00e+00 ✅
+---
 
-## Notes
-Poly_eval uses Horner's method — exact for integer coefficients and integer inputs (zero rounding). Root errors of ~1e-6 are within the requested tol=1e-6 and bounded by float32 representability.
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-05-29 | **Commit:** 37e581f
+
+### Test cases
+
+| Function | Input | Expected | Computed | Error | Pass |
+|----------|-------|----------|----------|-------|------|
+| poly_eval | x=1 | 0.0 | 0.00000000 | 0.00e+00 | ✅ |
+| poly_eval | x=2 | 0.0 | 0.00000000 | 0.00e+00 | ✅ |
+| poly_eval | x=3 | 0.0 | 0.00000000 | 0.00e+00 | ✅ |
+| poly_eval | x=2.5 | -0.375 | -0.37500000 | 0.00e+00 | ✅ |
+| poly_eval | x=0 | -6.0 | -6.00000000 | 0.00e+00 | ✅ |
+| poly_eval degree-8 | x=1.5 | 12.44140625 | 12.44140625 | 0.00e+00 | ✅ |
+| poly_roots | [1,2,3] | r[0]=1.0 | 0.99999976 | 2.38e-07 | ✅ |
+| poly_roots | [1,2,3] | r[1]=2.0 | 2.00000119 | 1.19e-06 | ✅ |
+| poly_roots | [1,2,3] | r[2]=3.0 | 2.99999881 | 1.19e-06 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | degree | N | Total | Per call |
+|----------|--------|---|-------|----------|
+| poly_eval | 3 | 100,000 | 182 µs | 1 ns |
+| poly_roots | 3 | 1,000 | 41 µs | 41 ns |
+
+### Precision vs numpy reference
+
+| x | numpy | numx | Error |
+|---|-------|------|-------|
+| 1.0 | 0.0 | 0.00000000 | 0.00e+00 |
+| 2.5 | -0.375 | -0.37500000 | 0.00e+00 |
+| p8(1.5) | 12.44140625 | 12.44140625 | 0.00e+00 |
+
+---
+
+## ESP32-S3
+**Status:** ⚠️ Pending
