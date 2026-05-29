@@ -23,7 +23,7 @@
 | median does not modify input    | —             | input unchanged | ✅       | ✅        |
 | sample n<2 rejected             | n=1, sample   | ERR_INVALID_ARG | -2       | ✅        |
 
-*All 28 Unity tests: PASS (test_runner.c:267–295)*
+*All 28 Unity tests: PASS (test_stats.c:267–295)*
 
 ## Performance (x86-64)
 

@@ -24,7 +24,7 @@
 | poly_roots degree-0 → rejected  | ERR         | -2           | ✅        |
 | null args → ERR_NULL_PTR        | -1          | -1           | ✅        |
 
-*All 17 Unity tests: PASS (test_runner.c:229–245)*
+*All 17 Unity tests: PASS (test_poly.c:229–245)*
 
 ## Performance (x86-64)
 

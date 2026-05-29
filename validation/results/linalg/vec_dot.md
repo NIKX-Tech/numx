@@ -24,7 +24,7 @@
 | null b → ERR_NULL_PTR          | b=NULL                        | NUMX_ERR_NULL_PTR | -1      | ✅        |       |
 | n=0 → ERR_INVALID_ARG          | n=0                           | NUMX_ERR_INVALID_ARG | -2   | ✅        |       |
 
-*All 10 Unity tests: PASS (see test_runner.c:514–523)*
+*All 10 Unity tests: PASS (see test_linalg.c:514–523)*
 
 ## Performance (x86-64)
 

@@ -23,7 +23,7 @@
 | rk4 h≤0 / steps=0 / n=0 → ERR     | -2               | -2              | ✅        |
 | rk45 t1≤t0 / tol≤0 → ERR          | -2               | -2              | ✅        |
 
-*All 18 Unity tests: PASS (test_runner.c:257–275)*
+*All 18 Unity tests: PASS (test_ode.c:257–275)*
 
 ## Performance (x86-64)
 

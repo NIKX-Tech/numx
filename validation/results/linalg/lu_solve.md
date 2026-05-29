@@ -20,7 +20,7 @@
 | residual \|\|Ax-b\|\|  | 4×4               | ~0            | < 1e-5         | ✅        |              |
 | singular → ERR_SINGULAR|                   | -3            | -3             | ✅        |              |
 
-*All 8 Unity tests: PASS (test_runner.c:567–574)*
+*All 8 Unity tests: PASS (test_linalg.c:567–574)*
 
 ## Performance (x86-64)
 

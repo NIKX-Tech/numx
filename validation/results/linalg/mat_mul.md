@@ -19,7 +19,7 @@
 | identity           | A × I      | A                    | A                    | ✅        |
 | dim mismatch       | ca≠rb      | ERR_INVALID_ARG      | -2                   | ✅        |
 
-*All 5 Unity tests: PASS (test_runner.c:543–547)*
+*All 5 Unity tests: PASS (test_linalg.c:543–547)*
 
 ## Performance (x86-64)
 

@@ -24,31 +24,14 @@ except ImportError as e:
     print("Install: pip install numpy scipy")
     sys.exit(1)
 
-TOL = 1e-5
-passed = 0
-failed = 0
-flags = []   # collects anything flagged for review
-
-def check(label, numx_val, ref_val, tol=TOL, flag_msg=None):
-    global passed, failed
-    err = abs(float(numx_val) - float(ref_val))
-    ok = err <= tol
-    status = "PASS" if ok else "FAIL"
-    line = f"  [{status}]  {label:55s}  numx={numx_val:.7g}  ref={ref_val:.7g}  err={err:.2e}"
-    print(line)
-    if ok:
-        passed += 1
-    else:
-        failed += 1
-        flags.append(f"FAIL  {label}: numx={numx_val:.7g} ref={ref_val:.7g} err={err:.2e}")
-    if flag_msg and not ok:
-        flags.append(f"      NOTE: {flag_msg}")
-
 
 # ══════════════════════════════════════════════════════════════════════
 # Section 1: linalg
 # ══════════════════════════════════════════════════════════════════════
 def ref_linalg():
+    # Uses float64 as ground-truth double-precision reference.
+    # For float32 reference values that match numx's internal precision,
+    # see reference_linalg.py.
     print("\n" + "="*70)
     print("1. linalg")
     print("="*70)
@@ -154,7 +137,6 @@ def ref_integrate():
     def f(x): return x**3 + 1.0   # exact integral on [0,1] = 0.25 + 1 = 1.25
 
     exact, _ = sci_integrate.quad(f, 0, 1)
-    trap100, _ = sci_integrate.quad(f, 0, 1)  # scipy uses adaptive; trap is approximate
     print(f"\n  exact integral x^3+1 on [0,1] = {exact:.10f}  (exact: 1.25)")
 
     # Manual trapezoidal

@@ -1,5 +1,9 @@
 # Hardware Profile: ESP32-S3 DevKit
 
+> **Note:** The filename `esp32_devkit_v1.md` is a legacy name; the actual
+> board being validated is an **ESP32-S3** (Xtensa LX7), not the classic
+> ESP32 DevKit V1 (Xtensa LX6). Results collected here are for ESP32-S3.
+
 > **Status: pending — hardware not yet flashed.**
 > All benchmark values are TBD. This file will be updated with real
 > measured results once `idf.py flash monitor` has been run on the

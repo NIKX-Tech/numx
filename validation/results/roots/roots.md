@@ -21,7 +21,7 @@
 | newton zero derivative → ERR  | —            | ERR_SINGULAR    | -3          | ✅        |
 | bisect no bracket → ERR       | f(a)*f(b)≥0  | ERR_INVALID_ARG | -2          | ✅        |
 
-*All 22 Unity tests: PASS (test_runner.c:276–302)*
+*All 22 Unity tests: PASS (test_roots.c:276–302)*
 
 ## Performance (x86-64)
 
