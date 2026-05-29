@@ -5,7 +5,13 @@
 **numx version:** d81b386
 
 ## Hardware: ESP32
-*⚠️ Pending.*
+- Board: ESP32-S3-DevKitC-1
+- CPU: Xtensa LX7 @ 160 MHz, HW FPU
+- IDF: ESP-IDF v5.5.2
+- numx commit: d81b386
+- Compiler: xtensa-esp32s3-elf-gcc -O2 -std=gnu99
+- Precision: float32
+- Validator: Amir Ab Khoshk
 
 ## Hardware: Host
 - OS: Ubuntu 22.04 / Intel i7-13700H
@@ -13,14 +19,23 @@
 
 ## Test results
 
-| Test case               | Input      | Expected   | numx output  | Pass/Fail | Notes |
-|-------------------------|-----------|------------|--------------|-----------|-------|
-| L2 Pythagorean 3-4-5    | [3,4], L2  | 5.0        | 5.00000000   | ✅        | Uses Newton-Raphson sqrt (no libm) |
-| L1 known                | [3,4], L1  | 7.0        | 7.00000000   | ✅        |       |
-| Linf known              | [3,4], Linf| 4.0        | 4.00000000   | ✅        |       |
-| null / invalid          | NULL, n=0  | errors     | errors       | ✅        |       |
+### ESP32-S3 hardware run — 9/9 PASS
 
-*All 8 Unity tests: PASS (test_runner.c:526–533)*
+| Test case                  | Input           | Expected             | numx output | Pass/Fail |
+|----------------------------|-----------------|----------------------|-------------|-----------|
+| vec_norm L2 rc             | [3,4], L2       | NUMX_OK (0)          | rc=0        | ✅        |
+| vec_norm L2 [3,4]=5        | [3,4], L2       | 5.0                  | 5.0000000   | ✅        |
+| vec_norm L1 [3,-4,0]=7     | [3,-4,0], L1    | 7.0                  | 7.0000000   | ✅        |
+| vec_norm Linf [3,-5,4]=5   | [3,-5,4], Linf  | 5.0                  | 5.0000000   | ✅        |
+| vec_norm unit = 1          | [1,0,0], L2     | 1.0                  | 1.0000000   | ✅        |
+| vec_norm zero = 0          | [0,0,0], L2     | 0.0                  | 0.0000000   | ✅        |
+| vec_norm null-a            | a=NULL          | ERR_NULL_PTR (-1)    | rc=-1       | ✅        |
+| vec_norm null-out          | out=NULL        | ERR_NULL_PTR (-1)    | rc=-1       | ✅        |
+| vec_norm bad-type          | type=99         | ERR_INVALID_ARG (-2) | rc=-2       | ✅        |
+
+**ESP32-S3 result: 9 PASS / 0 FAIL**
+
+*All 8 Unity tests (host): PASS (test_runner.c:526–533)*
 
 ## Performance (x86-64)
 
