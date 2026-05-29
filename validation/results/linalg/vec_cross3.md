@@ -61,5 +61,26 @@
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
+
+### Test cases
+
+| Test case | Component | Expected | Computed | Error | Pass |
+|-----------|-----------|----------|----------|-------|------|
+| x̂×ŷ = ẑ | [0] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| x̂×ŷ = ẑ | [1] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| x̂×ŷ = ẑ | [2] | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| anti-commutative b×a = −(a×b) | [0] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| anti-commutative b×a = −(a×b) | [1] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| anti-commutative b×a = −(a×b) | [2] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| parallel → zero | [0] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| parallel → zero | [2] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| alias-safe (out=a) | [0] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| alias-safe (out=a) | [1] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| alias-safe (out=a) | [2] | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| null-a | — | rc=-1 | rc=-1 | — | ✅ |
+| null-b | — | rc=-1 | rc=-1 | — | ✅ |
+| null-c | — | rc=-1 | rc=-1 | — | ✅ |
+
+**RESULTS: 15 PASS / 0 FAIL / 15 TOTAL**
