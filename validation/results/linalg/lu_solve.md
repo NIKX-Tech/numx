@@ -70,5 +70,35 @@
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP32-S3-DevKitC-1 / Xtensa LX7 @ 160 MHz / ESP-IDF v5.5.2 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-25 | **Commit:** d81b386
+
+### Test cases (A·x = b, 3×3 textbook system)
+
+| Component | Expected | Computed | Error | Pass |
+|-----------|----------|----------|-------|------|
+| x[0] | 2.0 | 1.9999996 | 3.58e-07 | ✅ |
+| x[1] | 3.0 | 3.0000002 | 2.38e-07 | ✅ |
+| x[2] | -1.0 | -1.0000004 | 3.58e-07 | ✅ |
+| residual b[0] = 8.0 | 8.0 | 8.0000000 | 0.00e+00 | ✅ |
+| residual b[1] = -11.0 | -11.0 | -11.0000000 | 0.00e+00 | ✅ |
+| residual b[2] = -3.0 | -3.0 | -2.9999998 | 2.38e-07 | ✅ |
+| singular → ERR_SINGULAR | -3 | -3 | — | ✅ |
+| NULL checks (5 cases) | -1 | -1 | — | ✅ |
+
+*15 / 15 Unity tests PASS*
+
+### Performance
+
+*Run `run_benchmarks()` on device to collect.*
+
+### Precision vs numpy reference
+
+| Component | numpy | numx | Error |
+|-----------|-------|------|-------|
+| x[0] | 1.0 | 1.00000012 | 1.19e-07 |
+| x[1] | 0.0 | 0.00000000 | 0.00e+00 |
+| x[2] | -1.0 | -1.00000012 | 1.19e-07 |
+| x[3] | 1.0 | 1.00000000 | 0.00e+00 |
+
+*Errors of 1.19e-07 are within float32 machine epsilon (~1.2e-7). Not a bug.*

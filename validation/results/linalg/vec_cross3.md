@@ -61,5 +61,28 @@
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP32-S3-DevKitC-1 / Xtensa LX7 @ 160 MHz / ESP-IDF v5.5.2 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-25 | **Commit:** d81b386
+
+### Test cases
+
+| Input | Expected | Computed | Pass |
+|-------|----------|----------|------|
+| [1,0,0]×[0,1,0] | [0,0,1] | [0,0,1] | ✅ |
+| [1,2,3]×[4,5,6] anti-commutative (axb+bxa=0) | [0,0,0] | [0,0,0] | ✅ |
+| [2,0,0]×[5,0,0] (parallel) | [0,0,0] | [0,0,0] | ✅ |
+| NULL checks (a, b, c) | -1 | -1 | ✅ |
+
+*12 / 12 Unity tests PASS*
+
+### Performance
+
+*Run `run_benchmarks()` on device to collect.*
+
+### Precision vs numpy reference
+
+| Input | component | numpy | numx | Error |
+|-------|-----------|-------|------|-------|
+| [1,2,3]×[4,5,6] | [0] | -3.0 | -3.0 | 0.00e+00 |
+| [1,2,3]×[4,5,6] | [1] | 6.0 | 6.0 | 0.00e+00 |
+| [1,2,3]×[4,5,6] | [2] | -3.0 | -3.0 | 0.00e+00 |

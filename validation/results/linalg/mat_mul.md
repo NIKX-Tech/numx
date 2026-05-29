@@ -60,5 +60,27 @@
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP32-S3-DevKitC-1 / Xtensa LX7 @ 160 MHz / ESP-IDF v5.5.2 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-25 | **Commit:** d81b386
+
+### Test cases
+
+| Case | Expected | Computed | Pass |
+|------|----------|----------|------|
+| 2×2: [[1,2],[3,4]] @ [[5,6],[7,8]] | [[19,22],[43,50]] | [[19,22],[43,50]] | ✅ |
+| 2×3 @ 3×2: C[0,0]=58, C[1,1]=154 | [58, 154] | [58, 154] | ✅ |
+| A × I (identity) | A | A | ✅ |
+| dim mismatch (ca≠rb) | ERR_INVALID_ARG | -2 | ✅ |
+| mat_transpose 2×3 + square in-place | correct | correct | ✅ |
+
+*24 / 24 Unity tests PASS (12 mat_mul + 12 mat_transpose)*
+
+### Performance
+
+*Run `run_benchmarks()` on device to collect.*
+
+### Precision vs numpy reference
+
+| Case | numpy | numx | Error |
+|------|-------|------|-------|
+| 2×2 all elements | exact integers | exact match | 0.00e+00 |
