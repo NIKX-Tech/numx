@@ -1,0 +1,8 @@
+# Force all headers to be treated as C, not C++
+*.h linguist-language=C
+
+# Exclude vendored test framework from language stats
+tests/unity/* linguist-vendored
+
+# Exclude validation scripts from language stats
+validation/python/* linguist-documentation
