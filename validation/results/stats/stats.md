@@ -88,5 +88,35 @@
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP32-S3-DevKitC-1 / Xtensa LX7 @ 160 MHz / ESP-IDF v5.5.2 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-25 | **Commit:** d81b386
+
+### Test cases — dataset [2, 4, 4, 4, 5, 5, 7, 9]
+
+| Function | Expected | Computed | Error | Pass |
+|----------|----------|----------|-------|------|
+| mean | 5.0 | 5.00000000 | 0.00e+00 | ✅ |
+| variance (population) | 4.0 | 4.00000000 | 0.00e+00 | ✅ |
+| variance (sample) | 4.571429 | 4.57142878 | 1.76e-07 | ✅ |
+| median | 4.5 | 4.50000000 | 0.00e+00 | ✅ |
+| percentile p0 | 2.0 | 2.00000000 | 0.00e+00 | ✅ |
+| percentile p100 | 9.0 | 9.00000000 | 0.00e+00 | ✅ |
+| median does not modify input | — | input unchanged | — | ✅ |
+| sample n<2 → ERR_INVALID_ARG | -2 | -2 | — | ✅ |
+
+*35 / 35 Unity tests PASS*
+
+### Performance
+
+*Run `run_benchmarks()` on device to collect. Estimated from x86-64 baseline (160 MHz Xtensa LX7, no cache): stats_median n=128 ~25–30 µs/call — potentially too slow for RT loops.*
+
+### Precision vs numpy reference
+
+| Function | numpy | numx | Error |
+|----------|-------|------|-------|
+| mean | 5.0 | 5.0 | 0.00e+00 |
+| variance pop | 4.0 | 4.0 | 0.00e+00 |
+| variance samp | 4.5714286 | 4.5714288 | 1.76e-07 |
+| median | 4.5 | 4.5 | 0.00e+00 |
+| percentile p0 | 2.0 | 2.0 | 0.00e+00 |
+| percentile p100 | 9.0 | 9.0 | 0.00e+00 |
