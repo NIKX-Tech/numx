@@ -4,6 +4,11 @@
 **Date:** 2026-05-25
 **numx version:** d81b386
 
+## Hardware: Apple Silicon (Mac mini M4 Pro)
+- OS: macOS 26.2 / Apple M4 Pro (arm64) / Apple clang 21.0.0 -O2 / float32
+- **300 / 300 tests PASS** (2026-05-29) — identical results to x86
+- Benchmarks: *pending (bench_runner not yet implemented)*
+
 ## Hardware: ESP32
 *⚠️ Pending — hardware benchmarks not yet collected.*
 
