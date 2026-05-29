@@ -81,5 +81,65 @@
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
+
+### Test cases — trap
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| trap const rc | rc=0 | rc=0 | — | ✅ |
+| trap const = 1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| trap linear = 0.5 | 0.5 | 0.5000000 | 0.00e+00 | ✅ |
+| trap x² = 1/3 | 0.3333333 | 0.3333336 | 2.09e-07 | ✅ |
+| trap linearity | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| trap n=1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| trap null-f | rc=-1 | rc=-1 | — | ✅ |
+| trap null-out | rc=-1 | rc=-1 | — | ✅ |
+| trap a>b | rc=-2 | rc=-2 | — | ✅ |
+| trap a=b | rc=-2 | rc=-2 | — | ✅ |
+| trap n=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — simpson
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| simp const rc | rc=0 | rc=0 | — | ✅ |
+| simp const = 1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| simp linear = 0.5 | 0.5 | 0.5000000 | 0.00e+00 | ✅ |
+| simp x² = 1/3 | 0.3333333 | 0.3333333 | 0.00e+00 | ✅ |
+| simp x³ = 0.25 | 0.25 | 0.2500000 | 0.00e+00 | ✅ |
+| simp x² [0,3] = 9 | 9.0 | 9.0000000 | 0.00e+00 | ✅ |
+| simp odd-n rejected | rc=-2 | rc=-2 | — | ✅ |
+| simp n<2 rejected | rc=-2 | rc=-2 | — | ✅ |
+| simp null-f | rc=-1 | rc=-1 | — | ✅ |
+| simp null-out | rc=-1 | rc=-1 | — | ✅ |
+
+### Test cases — gauss
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| gauss2 linear rc | rc=0 | rc=0 | — | ✅ |
+| gauss2 linear = 0.5 | 0.5 | 0.5000000 | 0.00e+00 | ✅ |
+| gauss4 x² = 1/3 | 0.3333333 | 0.3333333 | 2.98e-08 | ✅ |
+| gauss8 x³ = 0.25 | 0.25 | 0.2500000 | 0.00e+00 | ✅ |
+| gauss8 const [−3,3] = 6 | 6.0 | 6.0000000 | 0.00e+00 | ✅ |
+| gauss null-f | rc=-1 | rc=-1 | — | ✅ |
+| gauss null-out | rc=-1 | rc=-1 | — | ✅ |
+| gauss bad-npts=3 | rc=-2 | rc=-2 | — | ✅ |
+| gauss bad-npts=16 | rc=-2 | rc=-2 | — | ✅ |
+| gauss a>b | rc=-2 | rc=-2 | — | ✅ |
+
+### Precision vs reference
+
+| Function | f | Exact | Computed | Error |
+|----------|---|-------|----------|-------|
+| trap | x² on [0,1] | 0.3333333 | 0.3333336 | 2.09e-07 |
+| simp | x² on [0,1] | 0.3333333 | 0.3333333 | 0.00e+00 |
+| simp | x³ on [0,1] | 0.25 | 0.2500000 | 0.00e+00 |
+| gauss4 | x² on [0,1] | 0.3333333 | 0.3333333 | 2.98e-08 |
+| gauss8 | x³ on [0,1] | 0.25 | 0.2500000 | 0.00e+00 |
+
+*trap x² error of 2.09e-07 is inherent O(h²) trapezoidal truncation, not a bug. Simpson and Gauss methods are exact for polynomials of their respective degrees.*
+
+**RESULTS: 31 PASS / 0 FAIL / 31 TOTAL**
