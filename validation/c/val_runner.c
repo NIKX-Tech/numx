@@ -16,6 +16,8 @@
  * Run:    ./build/numx_val_runner 2>&1 | tee validation_arm64.txt
  */
 
+#define _POSIX_C_SOURCE 199309L
+
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
