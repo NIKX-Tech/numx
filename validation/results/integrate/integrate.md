@@ -24,7 +24,7 @@
 | gauss-8 degree-15 exact       | exact   | exact        | ✅        |
 | odd n for simpson → rejected  | ERR     | -2           | ✅        |
 
-*All 24 Unity tests: PASS (test_runner.c:232–256)*
+*All 24 Unity tests: PASS (test_integrate.c:232–256)*
 
 ## Performance (x86-64)
 

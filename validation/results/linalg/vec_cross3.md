@@ -20,7 +20,7 @@
 | alias-safe            | result=a        | correct     | correct             | ✅        |
 | [1,2,3]×[4,5,6]      | see above       | [-3,6,-3]   | [-3, 6, -3]         | ✅        |
 
-*All 5 Unity tests: PASS (test_runner.c:536–540)*
+*All 5 Unity tests: PASS (test_linalg.c:536–540)*
 
 ## Performance (x86-64)
 

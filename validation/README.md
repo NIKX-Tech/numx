@@ -14,7 +14,7 @@ validation/
 ├── README.md                  ← this file
 ├── hardware/
 │   ├── host_linux_x86_64.md   ← x86 host profile
-│   └── esp32_devkit_v1.md     ← ESP32 profile (details pending)
+│   └── esp32_devkit_v1.md     ← ESP32-S3 profile (details pending; see note in file)
 ├── results/
 │   ├── linalg/
 │   │   ├── vec_dot.md
@@ -43,7 +43,7 @@ validation/
 
 ---
 
-## Phase 1 function inventory (28 functions)
+## Phase 1 function inventory (30 functions)
 
 | ID    | Function                          | Module       | Tests | x86 bench | x86 prec | ESP32 |
 |-------|-----------------------------------|--------------|-------|-----------|----------|-------|
@@ -75,8 +75,8 @@ validation/
 | P1.26 | numx_interp_chebyshev             | interpolate  | ✅    | ✅        | ✅       | ⚠️    |
 | P1.27 | numx_poly_eval                    | poly         | ✅    | ✅        | ✅       | ⚠️    |
 | P1.28 | numx_poly_roots                   | poly         | ✅    | ✅        | ✅       | ⚠️    |
-| extra | numx_ode_rk4                     | ode          | ✅    | ✅        | ✅       | ⚠️    |
-| extra | numx_ode_rk45                    | ode          | ✅    | ✅        | ✅       | ⚠️    |
+| P1.29 | numx_ode_rk4                     | ode          | ✅    | ✅        | ✅       | ⚠️    |
+| P1.30 | numx_ode_rk45                    | ode          | ✅    | ✅        | ✅       | ⚠️    |
 
 ---
 

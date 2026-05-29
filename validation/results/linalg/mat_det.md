@@ -21,7 +21,7 @@
 | singular → 0     | 2  | 0.0       | 0.00000000   | ✅        |
 | identity → 1     | 3  | 1.0       | 1.00000000   | ✅        |
 
-*All 7 Unity tests: PASS (test_runner.c:558–564)*
+*All 7 Unity tests: PASS (test_linalg.c:558–564)*
 
 ## Performance (x86-64)
 

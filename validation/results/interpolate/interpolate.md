@@ -24,7 +24,7 @@
 | chebyshev quadratic exact (n≥3)   | exact   | exact       | ✅        |
 | n<2 → ERR_INVALID_ARG             | -2      | -2          | ✅        |
 
-*All 26 Unity tests: PASS (test_runner.c:287–312)*
+*All 26 Unity tests: PASS (test_interpolate.c:287–312)*
 
 ## Performance (x86-64)
 

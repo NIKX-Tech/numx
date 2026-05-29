@@ -20,7 +20,7 @@
 | Linf known              | [3,4], Linf| 4.0        | 4.00000000   | ✅        |       |
 | null / invalid          | NULL, n=0  | errors     | errors       | ✅        |       |
 
-*All 8 Unity tests: PASS (test_runner.c:526–533)*
+*All 8 Unity tests: PASS (test_linalg.c:526–533)*
 
 ## Performance (x86-64)
 

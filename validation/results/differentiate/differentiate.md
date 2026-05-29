@@ -21,7 +21,7 @@
 | linear function → 1 (central) | 1.0     | exact       | ✅        |
 | h≤0 → ERR_INVALID_ARG         | -2      | -2          | ✅        |
 
-*All 18 Unity tests: PASS (test_runner.c:217–237)*
+*All 18 Unity tests: PASS (test_differentiate.c:217–237)*
 
 ## Performance (x86-64)
 
