@@ -70,5 +70,64 @@ Identical values to x86-64 — confirms float32 cancellation is deterministic ac
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
+
+### Test cases — forward
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| fwd rc | rc=0 | rc=0 | — | ✅ |
+| fwd x³ at 3 = 27 | 27.0 | 27.0061474 | 6.15e-03 | ✅ |
+| fwd x³ at 2 = 12 | 12.0 | 12.0048513 | 4.85e-03 | ✅ |
+| fwd const = 0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| fwd linear = 1 | 1.0 | 0.9999275 | 7.25e-05 | ✅ |
+| fwd x² at 3 = 6 | 6.0 | 6.0005183 | 5.18e-04 | ✅ |
+| fwd null-f | rc=-1 | rc=-1 | — | ✅ |
+| fwd null-out | rc=-1 | rc=-1 | — | ✅ |
+| fwd h=0 | rc=-2 | rc=-2 | — | ✅ |
+| fwd h<0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — central
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| central x³ at 3 = 27 | 27.0 | 26.9975643 | 2.44e-03 | ✅ |
+| central x² at −2 = −4 | −4.0 | −3.9999483 | 5.17e-05 | ✅ |
+| central const = 0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| central linear = 1 | 1.0 | 1.0000169 | 1.69e-05 | ✅ |
+| central x² at 3 = 6 | 6.0 | 5.9995646 | 4.35e-04 | ✅ |
+| central x³ at 2 = 12 | 12.0 | 11.9998446 | 1.55e-04 | ✅ |
+| central null-f | rc=-1 | rc=-1 | — | ✅ |
+| central null-out | rc=-1 | rc=-1 | — | ✅ |
+| central h=0 | rc=-2 | rc=-2 | — | ✅ |
+| central h<0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — richardson
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| rich x³ at 3 = 27 | 27.0 | 26.9988346 | 1.17e-03 | ✅ |
+| rich x³ at 2 = 12 | 12.0 | 11.9995270 | 4.73e-04 | ✅ |
+| rich more accurate than central (large h) | better | confirmed | — | ✅ |
+| rich x² at 3 = 6 | 6.0 | 5.9995646 | 4.35e-04 | ✅ |
+| rich const = 0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| rich null-f | rc=-1 | rc=-1 | — | ✅ |
+| rich null-out | rc=-1 | rc=-1 | — | ✅ |
+| rich h=0 | rc=-2 | rc=-2 | — | ✅ |
+| rich h<0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Precision vs reference
+
+| Function | f | x | Expected f′ | Computed | Error | Note |
+|----------|---|---|------------|----------|-------|------|
+| forward | x³ | 3 | 27.0 | 27.0061474 | 6.15e-03 | float32 cancellation |
+| forward | x³ | 2 | 12.0 | 12.0048513 | 4.85e-03 | float32 cancellation |
+| central | x³ | 3 | 27.0 | 26.9975643 | 2.44e-03 | float32 cancellation |
+| central | x³ | 2 | 12.0 | 11.9998446 | 1.55e-04 | float32 cancellation |
+| richardson | x³ | 3 | 27.0 | 26.9988346 | 1.17e-03 | float32 cancellation |
+| richardson | x³ | 2 | 12.0 | 11.9995270 | 4.73e-04 | float32 cancellation |
+
+*Errors are consistent with FLAG F-01 (float32 cancellation at small h). Matches x86-64/ARM64 behaviour — not a bug.*
+
+**RESULTS: 29 PASS / 0 FAIL / 29 TOTAL**
