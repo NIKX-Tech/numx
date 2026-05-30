@@ -70,5 +70,29 @@
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
+
+### Test cases (3×3 system A·x = b)
+
+| Test | Component | Expected | Computed | Error | Pass |
+|------|-----------|----------|----------|-------|------|
+| lu_decompose 3×3 | rc | 0 | 0 | — | ✅ |
+| lu_solve 3×3 | rc | 0 | 0 | — | ✅ |
+| solution x | x[0] | 2.0 | 2.0000000 | 0.00e+00 | ✅ |
+| solution x | x[1] | 3.0 | 2.9999998 | 2.38e-07 | ✅ |
+| solution x | x[2] | −1.0 | −0.9999999 | 5.96e-08 | ✅ |
+| I·x = b | x[0] | 5.0 | 5.0000000 | 0.00e+00 | ✅ |
+| I·x = b | x[1] | 7.0 | 7.0000000 | 0.00e+00 | ✅ |
+| residual Ax | [0] | 8.0 | 8.0000000 | 0.00e+00 | ✅ |
+| residual Ax | [1] | −11.0 | −11.0000000 | 0.00e+00 | ✅ |
+| residual Ax | [2] | −3.0 | −3.0000000 | 0.00e+00 | ✅ |
+| singular matrix | rc | rc=-3 | rc=-3 | — | ✅ |
+| lu_decompose null-A | rc | rc=-1 | rc=-1 | — | ✅ |
+| lu_decompose null-LU | rc | rc=-1 | rc=-1 | — | ✅ |
+| lu_solve null-LU | rc | rc=-1 | rc=-1 | — | ✅ |
+| lu_solve null-x | rc | rc=-1 | rc=-1 | — | ✅ |
+
+*Errors of 2.38e-07 / 5.96e-08 on x[1] and x[2] are within float32 machine epsilon (~1.2e-7). Not a bug.*
+
+**RESULTS: 15 PASS / 0 FAIL / 15 TOTAL**
