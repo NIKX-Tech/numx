@@ -81,5 +81,56 @@
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
+
+### Test cases — poly_eval
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| poly_eval rc | rc=0 | rc=0 | — | ✅ |
+| x²+1 at 3 = 10 | 10.0 | 10.0000000 | 0.00e+00 | ✅ |
+| x³−2x+1 at 2 = 5 | 5.0 | 5.0000000 | 0.00e+00 | ✅ |
+| at 0 = const = −2 | −2.0 | −2.0000000 | 0.00e+00 | ✅ |
+| degree-0 = 5 | 5.0 | 5.0000000 | 0.00e+00 | ✅ |
+| Horner 2x²+3x+4 at 5 = 69 | 69.0 | 69.0000000 | 0.00e+00 | ✅ |
+| (x−1)(x−2)(x−3) at 1 = 0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| (x−1)(x−2)(x−3) at 2 = 0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| (x−1)(x−2)(x−3) at 3 = 0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| x²−3x+2 at 1 = 0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| poly_eval null-c | rc=-1 | rc=-1 | — | ✅ |
+| poly_eval null-out | rc=-1 | rc=-1 | — | ✅ |
+
+### Test cases — poly_roots
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| poly_roots linear rc | rc=0 | rc=0 | — | ✅ |
+| poly_roots linear nroots=1 | 1 | 1 | — | ✅ |
+| poly_roots linear root=−1 | −1.0 | −1.0000000 | 0.00e+00 | ✅ |
+| poly_roots quad nroots=2 | 2 | 2 | — | ✅ |
+| poly_roots quad f(r0)≈0 | 0.0 | 0.0000019 | 1.91e-06 | ✅ |
+| poly_roots quad f(r1)≈0 | 0.0 | 0.0000024 | 2.38e-06 | ✅ |
+| poly_roots quad root=2 found | 2.0 | confirmed | — | ✅ |
+| poly_roots quad root=3 found | 3.0 | confirmed | — | ✅ |
+| poly_roots cubic residuals all ≈ 0 | ~0 | confirmed | — | ✅ |
+| poly_roots x³−8 has root | confirmed | confirmed | — | ✅ |
+| poly_roots x³−8 real root≈2 | 2.0 | ≈2.0 | — | ✅ |
+| poly_roots null-c | rc=-1 | rc=-1 | — | ✅ |
+| poly_roots null-out | rc=-1 | rc=-1 | — | ✅ |
+| poly_roots null-nr | rc=-1 | rc=-1 | — | ✅ |
+| poly_roots degree=0 | rc=-2 | rc=-2 | — | ✅ |
+| poly_roots tol=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Precision vs reference
+
+| Function | Input | Expected | Computed | Error |
+|----------|-------|----------|----------|-------|
+| poly_eval x²+1 | x=3 | 10.0 | 10.0000000 | 0.00e+00 |
+| poly_eval Horner | x=5 | 69.0 | 69.0000000 | 0.00e+00 |
+| poly_roots quad residual | f(r0) | 0.0 | 1.91e-06 | 1.91e-06 |
+| poly_roots quad residual | f(r1) | 0.0 | 2.38e-06 | 2.38e-06 |
+
+*Quadratic root residuals of ~2e-06 are within float32 precision for iterative root finding. Not a bug.*
+
+**RESULTS: 28 PASS / 0 FAIL / 28 TOTAL**

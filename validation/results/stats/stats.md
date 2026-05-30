@@ -88,5 +88,59 @@
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
+
+### mean
+
+| Test case | Expected | Computed | Error | Pass |
+|-----------|----------|----------|-------|------|
+| [1..5] = 3 | 3.0 | 3.0000000 | 0.00e+00 | ✅ |
+| negatives = 0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| constant = 5 | 5.0 | 5.0000000 | 0.00e+00 | ✅ |
+| arith-seq [1..7] = 4 | 4.0 | 4.0000000 | 0.00e+00 | ✅ |
+| n=1 = 42 | 42.0 | 42.0000000 | 0.00e+00 | ✅ |
+| null array ptr | rc=-1 | rc=-1 | — | ✅ |
+| null output ptr | rc=-1 | rc=-1 | — | ✅ |
+| n=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### variance
+
+| Test case | Expected | Computed | Error | Pass |
+|-----------|----------|----------|-------|------|
+| population = 4 | 4.0 | 4.0000000 | 0.00e+00 | ✅ |
+| sample = 32/7 | 4.571429 | 4.5714288 | 0.00e+00 | ✅ |
+| constant = 0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| sample > population | samp > pop | confirmed | — | ✅ |
+| sample n=1 rejected | rc=-2 | rc=-2 | — | ✅ |
+| null array ptr | rc=-1 | rc=-1 | — | ✅ |
+| null output ptr | rc=-1 | rc=-1 | — | ✅ |
+
+### median
+
+| Test case | Expected | Computed | Error | Pass |
+|-----------|----------|----------|-------|------|
+| odd count = 3 | 3.0 | 3.0000000 | 0.00e+00 | ✅ |
+| even count = 2.5 | 2.5 | 2.5000000 | 0.00e+00 | ✅ |
+| no-modify input[0] | 5.0 | 5.0000000 | 0.00e+00 | ✅ |
+| no-modify input[1] | 3.0 | 3.0000000 | 0.00e+00 | ✅ |
+| no-modify input[2] | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| sorted-mid = 30 | 30.0 | 30.0000000 | 0.00e+00 | ✅ |
+| n=1 = 7 | 7.0 | 7.0000000 | 0.00e+00 | ✅ |
+| n=2 = 2 | 2.0 | 2.0000000 | 0.00e+00 | ✅ |
+| null array ptr | rc=-1 | rc=-1 | — | ✅ |
+| null output ptr | rc=-1 | rc=-1 | — | ✅ |
+
+### percentile
+
+| Test case | Expected | Computed | Error | Pass |
+|-----------|----------|----------|-------|------|
+| p0 = min = 1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| p100 = max = 5 | 5.0 | 5.0000000 | 0.00e+00 | ✅ |
+| no-modify input[0] | 3.0 | 3.0000000 | 0.00e+00 | ✅ |
+| null array ptr | rc=-1 | rc=-1 | — | ✅ |
+| null output ptr | rc=-1 | rc=-1 | — | ✅ |
+| p < 0 | rc=-2 | rc=-2 | — | ✅ |
+| p > 100 | rc=-2 | rc=-2 | — | ✅ |
+
+**RESULTS: 37 PASS / 0 FAIL / 37 TOTAL**

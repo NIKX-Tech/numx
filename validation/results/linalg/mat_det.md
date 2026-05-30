@@ -64,5 +64,19 @@
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
+
+### Test cases
+
+| n | Test case | Expected | Computed | Error | Pass |
+|---|-----------|----------|----------|-------|------|
+| 1×1 | det = 7 | 7.0 | 7.0000000 | 0.00e+00 | ✅ |
+| 2×2 | det = −2 | −2.0 | −2.0000000 | 0.00e+00 | ✅ |
+| 3×3 | det = −3 | −3.0 | −3.0000000 | 0.00e+00 | ✅ |
+| n×n | identity = 1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| 2×2 | singular = 0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| — | null-A | rc=-1 | rc=-1 | — | ✅ |
+| — | null-out | rc=-1 | rc=-1 | — | ✅ |
+
+**RESULTS: 8 PASS / 0 FAIL / 8 TOTAL**
