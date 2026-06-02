@@ -69,35 +69,156 @@ Covers: `window_rect` · `window_hann` · `window_hamming` · `window_blackman` 
 
 ---
 
-## ESP32-S3 — ESP-IDF v5.5.x / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
-**Validator:** — | **Date:** — | **Commit:** —
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
 
-### Test cases
+### Test cases — window_rect
 
 | Test | Expected | Computed | Error | Pass |
 |------|----------|----------|-------|------|
-| rect n=4 rc | rc=0 | — | — | — |
-| rect w[0]=1 | 1.0 | — | — | — |
-| hann n=5 rc | rc=0 | — | — | — |
-| hann w[0]=0 | 0.0 | — | — | — |
-| hann w[2]=1 | 1.0 | — | — | — |
-| hann symmetric | w[1]=w[3] | — | — | — |
-| hamming w[0]=0.08 | 0.08 | — | — | — |
-| hamming center=1 | 1.0 | — | — | — |
-| blackman w[0]≈0 | 0.0 | — | — | — |
-| blackman center=1 | 1.0 | — | — | — |
-| convolve impulse rc | rc=0 | — | — | — |
-| convolve out[0]=1 | 1.0 | — | — | — |
-| convolve out[1]=2 | 2.0 | — | — | — |
-| correlate auto peak=14 | 14.0 | — | — | — |
-| fir identity out[0]=1 | 1.0 | — | — | — |
-| fir box out[1]=1.5 | 1.5 | — | — | — |
-| biquad all-pass [0]=1 | 1.0 | — | — | — |
-| peaks count=2 | 2 | — | — | — |
-| peaks monotone=0 | 0 | — | — | — |
-| ema alpha=1 identity | x[i] | — | — | — |
-| ema alpha=0.5 [2]=2.25 | 2.25 | — | — | — |
-| null-ptr guards | rc=-1 | — | — | — |
-| invalid-arg guards | rc=-2 | — | — | — |
+| rect n=4 rc | rc=0 | rc=0 | — | ✅ |
+| rect w[0]=1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| rect w[1]=1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| rect w[3]=1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| rect n=1 rc | rc=0 | rc=0 | — | ✅ |
+| rect n=1 w[0]=1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| rect null | rc=-1 | rc=-1 | — | ✅ |
+| rect n=0 | rc=-2 | rc=-2 | — | ✅ |
 
-**RESULTS: — PASS / — FAIL / — TOTAL**
+### Test cases — window_hann
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| hann n=5 rc | rc=0 | rc=0 | — | ✅ |
+| hann w[0]=0 (left) | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| hann w[4]=0 (right) | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| hann w[2]=1 (peak) | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| hann symmetric w[1]=w[3] | equal | 0.5000001 | 0.00e+00 | ✅ |
+| hann null | rc=-1 | rc=-1 | — | ✅ |
+| hann n=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — window_hamming
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| hamming n=5 rc | rc=0 | rc=0 | — | ✅ |
+| hamming w[0]=0.08 | 0.08 | 0.0800000 | 1.49e-08 | ✅ |
+| hamming w[2]=1 (peak) | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| hamming symmetric w[1]=w[3] | equal | 0.5400000 | 5.96e-08 | ✅ |
+| hamming null | rc=-1 | rc=-1 | — | ✅ |
+| hamming n=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — window_blackman
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| blackman n=5 rc | rc=0 | rc=0 | — | ✅ |
+| blackman w[0]≈0 | 0.0 | −0.0000000 | 1.49e-08 | ✅ |
+| blackman w[2]=1 (peak) | 1.0 | 0.9999999 | 5.96e-08 | ✅ |
+| blackman symmetric w[1]=w[3] | equal | 0.3400000 | 0.00e+00 | ✅ |
+| blackman null | rc=-1 | rc=-1 | — | ✅ |
+| blackman n=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — convolve
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| convolve impulse rc | rc=0 | rc=0 | — | ✅ |
+| convolve out[0]=1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| convolve out[1]=2 | 2.0 | 2.0000000 | 0.00e+00 | ✅ |
+| convolve out[2]=3 | 3.0 | 3.0000000 | 0.00e+00 | ✅ |
+| convolve out[3]=0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| convolve out[4]=0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| convolve [1,1]*[1,1] out[1]=2 | 2.0 | 2.0000000 | 0.00e+00 | ✅ |
+| convolve null-x | rc=-1 | rc=-1 | — | ✅ |
+| convolve null-h | rc=-1 | rc=-1 | — | ✅ |
+| convolve null-out | rc=-1 | rc=-1 | — | ✅ |
+| convolve xn=0 | rc=-2 | rc=-2 | — | ✅ |
+| convolve hn=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — correlate
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| correlate auto rc | rc=0 | rc=0 | — | ✅ |
+| correlate auto peak=14 | 14.0 | 14.0000000 | 0.00e+00 | ✅ |
+| correlate auto symmetric | 8.0 | 8.0000000 | 0.00e+00 | ✅ |
+| correlate null-x | rc=-1 | rc=-1 | — | ✅ |
+| correlate null-y | rc=-1 | rc=-1 | — | ✅ |
+| correlate null-out | rc=-1 | rc=-1 | — | ✅ |
+| correlate xn=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — fir
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| fir identity rc | rc=0 | rc=0 | — | ✅ |
+| fir identity out[0]=1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| fir identity out[2]=3 | 3.0 | 3.0000000 | 0.00e+00 | ✅ |
+| fir box out[1]=1.5 | 1.5 | 1.5000000 | 0.00e+00 | ✅ |
+| fir null-x | rc=-1 | rc=-1 | — | ✅ |
+| fir null-taps | rc=-1 | rc=-1 | — | ✅ |
+| fir null-out | rc=-1 | rc=-1 | — | ✅ |
+| fir xn=0 | rc=-2 | rc=-2 | — | ✅ |
+| fir ntaps=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — iir_biquad
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| biquad all-pass rc | rc=0 | rc=0 | — | ✅ |
+| biquad all-pass out[0]=1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| biquad all-pass out[2]=3 | 3.0 | 3.0000000 | 0.00e+00 | ✅ |
+| biquad null-x | rc=-1 | rc=-1 | — | ✅ |
+| biquad null-b | rc=-1 | rc=-1 | — | ✅ |
+| biquad null-a | rc=-1 | rc=-1 | — | ✅ |
+| biquad null-out | rc=-1 | rc=-1 | — | ✅ |
+| biquad n=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — peaks
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| peaks 2-peak rc | rc=0 | rc=0 | — | ✅ |
+| peaks count=2 | 2 | 2 | — | ✅ |
+| peaks pk[0]=1 | idx=1 | idx=1 | — | ✅ |
+| peaks pk[1]=3 | idx=3 | idx=3 | — | ✅ |
+| peaks monotone=0 | 0 | 0 | — | ✅ |
+| peaks n=2 → 0 | 0 | 0 | — | ✅ |
+| peaks null-x | rc=-1 | rc=-1 | — | ✅ |
+| peaks null-peaks | rc=-1 | rc=-1 | — | ✅ |
+| peaks null-npeaks | rc=-1 | rc=-1 | — | ✅ |
+
+### Test cases — ema
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| ema alpha=1 rc | rc=0 | rc=0 | — | ✅ |
+| ema alpha=1 out[0]=1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| ema alpha=1 out[1]=3 | 3.0 | 3.0000000 | 0.00e+00 | ✅ |
+| ema alpha=1 out[2]=2 | 2.0 | 2.0000000 | 0.00e+00 | ✅ |
+| ema alpha=0 out[1]=1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| ema alpha=0 out[2]=1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| ema alpha=0.5 out[0]=1.0 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| ema alpha=0.5 out[1]=1.5 | 1.5 | 1.5000000 | 0.00e+00 | ✅ |
+| ema alpha=0.5 out[2]=2.25 | 2.25 | 2.2500000 | 0.00e+00 | ✅ |
+| ema null-x | rc=-1 | rc=-1 | — | ✅ |
+| ema null-out | rc=-1 | rc=-1 | — | ✅ |
+| ema n=0 | rc=-2 | rc=-2 | — | ✅ |
+| ema alpha<0 | rc=-2 | rc=-2 | — | ✅ |
+| ema alpha>1 | rc=-2 | rc=-2 | — | ✅ |
+
+### Precision vs reference
+
+| Function | Input | Exact | Computed | Error |
+|----------|-------|-------|----------|-------|
+| window_hamming | w[0], n=5 | 0.08 | 0.0800000 | 1.49e-08 |
+| window_hamming | w[1] (symm), n=5 | 0.54 | 0.5400000 | 5.96e-08 |
+| window_blackman | w[0], n=5 | 0.0 | −0.0000000 | 1.49e-08 |
+| window_blackman | w[2] (peak), n=5 | 1.0 | 0.9999999 | 5.96e-08 |
+| correlate | auto-corr peak | 14.0 | 14.0000000 | 0.00e+00 |
+| ema | alpha=0.5, out[2] | 2.25 | 2.2500000 | 0.00e+00 |
+
+*Window function errors (1.49e-08 – 5.96e-08) are sub-epsilon float32 trig rounding — expected. Blackman w[0] computes as −0.0 in float32 due to cancellation in 0.42−0.5+0.08; equivalent to 0 for all practical purposes.*
+
+**RESULTS: 86 PASS / 0 FAIL / 86 TOTAL**
