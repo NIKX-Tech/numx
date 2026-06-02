@@ -61,30 +61,90 @@ Covers: `fft_f32` · `ifft_f32` · `fft_q15` · `fft_magnitude`
 
 ---
 
-## ESP32-S3 — ESP-IDF v5.5.x / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
-**Validator:** — | **Date:** — | **Commit:** —
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
 
-### Test cases
+### Test cases — f32_dc
 
 | Test | Expected | Computed | Error | Pass |
 |------|----------|----------|-------|------|
-| fft_f32 dc n=8 rc | rc=0 | — | — | — |
-| fft_f32 dc X[0].re=8 | 8.0 | — | — | — |
-| fft_f32 dc X[0].im=0 | 0.0 | — | — | — |
-| fft_f32 dc X[1].re≈0 | 0.0 | — | — | — |
-| fft_f32 impulse X[0]=1 | 1.0 | — | — | — |
-| fft_f32 impulse X[1]=1 | 1.0 | — | — | — |
-| ifft_f32 roundtrip rc | rc=0 | — | — | — |
-| roundtrip re[0] | 3.0 | — | — | — |
-| roundtrip re[1] | 1.0 | — | — | — |
-| magnitude dc rc | rc=0 | — | — | — |
-| magnitude dc mag[0]=4 | 4.0 | — | — | — |
-| magnitude dc mag[1]≈0 | 0.0 | — | — | — |
-| fft_q15 dc n=2 rc | rc=0 | — | — | — |
-| fft_q15 dc X[0].re>0 | >0 | — | — | — |
-| fft_q15 dc X[1].re=0 | 0 | — | — | — |
-| fft_q15 impulse X[0]>0 | >0 | — | — | — |
-| null-ptr guards | rc=-1 | — | — | — |
-| invalid-arg guards | rc=-2 | — | — | — |
+| fft_f32 dc n=8 rc | rc=0 | rc=0 | — | ✅ |
+| fft_f32 dc X[0].re=8 | 8.0 | 8.0000000 | 0.00e+00 | ✅ |
+| fft_f32 dc X[0].im=0 | 0.0 | 0.0000007 | 7.50e-07 | ✅ |
+| fft_f32 dc X[1].re≈0 | 0.0 | −0.0000002 | 1.51e-07 | ✅ |
+| fft_f32 dc X[4].re≈0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
 
-**RESULTS: — PASS / — FAIL / — TOTAL**
+### Test cases — f32_impulse
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| fft_f32 impulse rc | rc=0 | rc=0 | — | ✅ |
+| fft_f32 impulse X[0]=1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| fft_f32 impulse X[1]=1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| fft_f32 impulse X[2]=1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| fft_f32 impulse X[3]=1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+
+### Test cases — f32_roundtrip
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| ifft_f32 roundtrip rc | rc=0 | rc=0 | — | ✅ |
+| roundtrip re[0] | 3.0 | 3.0000000 | 0.00e+00 | ✅ |
+| roundtrip re[1] | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| roundtrip re[2] | 4.0 | 4.0000000 | 0.00e+00 | ✅ |
+| roundtrip re[3] | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+
+### Test cases — magnitude
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| magnitude dc rc | rc=0 | rc=0 | — | ✅ |
+| magnitude dc mag[0]=4 | 4.0 | 4.0000000 | 0.00e+00 | ✅ |
+| magnitude dc mag[1]≈0 | 0.0 | 0.0000001 | 8.84e-08 | ✅ |
+| magnitude dc mag[2]≈0 | 0.0 | 0.0000001 | 1.25e-07 | ✅ |
+| magnitude null-fft | rc=-1 | rc=-1 | — | ✅ |
+| magnitude null-mag | rc=-1 | rc=-1 | — | ✅ |
+| magnitude n=1 | rc=-2 | rc=-2 | — | ✅ |
+| magnitude n=3 (non-pow2) | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — q15
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| fft_q15 dc n=2 rc | rc=0 | rc=0 | — | ✅ |
+| fft_q15 dc X[0].re>0 | >0 | confirmed | — | ✅ |
+| fft_q15 dc X[1].re=0 | 0 | confirmed | — | ✅ |
+| fft_q15 impulse X[0]>0 | >0 | confirmed | — | ✅ |
+| fft_q15 impulse X[1]>0 | >0 | confirmed | — | ✅ |
+| fft_q15 null | rc=-1 | rc=-1 | — | ✅ |
+| fft_q15 n=0 | rc=-2 | rc=-2 | — | ✅ |
+| fft_q15 n=3 (non-pow2) | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — f32_errors
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| fft_f32 null | rc=-1 | rc=-1 | — | ✅ |
+| fft_f32 n=0 | rc=-2 | rc=-2 | — | ✅ |
+| fft_f32 n=3 | rc=-2 | rc=-2 | — | ✅ |
+| fft_f32 n>max | rc=-2 | rc=-2 | — | ✅ |
+| ifft_f32 null | rc=-1 | rc=-1 | — | ✅ |
+| ifft_f32 n=0 | rc=-2 | rc=-2 | — | ✅ |
+| ifft_f32 n=3 | rc=-2 | rc=-2 | — | ✅ |
+
+### Precision vs reference
+
+| Scenario | Bin | Exact | Computed | Error |
+|----------|-----|-------|----------|-------|
+| DC n=8 | X[0].re | 8.0 | 8.0000000 | 0.00e+00 |
+| DC n=8 | X[0].im | 0.0 | 0.0000007 | 7.50e-07 |
+| DC n=8 | X[1].re | 0.0 | −0.0000002 | 1.51e-07 |
+| Impulse n=4 | X[k].re (all) | 1.0 | 1.0000000 | 0.00e+00 |
+| Roundtrip n=4 | re[0..3] | [3,1,4,1] | exact | 0.00e+00 |
+| Magnitude DC n=4 | mag[0] | 4.0 | 4.0000000 | 0.00e+00 |
+| Magnitude DC n=4 | mag[1] | 0.0 | 0.0000001 | 8.84e-08 |
+| Magnitude DC n=4 | mag[2] | 0.0 | 0.0000001 | 1.25e-07 |
+
+*DC bin X[0].im error of 7.50e-07 and non-DC bin X[1].re error of 1.51e-07 are float32 trig rounding in the butterfly operations — expected. Impulse spectrum and IFFT roundtrip are exact. Magnitude near-zero bins are sub-epsilon.*
+
+**RESULTS: 38 PASS / 0 FAIL / 38 TOTAL**
