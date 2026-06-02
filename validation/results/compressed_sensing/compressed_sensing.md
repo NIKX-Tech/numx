@@ -54,29 +54,68 @@ Covers: `numx_cs_spectral_norm` · `numx_cs_omp` (Orthogonal Matching Pursuit) �
 
 ---
 
-## ESP32-S3 — ESP-IDF v5.5.x / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
-**Validator:** — | **Date:** — | **Commit:** —
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
 
 > **Stack note:** `numx_cs_omp` uses ~9 KB of internal local variables (bounded by
 > `NUMX_MAX_CS_MEASUREMENTS` / `NUMX_MAX_CS_SPARSITY`). Requires
 > `CONFIG_ESP_MAIN_TASK_STACK_SIZE >= 16384` in `sdkconfig`.
 
-### Test cases
+### Test cases — spectral_norm
 
 | Test | Expected | Computed | Error | Pass |
 |------|----------|----------|-------|------|
-| spectral_norm I3 rc | rc=0 | — | — | — |
-| spectral_norm I3=1.0 | 1.0 | — | — | — |
-| spectral_norm D3=3.0 | 3.0 | — | — | — |
-| omp identity rc | rc=0 | — | — | — |
-| omp identity x[0]=3 | 3.0 | — | — | — |
-| omp identity x[1]=0 | 0.0 | — | — | — |
-| omp 2-sparse x[0]=2 | 2.0 | — | — | — |
-| omp 2-sparse x[2]=5 | 5.0 | — | — | — |
-| ista identity rc | rc=0 | — | — | — |
-| ista identity x[0]≈4.5 | 4.5 | — | — | — |
-| ista identity x[1]=0 | 0.0 | — | — | — |
-| null-ptr guards | rc=-1 | — | — | — |
-| invalid-arg guards | rc=-2 | — | — | — |
+| spectral_norm I3 rc | rc=0 | rc=0 | — | ✅ |
+| spectral_norm I3=1.0 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| spectral_norm D3=3.0 | 3.0 | 3.0000000 | 0.00e+00 | ✅ |
+| spectral_norm null-A | rc=-1 | rc=-1 | — | ✅ |
+| spectral_norm null-out | rc=-1 | rc=-1 | — | ✅ |
+| spectral_norm m=0 | rc=-2 | rc=-2 | — | ✅ |
+| spectral_norm n=0 | rc=-2 | rc=-2 | — | ✅ |
 
-**RESULTS: — PASS / — FAIL / — TOTAL**
+### Test cases — omp
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| omp identity rc | rc=0 | rc=0 | — | ✅ |
+| omp identity x[0]=3 | 3.0 | 3.0000000 | 0.00e+00 | ✅ |
+| omp identity x[1]=0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| omp identity x[2]=0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| omp identity x[3]=0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| omp 2-sparse x[0]=2 | 2.0 | 2.0000000 | 0.00e+00 | ✅ |
+| omp 2-sparse x[2]=5 | 5.0 | 5.0000000 | 0.00e+00 | ✅ |
+| omp null-A | rc=-1 | rc=-1 | — | ✅ |
+| omp null-y | rc=-1 | rc=-1 | — | ✅ |
+| omp null-x | rc=-1 | rc=-1 | — | ✅ |
+| omp m=0 | rc=-2 | rc=-2 | — | ✅ |
+| omp n=0 | rc=-2 | rc=-2 | — | ✅ |
+| omp k=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — ista
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| ista identity rc | rc=0 | rc=0 | — | ✅ |
+| ista identity x[0]≈4.5 | 4.5 | 4.5000000 | 0.00e+00 | ✅ |
+| ista identity x[1]=0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| ista identity x[2]=0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| ista null-A | rc=-1 | rc=-1 | — | ✅ |
+| ista null-y | rc=-1 | rc=-1 | — | ✅ |
+| ista null-x | rc=-1 | rc=-1 | — | ✅ |
+| ista step=0 | rc=-2 | rc=-2 | — | ✅ |
+| ista step<0 | rc=-2 | rc=-2 | — | ✅ |
+| ista lambda<0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Precision vs reference
+
+| Function | Scenario | Exact | Computed | Error |
+|----------|----------|-------|----------|-------|
+| spectral_norm | I₃ σ_max | 1.0 | 1.0000000 | 0.00e+00 |
+| spectral_norm | diag(3,1,1) σ_max | 3.0 | 3.0000000 | 0.00e+00 |
+| omp | 1-sparse recovery x[0] | 3.0 | 3.0000000 | 0.00e+00 |
+| omp | 2-sparse recovery x[0],x[2] | 2.0, 5.0 | exact | 0.00e+00 |
+| ista | soft-threshold x[0] (λ=0.5, step=0.9) | 4.5 | 4.5000000 | 0.00e+00 |
+
+*All results exact in float32. OMP recovers sparse signals from identity measurements without error. ISTA converges to the correct soft-threshold solution (5.0 − 0.5 = 4.5) within 1000 iterations.*
+
+**RESULTS: 30 PASS / 0 FAIL / 30 TOTAL**
