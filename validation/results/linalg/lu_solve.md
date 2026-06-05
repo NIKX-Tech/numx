@@ -96,3 +96,30 @@
 *Errors of 2.38e-07 / 5.96e-08 on x[1] and x[2] are within float32 machine epsilon (~1.2e-7). Not a bug.*
 
 **RESULTS: 15 PASS / 0 FAIL / 15 TOTAL**
+
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_lu_solve_3x3_textbook | ✅ |
+| test_lu_solve_identity_system | ✅ |
+| test_lu_solve_residual_is_zero | ✅ |
+| test_lu_decompose_singular | ✅ |
+| test_lu_decompose_null_A | ✅ |
+| test_lu_decompose_null_LU | ✅ |
+| test_lu_solve_null_LU | ✅ |
+| test_lu_solve_null_x | ✅ |
+
+**RESULTS: 8 PASS / 0 FAIL / 8 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** — | **Date:** — | **Commit:** —
+
+> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.

@@ -56,8 +56,8 @@ Covers: **forward-mode** (`numx_dual_t` — const, var, add, sub, mul, div, neg,
 
 ---
 
-## x86-64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
-**Validator:** Amir Ab Khoshk | **Date:** 2026-06-03 | **Commit:** 9cb92bc
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
 
 ### Forward-mode tests
 
@@ -256,3 +256,10 @@ Covers: **forward-mode** (`numx_dual_t` — const, var, add, sub, mul, div, neg,
 *Errors of 6.25e-08 on sin/cos at x=0 are float32 trig rounding — sub-epsilon, expected. All arithmetic operations (add/sub/mul/div/neg) and exp/log/sqrt are exact in float32. Both forward and reverse modes agree.*
 
 **RESULTS: 70 PASS / 0 FAIL / 70 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** — | **Date:** — | **Commit:** —
+
+> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.

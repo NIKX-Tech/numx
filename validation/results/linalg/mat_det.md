@@ -80,3 +80,29 @@
 | — | null-out | rc=-1 | rc=-1 | — | ✅ |
 
 **RESULTS: 8 PASS / 0 FAIL / 8 TOTAL**
+
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_mat_det_1x1 | ✅ |
+| test_mat_det_2x2 | ✅ |
+| test_mat_det_3x3 | ✅ |
+| test_mat_det_identity_is_one | ✅ |
+| test_mat_det_singular_is_zero | ✅ |
+| test_mat_det_null | ✅ |
+| test_mat_det_null_result | ✅ |
+
+**RESULTS: 7 PASS / 0 FAIL / 7 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** — | **Date:** — | **Commit:** —
+
+> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.

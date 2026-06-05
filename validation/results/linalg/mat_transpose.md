@@ -36,3 +36,28 @@ Expected Sᵀ (in-place): [1,3,2,4]
 | null ptr | rc=-1 | rc=-1 | — | ✅ |
 
 **RESULTS: 16 PASS / 0 FAIL / 16 TOTAL**
+
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_mat_transpose_2x3 | ✅ |
+| test_mat_transpose_double_is_identity | ✅ |
+| test_mat_transpose_sq_inplace | ✅ |
+| test_mat_transpose_sq_twice_is_identity | ✅ |
+| test_mat_transpose_null | ✅ |
+| test_mat_transpose_sq_null | ✅ |
+
+**RESULTS: 6 PASS / 0 FAIL / 6 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** — | **Date:** — | **Commit:** —
+
+> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.

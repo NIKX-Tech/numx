@@ -144,3 +144,48 @@
 | p > 100 | rc=-2 | rc=-2 | — | ✅ |
 
 **RESULTS: 37 PASS / 0 FAIL / 37 TOTAL**
+
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_stats_mean_known | ✅ |
+| test_stats_mean_negative_values | ✅ |
+| test_stats_mean_arithmetic_sequence | ✅ |
+| test_stats_mean_constant_array | ✅ |
+| test_stats_mean_single_element | ✅ |
+| test_stats_mean_null_a | ✅ |
+| test_stats_mean_null_result | ✅ |
+| test_stats_mean_n_zero | ✅ |
+| test_stats_variance_pop_known | ✅ |
+| test_stats_variance_sample_known | ✅ |
+| test_stats_variance_constant_is_zero | ✅ |
+| test_stats_variance_sample_ge_population | ✅ |
+| test_stats_variance_sample_n1_rejected | ✅ |
+| test_stats_variance_null | ✅ |
+| test_stats_median_odd_known | ✅ |
+| test_stats_median_even_known | ✅ |
+| test_stats_median_sorted_middle | ✅ |
+| test_stats_median_does_not_modify_input | ✅ |
+| test_stats_median_single_element | ✅ |
+| test_stats_median_two_elements | ✅ |
+| test_stats_median_null | ✅ |
+| test_stats_percentile_0_is_min | ✅ |
+| test_stats_percentile_100_is_max | ✅ |
+| test_stats_percentile_does_not_modify_input | ✅ |
+| test_stats_percentile_null | ✅ |
+| test_stats_percentile_out_of_range | ✅ |
+
+**RESULTS: 26 PASS / 0 FAIL / 26 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** — | **Date:** — | **Commit:** —
+
+> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.

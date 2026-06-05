@@ -148,3 +148,40 @@ Covers: `fft_f32` · `ifft_f32` · `fft_q15` · `fft_magnitude`
 *DC bin X[0].im error of 7.50e-07 and non-DC bin X[1].re error of 1.51e-07 are float32 trig rounding in the butterfly operations — expected. Impulse spectrum and IFFT roundtrip are exact. Magnitude near-zero bins are sub-epsilon.*
 
 **RESULTS: 38 PASS / 0 FAIL / 38 TOTAL**
+
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_fft_dc_n4 | ✅ |
+| test_fft_single_tone_n4 | ✅ |
+| test_fft_dc_n2 | ✅ |
+| test_fft_n1_passthrough | ✅ |
+| test_fft_delta_at_0 | ✅ |
+| test_fft_null_returns_error | ✅ |
+| test_fft_n_not_power_of_two | ✅ |
+| test_fft_n_exceeds_max | ✅ |
+| test_ifft_roundtrip | ✅ |
+| test_ifft_dc_spectrum | ✅ |
+| test_ifft_null_returns_error | ✅ |
+| test_fft_q15_dc_n4 | ✅ |
+| test_fft_q15_null_returns_error | ✅ |
+| test_fft_q15_n_not_power_of_two | ✅ |
+| test_fft_magnitude_dc | ✅ |
+| test_fft_magnitude_complex_bin | ✅ |
+| test_fft_magnitude_null_returns_error | ✅ |
+| test_fft_magnitude_n1_invalid | ✅ |
+
+**RESULTS: 18 PASS / 0 FAIL / 18 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** — | **Date:** — | **Commit:** —
+
+> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.

@@ -134,3 +134,38 @@
 *Quadratic root residuals of ~2e-06 are within float32 precision for iterative root finding. Not a bug.*
 
 **RESULTS: 28 PASS / 0 FAIL / 28 TOTAL**
+
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_poly_eval_quadratic_at_3 | ✅ |
+| test_poly_eval_cubic_at_2 | ✅ |
+| test_poly_eval_at_zero | ✅ |
+| test_poly_eval_at_one | ✅ |
+| test_poly_eval_degree_0 | ✅ |
+| test_poly_eval_horner_consistency | ✅ |
+| test_poly_eval_null_coeffs | ✅ |
+| test_poly_eval_null_result | ✅ |
+| test_poly_roots_linear | ✅ |
+| test_poly_roots_quadratic_two_reals | ✅ |
+| test_poly_roots_quadratic_root_values | ✅ |
+| test_poly_roots_cubic_residuals | ✅ |
+| test_poly_roots_single_real_found | ✅ |
+| test_poly_roots_null | ✅ |
+| test_poly_roots_degree_zero_rejected | ✅ |
+| test_poly_roots_tol_nonpositive | ✅ |
+
+**RESULTS: 16 PASS / 0 FAIL / 16 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** — | **Date:** — | **Commit:** —
+
+> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.

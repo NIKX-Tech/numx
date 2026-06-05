@@ -109,3 +109,28 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 > seed is not portable across `rand()` implementations.
 
 **RESULTS: 16 PASS / 2 FAIL / 18 TOTAL**
+
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_rsvd_rank1_reconstruction | ✅ |
+| test_rsvd_diagonal_rank2 | ✅ |
+| test_rsvd_tall_matrix | ✅ |
+| test_rsvd_null_returns_error | ✅ |
+| test_rsvd_invalid_arg_returns_error | ✅ |
+| test_rsvd_seed0 | ✅ |
+
+**RESULTS: 6 PASS / 0 FAIL / 6 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** — | **Date:** — | **Commit:** —
+
+> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.

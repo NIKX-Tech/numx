@@ -150,3 +150,46 @@
 *Chebyshev errors of 2.38e-07 and 1.19e-07 are at float32 machine epsilon (~1.2e-07) — expected for polynomial interpolation in floating-point arithmetic. Spline cubic error of 2.98e-08 is sub-epsilon.*
 
 **RESULTS: 37 PASS / 0 FAIL / 37 TOTAL**
+
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_linear_midpoint_known | ✅ |
+| test_linear_second_interval | ✅ |
+| test_linear_at_knots | ✅ |
+| test_linear_clamp_below | ✅ |
+| test_linear_clamp_above | ✅ |
+| test_linear_n2 | ✅ |
+| test_linear_null | ✅ |
+| test_linear_n_lt_2 | ✅ |
+| test_spline_linear_data_exact | ✅ |
+| test_spline_cubic_oneshot_midpoint | ✅ |
+| test_spline_at_knots | ✅ |
+| test_spline_clamp_below | ✅ |
+| test_spline_clamp_above | ✅ |
+| test_spline_n2 | ✅ |
+| test_spline_precompute_null | ✅ |
+| test_spline_precompute_n_lt_2 | ✅ |
+| test_cheb_constant | ✅ |
+| test_cheb_linear_exact | ✅ |
+| test_cheb_quadratic_exact | ✅ |
+| test_cheb_quadratic_at_zero | ✅ |
+| test_cheb_n2_gives_linear_interp | ✅ |
+| test_cheb_null | ✅ |
+| test_cheb_b_le_a | ✅ |
+| test_cheb_n_lt_2 | ✅ |
+
+**RESULTS: 24 PASS / 0 FAIL / 24 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** — | **Date:** — | **Commit:** —
+
+> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
