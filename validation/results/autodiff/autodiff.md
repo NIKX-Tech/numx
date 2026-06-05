@@ -56,6 +56,51 @@ Covers: **forward-mode** (`numx_dual_t` — const, var, add, sub, mul, div, neg,
 
 ---
 
+## x86-64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-03 | **Commit:** 9cb92bc
+
+### Forward-mode tests
+
+| Test | Result |
+|------|--------|
+| test_dual_const | ✅ |
+| test_dual_var | ✅ |
+| test_dual_add | ✅ |
+| test_dual_sub | ✅ |
+| test_dual_mul | ✅ |
+| test_dual_div | ✅ |
+| test_dual_neg | ✅ |
+| test_dual_sin | ✅ |
+| test_dual_cos | ✅ |
+| test_dual_exp | ✅ |
+| test_dual_log | ✅ |
+| test_dual_sqrt | ✅ |
+| test_dual_chain_quadratic | ✅ |
+| test_dual_div_by_zero | ✅ |
+| test_dual_log_nonpositive | ✅ |
+| test_dual_sqrt_negative | ✅ |
+
+### Reverse-mode tests
+
+| Test | Result |
+|------|--------|
+| test_ad_init | ✅ |
+| test_ad_var | ✅ |
+| test_ad_add_backward | ✅ |
+| test_ad_mul_backward | ✅ |
+| test_ad_div_backward | ✅ |
+| test_ad_sin_backward | ✅ |
+| test_ad_quadratic | ✅ |
+| test_ad_null_returns_error | ✅ |
+| test_ad_invalid_idx_returns_error | ✅ |
+| test_ad_div_by_zero_returns_error | ✅ |
+| test_ad_log_nonpositive_returns_error | ✅ |
+| test_ad_sqrt_negative_returns_error | ✅ |
+
+**RESULTS: 28 PASS / 0 FAIL / 28 TOTAL**
+
+---
+
 ## ARM64 — macOS / Apple M4 Pro / Apple clang / float32
 **Validator:** — | **Date:** — | **Commit:** —
 
