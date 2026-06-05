@@ -131,3 +131,41 @@ Identical values to x86-64 — confirms float32 cancellation is deterministic ac
 *Errors are consistent with FLAG F-01 (float32 cancellation at small h). Matches x86-64/ARM64 behaviour — not a bug.*
 
 **RESULTS: 29 PASS / 0 FAIL / 29 TOTAL**
+
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_fwd_quadratic_at_3 | ✅ |
+| test_fwd_cubic_at_2 | ✅ |
+| test_fwd_constant_is_zero | ✅ |
+| test_fwd_linear_is_one | ✅ |
+| test_fwd_null | ✅ |
+| test_fwd_nonpositive_h | ✅ |
+| test_central_quadratic_at_3 | ✅ |
+| test_central_quadratic_at_neg2 | ✅ |
+| test_central_cubic_at_2 | ✅ |
+| test_central_constant_is_zero | ✅ |
+| test_central_linear_exact | ✅ |
+| test_central_null | ✅ |
+| test_central_nonpositive_h | ✅ |
+| test_richardson_quadratic_at_3 | ✅ |
+| test_richardson_cubic_at_2 | ✅ |
+| test_richardson_more_accurate_than_central | ✅ |
+| test_richardson_constant_is_zero | ✅ |
+| test_richardson_null | ✅ |
+| test_richardson_nonpositive_h | ✅ |
+
+**RESULTS: 19 PASS / 0 FAIL / 19 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** — | **Date:** — | **Commit:** —
+
+> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.

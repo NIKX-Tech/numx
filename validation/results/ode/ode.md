@@ -135,3 +135,40 @@
 *Errors on growth problems (1.67e-06 / 1.43e-06) are ODE integration truncation error, not float32 rounding — inherent in finite step size. Single-step and decay errors are at float32 epsilon level (~1.2e-07).*
 
 **RESULTS: 27 PASS / 0 FAIL / 27 TOTAL**
+
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_rk4_growth_at_t1 | ✅ |
+| test_rk4_decay_at_t1 | ✅ |
+| test_rk4_growth_at_t2 | ✅ |
+| test_rk4_harmonic_energy_conserved | ✅ |
+| test_rk4_single_step | ✅ |
+| test_rk4_propagates_rhs_error | ✅ |
+| test_rk4_null | ✅ |
+| test_rk4_h_nonpositive | ✅ |
+| test_rk4_steps_zero | ✅ |
+| test_rk4_n_zero | ✅ |
+| test_rk45_growth_at_t1 | ✅ |
+| test_rk45_decay_at_t1 | ✅ |
+| test_rk45_harmonic_energy_conserved | ✅ |
+| test_rk45_propagates_rhs_error | ✅ |
+| test_rk45_null | ✅ |
+| test_rk45_t1_le_t0 | ✅ |
+| test_rk45_tol_nonpositive | ✅ |
+| test_rk45_n_zero | ✅ |
+
+**RESULTS: 18 PASS / 0 FAIL / 18 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** — | **Date:** — | **Commit:** —
+
+> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.

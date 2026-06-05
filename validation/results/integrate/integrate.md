@@ -143,3 +143,45 @@
 *trap x² error of 2.09e-07 is inherent O(h²) trapezoidal truncation, not a bug. Simpson and Gauss methods are exact for polynomials of their respective degrees.*
 
 **RESULTS: 31 PASS / 0 FAIL / 31 TOTAL**
+
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_trap_constant_one | ✅ |
+| test_trap_linear | ✅ |
+| test_trap_quadratic | ✅ |
+| test_trap_linearity | ✅ |
+| test_trap_n1 | ✅ |
+| test_trap_null | ✅ |
+| test_trap_a_ge_b | ✅ |
+| test_trap_n_zero | ✅ |
+| test_simpson_constant_one | ✅ |
+| test_simpson_linear_exact | ✅ |
+| test_simpson_quadratic_exact | ✅ |
+| test_simpson_cubic_exact | ✅ |
+| test_simpson_wider_interval | ✅ |
+| test_simpson_odd_n_rejected | ✅ |
+| test_simpson_n_lt_2_rejected | ✅ |
+| test_simpson_null | ✅ |
+| test_gauss2_linear | ✅ |
+| test_gauss4_quadratic_exact | ✅ |
+| test_gauss8_cubic_exact | ✅ |
+| test_gauss8_constant_exact | ✅ |
+| test_gauss_null | ✅ |
+| test_gauss_invalid_npts | ✅ |
+| test_gauss_a_ge_b | ✅ |
+
+**RESULTS: 23 PASS / 0 FAIL / 23 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** — | **Date:** — | **Commit:** —
+
+> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.

@@ -222,3 +222,50 @@ Covers: `window_rect` · `window_hann` · `window_hamming` · `window_blackman` 
 *Window function errors (1.49e-08 – 5.96e-08) are sub-epsilon float32 trig rounding — expected. Blackman w[0] computes as −0.0 in float32 due to cancellation in 0.42−0.5+0.08; equivalent to 0 for all practical purposes.*
 
 **RESULTS: 86 PASS / 0 FAIL / 86 TOTAL**
+
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_window_rect_all_ones | ✅ |
+| test_window_rect_n1 | ✅ |
+| test_window_hann_endpoints_zero | ✅ |
+| test_window_hann_midpoint_one | ✅ |
+| test_window_hann_n1_returns_one | ✅ |
+| test_window_hamming_endpoints | ✅ |
+| test_window_hamming_midpoint_one | ✅ |
+| test_window_blackman_endpoints_zero | ✅ |
+| test_window_blackman_midpoint_one | ✅ |
+| test_convolve_box | ✅ |
+| test_convolve_unit_impulse | ✅ |
+| test_convolve_null_returns_error | ✅ |
+| test_correlate_autocorr_peak_at_lag0 | ✅ |
+| test_correlate_output_length | ✅ |
+| test_fir_identity_tap | ✅ |
+| test_fir_moving_average | ✅ |
+| test_fir_null_returns_error | ✅ |
+| test_iir_biquad_identity | ✅ |
+| test_iir_biquad_scale | ✅ |
+| test_iir_biquad_null_returns_error | ✅ |
+| test_peaks_two_peaks | ✅ |
+| test_peaks_monotone_no_peaks | ✅ |
+| test_peaks_short_signal_no_peaks | ✅ |
+| test_peaks_buffer_too_small | ✅ |
+| test_ema_alpha1_copies_input | ✅ |
+| test_ema_alpha0_stays_at_first | ✅ |
+| test_ema_known_sequence | ✅ |
+| test_ema_invalid_alpha_returns_error | ✅ |
+
+**RESULTS: 28 PASS / 0 FAIL / 28 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** — | **Date:** — | **Commit:** —
+
+> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.

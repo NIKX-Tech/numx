@@ -82,3 +82,30 @@
 | bad norm type | — | rc=-2 | rc=-2 | — | ✅ |
 
 **RESULTS: 9 PASS / 0 FAIL / 9 TOTAL**
+
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_vec_norm_l2_pythagorean | ✅ |
+| test_vec_norm_l1_known | ✅ |
+| test_vec_norm_linf_known | ✅ |
+| test_vec_norm_unit_vector_is_one | ✅ |
+| test_vec_norm_zero_vector_is_zero | ✅ |
+| test_vec_norm_null_a | ✅ |
+| test_vec_norm_null_result | ✅ |
+| test_vec_norm_unknown_type | ✅ |
+
+**RESULTS: 8 PASS / 0 FAIL / 8 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** — | **Date:** — | **Commit:** —
+
+> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.

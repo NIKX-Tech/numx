@@ -119,3 +119,37 @@ Covers: `numx_cs_spectral_norm` · `numx_cs_omp` (Orthogonal Matching Pursuit) �
 *All results exact in float32. OMP recovers sparse signals from identity measurements without error. ISTA converges to the correct soft-threshold solution (5.0 − 0.5 = 4.5) within 1000 iterations.*
 
 **RESULTS: 30 PASS / 0 FAIL / 30 TOTAL**
+
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_omp_identity_1sparse | ✅ |
+| test_omp_identity_2sparse | ✅ |
+| test_omp_overdetermined_1sparse | ✅ |
+| test_omp_null_returns_error | ✅ |
+| test_omp_invalid_arg_returns_error | ✅ |
+| test_ista_identity_shrinkage | ✅ |
+| test_ista_zero_lambda_recovery | ✅ |
+| test_ista_large_lambda_zeros | ✅ |
+| test_ista_null_returns_error | ✅ |
+| test_ista_invalid_step_returns_error | ✅ |
+| test_spectral_norm_identity | ✅ |
+| test_spectral_norm_scaled_identity | ✅ |
+| test_spectral_norm_tall_matrix | ✅ |
+| test_spectral_norm_null_returns_error | ✅ |
+| test_spectral_norm_invalid_arg | ✅ |
+
+**RESULTS: 15 PASS / 0 FAIL / 15 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** — | **Date:** — | **Commit:** —
+
+> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.

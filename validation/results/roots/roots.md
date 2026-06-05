@@ -131,3 +131,47 @@
 *bisect errors of 1.91e-06 reflect convergence to tolerance; newton and brent converge to exact float32 representation for integer roots.*
 
 **RESULTS: 29 PASS / 0 FAIL / 29 TOTAL**
+
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_bisect_linear | ✅ |
+| test_bisect_quadratic_positive | ✅ |
+| test_bisect_quadratic_negative | ✅ |
+| test_bisect_residual_near_zero | ✅ |
+| test_bisect_root_at_left_endpoint | ✅ |
+| test_bisect_root_at_right_endpoint | ✅ |
+| test_bisect_null_f | ✅ |
+| test_bisect_null_root | ✅ |
+| test_bisect_no_bracket | ✅ |
+| test_bisect_tol_zero | ✅ |
+| test_newton_linear | ✅ |
+| test_newton_quadratic | ✅ |
+| test_newton_residual_near_zero | ✅ |
+| test_newton_already_at_root | ✅ |
+| test_newton_null_f | ✅ |
+| test_newton_null_df | ✅ |
+| test_newton_zero_derivative | ✅ |
+| test_newton_tol_negative | ✅ |
+| test_brent_linear | ✅ |
+| test_brent_quadratic | ✅ |
+| test_brent_cubic_root_at_one | ✅ |
+| test_brent_residual_near_zero | ✅ |
+| test_brent_null | ✅ |
+| test_brent_no_bracket | ✅ |
+| test_brent_tol_zero | ✅ |
+
+**RESULTS: 25 PASS / 0 FAIL / 25 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** — | **Date:** — | **Commit:** —
+
+> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.

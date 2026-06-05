@@ -78,3 +78,32 @@
 | n=0 | rc=-2 | rc=-2 | — | ✅ |
 
 **RESULTS: 11 PASS / 0 FAIL / 11 TOTAL**
+
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_vec_dot_known | ✅ |
+| test_vec_dot_orthogonal | ✅ |
+| test_vec_dot_commutative | ✅ |
+| test_vec_dot_self_equals_sq_norm | ✅ |
+| test_vec_dot_single_element | ✅ |
+| test_vec_dot_zero_vector | ✅ |
+| test_vec_dot_null_a | ✅ |
+| test_vec_dot_null_b | ✅ |
+| test_vec_dot_null_result | ✅ |
+| test_vec_dot_zero_n | ✅ |
+
+**RESULTS: 10 PASS / 0 FAIL / 10 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** — | **Date:** — | **Commit:** —
+
+> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
