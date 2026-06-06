@@ -212,13 +212,15 @@ Covers: `window_rect` · `window_hann` · `window_hamming` · `window_blackman` 
 
 | Function | N | Total | Per call |
 |----------|---|-------|----------|
-| signal_window_hann n=64 | 10,000 | — | — |
-| signal_convolve x=64 h=8 | 1,000 | — | — |
-| signal_correlate x=64 y=8 | 1,000 | — | — |
-| signal_fir x=128 ntaps=8 | 1,000 | — | — |
-| signal_iir_biquad n=128 | 5,000 | — | — |
-| signal_peaks n=64 | 5,000 | — | — |
-| signal_ema n=128 alpha=0.1 | 5,000 | — | — |
+| signal_window_hann n=64 | 10,000 | 4,520,091 µs | 452,009 ns |
+| signal_convolve x=64 h=8 | 1,000 | 56,642 µs | 56,642 ns |
+| signal_correlate x=64 y=8 | 1,000 | 63,059 µs | 63,059 ns |
+| signal_fir x=128 ntaps=8 | 1,000 | 123,815 µs | 123,815 ns |
+| signal_iir_biquad n=128 | 5,000 | 161,501 µs | 32,300 ns |
+| signal_peaks n=64 | 5,000 | 45,493 µs | 9,098 ns |
+| signal_ema n=128 alpha=0.1 | 5,000 | 89,029 µs | 17,805 ns |
+
+*⚠️ `signal_window_hann` takes 452 µs/call (vs 3.5 ns on x86) because `window_hann` calls `priv_cos` which uses `__divsf3` (software-float ROM division) — same root cause as the FFT trig issue. All other signal functions use only arithmetic and run at expected embedded speeds.*
 
 ### Precision vs reference
 

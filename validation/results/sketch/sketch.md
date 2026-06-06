@@ -93,7 +93,7 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 
 | Function | N | Total | Per call |
 |----------|---|-------|----------|
-| sketch_rsvd 8x8 rank=2 os=2 | 100 | — | — |
+| sketch_rsvd 8x8 rank=2 os=2 | 100 | 904,909 µs | 9,049,090 ns |
 | sketch_rsvd 16x16 rank=4 os=4 | 100 | — | — |
 
 ### Precision vs reference
