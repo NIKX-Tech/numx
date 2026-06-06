@@ -79,6 +79,12 @@
 | — | null-A | rc=-1 | rc=-1 | — | ✅ |
 | — | null-out | rc=-1 | rc=-1 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_det 4x4 | 10,000 | — | — |
+
 **RESULTS: 8 PASS / 0 FAIL / 8 TOTAL**
 
 ---
@@ -98,11 +104,35 @@
 | test_mat_det_null | ✅ |
 | test_mat_det_null_result | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_det 4x4 | 100,000 | 7,449 µs | 74 ns |
+
 **RESULTS: 7 PASS / 0 FAIL / 7 TOTAL**
 
 ---
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
-**Validator:** — | **Date:** — | **Commit:** —
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
 
-> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_mat_det_1x1 | ✅ |
+| test_mat_det_2x2 | ✅ |
+| test_mat_det_3x3 | ✅ |
+| test_mat_det_identity_is_one | ✅ |
+| test_mat_det_singular_is_zero | ✅ |
+| test_mat_det_null | ✅ |
+| test_mat_det_null_result | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_det 4x4 | 100,000 | 6,224 µs | 62 ns |
+
+**RESULTS: 7 PASS / 0 FAIL / 7 TOTAL**

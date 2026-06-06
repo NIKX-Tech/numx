@@ -89,6 +89,13 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 | rsvd n=0 | rc=-2 | rc=-2 | — | ✅ |
 | rsvd rank=0 | rc=-2 | rc=-2 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| sketch_rsvd 8x8 rank=2 os=2 | 100 | — | — |
+| sketch_rsvd 16x16 rank=4 os=4 | 100 | — | — |
+
 ### Precision vs reference
 
 | Scenario | Exact | Computed | Error | Note |
@@ -126,11 +133,35 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 | test_rsvd_invalid_arg_returns_error | ✅ |
 | test_rsvd_seed0 | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| sketch_rsvd 8x8 rank=2 os=2 | 100 | 9,438 µs | 94,380 ns |
+| sketch_rsvd 16x16 rank=4 os=4 | 100 | 46,646 µs | 466,460 ns |
+
 **RESULTS: 6 PASS / 0 FAIL / 6 TOTAL**
 
 ---
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
-**Validator:** — | **Date:** — | **Commit:** —
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
 
-> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_rsvd_rank1_reconstruction | ✅ |
+| test_rsvd_diagonal_rank2 | ✅ |
+| test_rsvd_tall_matrix | ✅ |
+| test_rsvd_null_returns_error | ✅ |
+| test_rsvd_invalid_arg_returns_error | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| sketch_rsvd 8x8 rank=2 os=2 | 100 | 9,476 µs | 94,760 ns |
+| sketch_rsvd 16x16 rank=4 os=4 | 100 | 49,092 µs | 490,920 ns |
+
+**RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**

@@ -122,6 +122,14 @@
 | poly_roots degree=0 | rc=-2 | rc=-2 | — | ✅ |
 | poly_roots tol=0 | rc=-2 | rc=-2 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| poly_eval degree=8 | 10,000 | — | — |
+| poly_eval degree=3 | 10,000 | — | — |
+| poly_roots degree=3 tol=1e-4 | 100 | — | — |
+
 ### Precision vs reference
 
 | Function | Input | Expected | Computed | Error |
@@ -161,11 +169,48 @@
 | test_poly_roots_degree_zero_rejected | ✅ |
 | test_poly_roots_tol_nonpositive | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| poly_eval degree=8 | 100,000 | 885 µs | 8 ns |
+| poly_eval degree=3 | 100,000 | 293 µs | 2 ns |
+| poly_roots degree=3 tol=1e-4 | 1,000 | 159 µs | 159 ns |
+
 **RESULTS: 16 PASS / 0 FAIL / 16 TOTAL**
 
 ---
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
-**Validator:** — | **Date:** — | **Commit:** —
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
 
-> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_poly_eval_quadratic_at_3 | ✅ |
+| test_poly_eval_cubic_at_2 | ✅ |
+| test_poly_eval_at_zero | ✅ |
+| test_poly_eval_at_one | ✅ |
+| test_poly_eval_degree_0 | ✅ |
+| test_poly_eval_horner_consistency | ✅ |
+| test_poly_eval_null_coeffs | ✅ |
+| test_poly_eval_null_result | ✅ |
+| test_poly_roots_linear | ✅ |
+| test_poly_roots_quadratic_two_reals | ✅ |
+| test_poly_roots_quadratic_root_values | ✅ |
+| test_poly_roots_cubic_residuals | ✅ |
+| test_poly_roots_single_real_found | ✅ |
+| test_poly_roots_null | ✅ |
+| test_poly_roots_degree_zero_rejected | ✅ |
+| test_poly_roots_tol_nonpositive | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| poly_eval degree=8 | 100,000 | 795 µs | 7 ns |
+| poly_eval degree=3 | 100,000 | 350 µs | 3 ns |
+| poly_roots degree=3 tol=1e-4 | 1,000 | 205 µs | 205 ns |
+
+**RESULTS: 16 PASS / 0 FAIL / 16 TOTAL**

@@ -83,6 +83,15 @@
 | null-A | — | rc=-1 | rc=-1 | — | ✅ |
 | null-C | — | rc=-1 | rc=-1 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_mul 4x4 | 10,000 | — | — |
+| mat_mul 8x8 | 100 | — | — |
+| mat_transpose 8x8 | 10,000 | — | — |
+| mat_transpose_sq 8x8 | 10,000 | — | — |
+
 **RESULTS: 16 PASS / 0 FAIL / 16 TOTAL**
 
 ---
@@ -100,11 +109,35 @@
 | test_mat_mul_dim_mismatch | ✅ |
 | test_mat_mul_null_A | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_mul 4x4 | 100,000 | 9,872 µs | 98 ns |
+| mat_mul 8x8 | 10,000 | 7,472 µs | 747 ns |
+
 **RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**
 
 ---
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
-**Validator:** — | **Date:** — | **Commit:** —
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
 
-> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_mat_mul_2x2 | ✅ |
+| test_mat_mul_2x3_times_3x2 | ✅ |
+| test_mat_mul_identity | ✅ |
+| test_mat_mul_dim_mismatch | ✅ |
+| test_mat_mul_null_A | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_mul 4x4 | 100,000 | 11,027 µs | 110 ns |
+| mat_mul 8x8 | 10,000 | 7,878 µs | 787 ns |
+
+**RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**

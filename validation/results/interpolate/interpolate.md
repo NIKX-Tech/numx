@@ -134,6 +134,17 @@
 | cheb n<2 | rc=-2 | rc=-2 | — | ✅ |
 | cheb n=0 | rc=-2 | rc=-2 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| interp_linear n=16 | 5,000 | — | — |
+| interp_spline_cubic n=16 | 5,000 | — | — |
+| interp_spline_eval (precomp) | 5,000 | — | — |
+| interp_spline_precompute n=16 | 5,000 | — | — |
+| interp_chebyshev n=8 | 5,000 | — | — |
+| interp_chebyshev n=16 | 1,000 | — | — |
+
 ### Precision vs reference
 
 | Function | Input | Exact | Computed | Error |
@@ -185,11 +196,62 @@
 | test_cheb_b_le_a | ✅ |
 | test_cheb_n_lt_2 | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| interp_linear n=16 | 50,000 | 504 µs | 10 ns |
+| interp_spline_cubic n=16 | 50,000 | 11,000 µs | 220 ns |
+| interp_spline_eval (precomp) | 50,000 | 563 µs | 11 ns |
+| interp_spline_precompute n=16 | 50,000 | 9,608 µs | 192 ns |
+| interp_chebyshev n=8 | 50,000 | 38,619 µs | 772 ns |
+| interp_chebyshev n=16 | 10,000 | 15,942 µs | 1,594 ns |
+
 **RESULTS: 24 PASS / 0 FAIL / 24 TOTAL**
 
 ---
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
-**Validator:** — | **Date:** — | **Commit:** —
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
 
-> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_linear_midpoint_known | ✅ |
+| test_linear_second_interval | ✅ |
+| test_linear_at_knots | ✅ |
+| test_linear_clamp_below | ✅ |
+| test_linear_clamp_above | ✅ |
+| test_linear_n2 | ✅ |
+| test_linear_null | ✅ |
+| test_linear_n_lt_2 | ✅ |
+| test_spline_linear_data_exact | ✅ |
+| test_spline_cubic_oneshot_midpoint | ✅ |
+| test_spline_at_knots | ✅ |
+| test_spline_clamp_below | ✅ |
+| test_spline_clamp_above | ✅ |
+| test_spline_n2 | ✅ |
+| test_spline_precompute_null | ✅ |
+| test_spline_precompute_n_lt_2 | ✅ |
+| test_cheb_constant | ✅ |
+| test_cheb_linear_exact | ✅ |
+| test_cheb_quadratic_exact | ✅ |
+| test_cheb_quadratic_at_zero | ✅ |
+| test_cheb_n2_gives_linear_interp | ✅ |
+| test_cheb_null | ✅ |
+| test_cheb_b_le_a | ✅ |
+| test_cheb_n_lt_2 | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| interp_linear n=16 | 50,000 | 386 µs | 7 ns |
+| interp_spline_cubic n=16 | 50,000 | 11,040 µs | 220 ns |
+| interp_spline_eval (precomp) | 50,000 | 555 µs | 11 ns |
+| interp_spline_precompute n=16 | 50,000 | 9,935 µs | 198 ns |
+| interp_chebyshev n=8 | 50,000 | 44,093 µs | 881 ns |
+| interp_chebyshev n=16 | 10,000 | 17,814 µs | 1,781 ns |
+
+**RESULTS: 24 PASS / 0 FAIL / 24 TOTAL**

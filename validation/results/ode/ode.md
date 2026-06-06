@@ -121,6 +121,15 @@
 | rk45 tol<0 | rc=-2 | rc=-2 | — | ✅ |
 | rk45 n=0 | rc=-2 | rc=-2 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| ode_rk4 decay n=1 100-steps | 1,000 | — | — |
+| ode_rk4 harmonic n=2 100-steps | 1,000 | — | — |
+| ode_rk45 decay n=1 tol=1e-4 | 1,000 | — | — |
+| ode_rk45 harmonic n=2 tol=1e-4 | 1,000 | — | — |
+
 ### Precision vs reference
 
 | Function | Problem | Exact | Computed | Error |
@@ -164,11 +173,52 @@
 | test_rk45_tol_nonpositive | ✅ |
 | test_rk45_n_zero | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| ode_rk4 decay n=1 100-steps | 1,000 | 1,745 µs | 1,745 ns |
+| ode_rk4 harmonic n=2 100-steps | 1,000 | 2,141 µs | 2,141 ns |
+| ode_rk45 decay n=1 tol=1e-4 | 1,000 | 339 µs | 339 ns |
+| ode_rk45 harmonic n=2 tol=1e-4 | 1,000 | 416 µs | 416 ns |
+
 **RESULTS: 18 PASS / 0 FAIL / 18 TOTAL**
 
 ---
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
-**Validator:** — | **Date:** — | **Commit:** —
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
 
-> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_rk4_growth_at_t1 | ✅ |
+| test_rk4_decay_at_t1 | ✅ |
+| test_rk4_growth_at_t2 | ✅ |
+| test_rk4_harmonic_energy_conserved | ✅ |
+| test_rk4_single_step | ✅ |
+| test_rk4_propagates_rhs_error | ✅ |
+| test_rk4_null | ✅ |
+| test_rk4_h_nonpositive | ✅ |
+| test_rk4_steps_zero | ✅ |
+| test_rk4_n_zero | ✅ |
+| test_rk45_growth_at_t1 | ✅ |
+| test_rk45_decay_at_t1 | ✅ |
+| test_rk45_harmonic_energy_conserved | ✅ |
+| test_rk45_propagates_rhs_error | ✅ |
+| test_rk45_null | ✅ |
+| test_rk45_t1_le_t0 | ✅ |
+| test_rk45_tol_nonpositive | ✅ |
+| test_rk45_n_zero | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| ode_rk4 decay n=1 100-steps | 1,000 | 1,813 µs | 1,813 ns |
+| ode_rk4 harmonic n=2 100-steps | 1,000 | 1,827 µs | 1,827 ns |
+| ode_rk45 decay n=1 tol=1e-4 | 1,000 | 347 µs | 347 ns |
+| ode_rk45 harmonic n=2 tol=1e-4 | 1,000 | 450 µs | 450 ns |
+
+**RESULTS: 18 PASS / 0 FAIL / 18 TOTAL**

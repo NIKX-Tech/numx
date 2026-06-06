@@ -81,6 +81,13 @@
 | null-out | — | rc=-1 | rc=-1 | — | ✅ |
 | bad norm type | — | rc=-2 | rc=-2 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_norm L2 n=64 | 10,000 | — | — |
+| vec_norm L1 n=64 | 10,000 | — | — |
+
 **RESULTS: 9 PASS / 0 FAIL / 9 TOTAL**
 
 ---
@@ -101,11 +108,38 @@
 | test_vec_norm_null_result | ✅ |
 | test_vec_norm_unknown_type | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_norm L2 n=64 | 100,000 | 16,647 µs | 166 ns |
+| vec_norm L1 n=64 | 100,000 | 12,477 µs | 124 ns |
+
 **RESULTS: 8 PASS / 0 FAIL / 8 TOTAL**
 
 ---
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
-**Validator:** — | **Date:** — | **Commit:** —
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
 
-> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_vec_norm_l2_pythagorean | ✅ |
+| test_vec_norm_l1_known | ✅ |
+| test_vec_norm_linf_known | ✅ |
+| test_vec_norm_unit_vector_is_one | ✅ |
+| test_vec_norm_zero_vector_is_zero | ✅ |
+| test_vec_norm_null_a | ✅ |
+| test_vec_norm_null_result | ✅ |
+| test_vec_norm_unknown_type | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_norm L2 n=64 | 100,000 | 17,927 µs | 179 ns |
+| vec_norm L1 n=64 | 100,000 | 10,408 µs | 104 ns |
+
+**RESULTS: 8 PASS / 0 FAIL / 8 TOTAL**

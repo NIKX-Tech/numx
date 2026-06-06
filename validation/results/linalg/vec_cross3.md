@@ -83,6 +83,12 @@
 | null-b | — | rc=-1 | rc=-1 | — | ✅ |
 | null-c | — | rc=-1 | rc=-1 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_cross3 | 10,000 | — | — |
+
 **RESULTS: 15 PASS / 0 FAIL / 15 TOTAL**
 
 ---
@@ -100,11 +106,33 @@
 | test_vec_cross3_alias_safe | ✅ |
 | test_vec_cross3_null | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_cross3 | 100,000 | 343 µs | 3 ns |
+
 **RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**
 
 ---
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
-**Validator:** — | **Date:** — | **Commit:** —
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
 
-> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_vec_cross3_x_cross_y | ✅ |
+| test_vec_cross3_anticommutative | ✅ |
+| test_vec_cross3_parallel_is_zero | ✅ |
+| test_vec_cross3_alias_safe | ✅ |
+| test_vec_cross3_null | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_cross3 | 100,000 | 507 µs | 5 ns |
+
+**RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**

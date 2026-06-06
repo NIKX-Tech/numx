@@ -106,6 +106,14 @@ Covers: `numx_cs_spectral_norm` · `numx_cs_omp` (Orthogonal Matching Pursuit) �
 | ista step<0 | rc=-2 | rc=-2 | — | ✅ |
 | ista lambda<0 | rc=-2 | rc=-2 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| cs_spectral_norm 16x32 iter=32 | 100 | — | — |
+| cs_omp 16x32 k=4 | 100 | — | — |
+| cs_ista 16x32 lam=0.1 iter=100 | 100 | — | — |
+
 ### Precision vs reference
 
 | Function | Scenario | Exact | Computed | Error |
@@ -145,11 +153,47 @@ Covers: `numx_cs_spectral_norm` · `numx_cs_omp` (Orthogonal Matching Pursuit) �
 | test_spectral_norm_null_returns_error | ✅ |
 | test_spectral_norm_invalid_arg | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| cs_spectral_norm 16x32 iter=32 | 100 | 6,299 µs | 62,990 ns |
+| cs_omp 16x32 k=4 | 100 | 370 µs | 3,700 ns |
+| cs_ista 16x32 lam=0.1 iter=100 | 100 | 16,238 µs | 162,380 ns |
+
 **RESULTS: 15 PASS / 0 FAIL / 15 TOTAL**
 
 ---
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
-**Validator:** — | **Date:** — | **Commit:** —
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
 
-> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_omp_identity_1sparse | ✅ |
+| test_omp_identity_2sparse | ✅ |
+| test_omp_overdetermined_1sparse | ✅ |
+| test_omp_null_returns_error | ✅ |
+| test_omp_invalid_arg_returns_error | ✅ |
+| test_ista_identity_shrinkage | ✅ |
+| test_ista_zero_lambda_recovery | ✅ |
+| test_ista_large_lambda_zeros | ✅ |
+| test_ista_null_returns_error | ✅ |
+| test_ista_invalid_step_returns_error | ✅ |
+| test_spectral_norm_identity | ✅ |
+| test_spectral_norm_scaled_identity | ✅ |
+| test_spectral_norm_tall_matrix | ✅ |
+| test_spectral_norm_null_returns_error | ✅ |
+| test_spectral_norm_invalid_arg | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| cs_spectral_norm 16x32 iter=32 | 100 | 6,257 µs | 62,570 ns |
+| cs_omp 16x32 k=4 | 100 | 367 µs | 3,670 ns |
+| cs_ista 16x32 lam=0.1 iter=100 | 100 | 16,109 µs | 161,090 ns |
+
+**RESULTS: 15 PASS / 0 FAIL / 15 TOTAL**

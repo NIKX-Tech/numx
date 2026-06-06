@@ -132,6 +132,17 @@ Covers: `fft_f32` · `ifft_f32` · `fft_q15` · `fft_magnitude`
 | ifft_f32 n=0 | rc=-2 | rc=-2 | — | ✅ |
 | ifft_f32 n=3 | rc=-2 | rc=-2 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| fft_f32 N=64 | 5,000 | — | — |
+| fft_f32 N=256 | 1,000 | — | — |
+| fft_f32 N=512 | 100 | — | — |
+| ifft_f32 N=256 | 1,000 | — | — |
+| fft_q15 N=256 | 1,000 | — | — |
+| fft_magnitude N=256 | 10,000 | — | — |
+
 ### Precision vs reference
 
 | Scenario | Bin | Exact | Computed | Error |
@@ -177,11 +188,56 @@ Covers: `fft_f32` · `ifft_f32` · `fft_q15` · `fft_magnitude`
 | test_fft_magnitude_null_returns_error | ✅ |
 | test_fft_magnitude_n1_invalid | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| fft_f32 N=64 | 10,000 | 124,203 µs | 12,420 ns |
+| fft_f32 N=256 | 5,000 | 353,729 µs | 70,745 ns |
+| fft_f32 N=512 | 1,000 | 161,765 µs | 161,765 ns |
+| ifft_f32 N=256 | 5,000 | 357,367 µs | 71,473 ns |
+| fft_q15 N=256 | 5,000 | 346,085 µs | 69,217 ns |
+| fft_magnitude N=256 | 100,000 | 2,980,047 µs | 29,800 ns |
+
 **RESULTS: 18 PASS / 0 FAIL / 18 TOTAL**
 
 ---
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
-**Validator:** — | **Date:** — | **Commit:** —
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
 
-> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_fft_dc_n4 | ✅ |
+| test_fft_single_tone_n4 | ✅ |
+| test_fft_dc_n2 | ✅ |
+| test_fft_n1_passthrough | ✅ |
+| test_fft_delta_at_0 | ✅ |
+| test_fft_null_returns_error | ✅ |
+| test_fft_n_not_power_of_two | ✅ |
+| test_fft_n_exceeds_max | ✅ |
+| test_ifft_roundtrip | ✅ |
+| test_ifft_dc_spectrum | ✅ |
+| test_ifft_null_returns_error | ✅ |
+| test_fft_q15_dc_n4 | ✅ |
+| test_fft_q15_null_returns_error | ✅ |
+| test_fft_q15_n_not_power_of_two | ✅ |
+| test_fft_magnitude_dc | ✅ |
+| test_fft_magnitude_complex_bin | ✅ |
+| test_fft_magnitude_null_returns_error | ✅ |
+| test_fft_magnitude_n1_invalid | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| fft_f32 N=64 | 10,000 | 238,883 µs | 23,888 ns |
+| fft_f32 N=256 | 5,000 | 634,781 µs | 126,956 ns |
+| fft_f32 N=512 | 1,000 | 289,183 µs | 289,183 ns |
+| ifft_f32 N=256 | 5,000 | 639,834 µs | 127,966 ns |
+| fft_q15 N=256 | 5,000 | 618,086 µs | 123,617 ns |
+| fft_magnitude N=256 | 100,000 | 3,139,824 µs | 31,398 ns |
+
+**RESULTS: 18 PASS / 0 FAIL / 18 TOTAL**

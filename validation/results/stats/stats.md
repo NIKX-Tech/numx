@@ -143,6 +143,17 @@
 | p < 0 | rc=-2 | rc=-2 | — | ✅ |
 | p > 100 | rc=-2 | rc=-2 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| stats_mean n=128 | 10,000 | — | — |
+| stats_variance pop n=128 | 5,000 | — | — |
+| stats_variance sample n=128 | 5,000 | — | — |
+| stats_median n=128 | 1,000 | — | — |
+| stats_percentile p50 n=128 | 1,000 | — | — |
+| stats_percentile p95 n=128 | 1,000 | — | — |
+
 **RESULTS: 37 PASS / 0 FAIL / 37 TOTAL**
 
 ---
@@ -181,11 +192,64 @@
 | test_stats_percentile_null | ✅ |
 | test_stats_percentile_out_of_range | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| stats_mean n=128 | 100,000 | 19,776 µs | 197 ns |
+| stats_variance pop n=128 | 50,000 | 52,740 µs | 1,054 ns |
+| stats_variance sample n=128 | 50,000 | 51,473 µs | 1,029 ns |
+| stats_median n=128 | 10,000 | 185,883 µs | 18,588 ns |
+| stats_percentile p50 n=128 | 10,000 | 93,902 µs | 9,390 ns |
+| stats_percentile p95 n=128 | 10,000 | 13,668 µs | 1,366 ns |
+
 **RESULTS: 26 PASS / 0 FAIL / 26 TOTAL**
 
 ---
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
-**Validator:** — | **Date:** — | **Commit:** —
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
 
-> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_stats_mean_known | ✅ |
+| test_stats_mean_negative_values | ✅ |
+| test_stats_mean_arithmetic_sequence | ✅ |
+| test_stats_mean_constant_array | ✅ |
+| test_stats_mean_single_element | ✅ |
+| test_stats_mean_null_a | ✅ |
+| test_stats_mean_null_result | ✅ |
+| test_stats_mean_n_zero | ✅ |
+| test_stats_variance_pop_known | ✅ |
+| test_stats_variance_sample_known | ✅ |
+| test_stats_variance_constant_is_zero | ✅ |
+| test_stats_variance_sample_ge_population | ✅ |
+| test_stats_variance_sample_n1_rejected | ✅ |
+| test_stats_variance_null | ✅ |
+| test_stats_median_odd_known | ✅ |
+| test_stats_median_even_known | ✅ |
+| test_stats_median_sorted_middle | ✅ |
+| test_stats_median_does_not_modify_input | ✅ |
+| test_stats_median_single_element | ✅ |
+| test_stats_median_two_elements | ✅ |
+| test_stats_median_null | ✅ |
+| test_stats_percentile_0_is_min | ✅ |
+| test_stats_percentile_100_is_max | ✅ |
+| test_stats_percentile_does_not_modify_input | ✅ |
+| test_stats_percentile_null | ✅ |
+| test_stats_percentile_out_of_range | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| stats_mean n=128 | 100,000 | 19,751 µs | 197 ns |
+| stats_variance pop n=128 | 50,000 | 38,276 µs | 765 ns |
+| stats_variance sample n=128 | 50,000 | 38,265 µs | 765 ns |
+| stats_median n=128 | 10,000 | 187,347 µs | 18,734 ns |
+| stats_percentile p50 n=128 | 10,000 | 91,969 µs | 9,196 ns |
+| stats_percentile p95 n=128 | 10,000 | 13,707 µs | 1,370 ns |
+
+**RESULTS: 26 PASS / 0 FAIL / 26 TOTAL**
