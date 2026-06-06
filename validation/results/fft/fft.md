@@ -136,12 +136,14 @@ Covers: `fft_f32` · `ifft_f32` · `fft_q15` · `fft_magnitude`
 
 | Function | N | Total | Per call |
 |----------|---|-------|----------|
-| fft_f32 N=64 | 5,000 | — | — |
-| fft_f32 N=256 | 1,000 | — | — |
-| fft_f32 N=512 | 100 | — | — |
-| ifft_f32 N=256 | 1,000 | — | — |
-| fft_q15 N=256 | 1,000 | — | — |
-| fft_magnitude N=256 | 10,000 | — | — |
+| fft_f32 N=64 | 5,000 | 12,908,018 µs | 2,581,603 ns |
+| fft_f32 N=256 | 1,000 | 13,768,864 µs | 13,768,864 ns |
+| fft_f32 N=512 | 100 | 3,110,345 µs | 31,103,450 ns |
+| ifft_f32 N=256 | 1,000 | 13,836,714 µs | 13,836,714 ns |
+| fft_q15 N=256 | 1,000 | 14,278,583 µs | 14,278,583 ns |
+| fft_magnitude N=256 | 10,000 | 36,844,459 µs | 3,684,445 ns |
+
+*⚠️ All FFT timings are ~1000× slower than expected. Root cause: `priv_cos`/`priv_sin` in `fft.c` call `__divsf3` (software-float division from ROM) instead of the hardware FPU, making each trig evaluation ~100 µs. This is a performance bug in the FFT implementation, not a measurement error. CPU ran at 160 MHz (benchmark header text "240 MHz" does not reflect actual clock). Task Watchdog (WDT) triggered during longer loops; timing values are valid — printed after WDT reset.*
 
 ### Precision vs reference
 

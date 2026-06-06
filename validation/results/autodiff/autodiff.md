@@ -255,10 +255,10 @@ Covers: **forward-mode** (`numx_dual_t` — const, var, add, sub, mul, div, neg,
 
 | Function | N | Total | Per call |
 |----------|---|-------|----------|
-| dual_mul (x*x fwd-mode) | 10,000 | — | — |
-| dual_sin (sin(x) fwd-mode) | 10,000 | — | — |
-| dual fwd: sin(x^2) full expr | 10,000 | — | — |
-| tape: init+x,x^2,sin+bwd | 1,000 | — | — |
+| dual_mul (x*x fwd-mode) | 10,000 | 3,583 µs | 358 ns |
+| dual_sin (sin(x) fwd-mode) | 10,000 | 135,474 µs | 13,547 ns |
+| dual fwd: sin(x^2) full expr | 10,000 | 137,945 µs | 13,794 ns |
+| tape: init+x,x^2,sin+bwd | 1,000 | 272,504 µs | 272,504 ns |
 
 ### Precision vs reference
 
