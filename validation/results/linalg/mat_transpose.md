@@ -35,6 +35,13 @@ Expected Sᵀ (in-place): [1,3,2,4]
 | T(T(S)) = S | identity | confirmed | — | ✅ |
 | null ptr | rc=-1 | rc=-1 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_transpose 8x8 | 10,000 | — | — |
+| mat_transpose_sq 8x8 | 10,000 | — | — |
+
 **RESULTS: 16 PASS / 0 FAIL / 16 TOTAL**
 
 ---
@@ -53,11 +60,36 @@ Expected Sᵀ (in-place): [1,3,2,4]
 | test_mat_transpose_null | ✅ |
 | test_mat_transpose_sq_null | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_transpose 8x8 | 100,000 | 7,933 µs | 79 ns |
+| mat_transpose_sq 8x8 | 100,000 | 6,083 µs | 60 ns |
+
 **RESULTS: 6 PASS / 0 FAIL / 6 TOTAL**
 
 ---
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
-**Validator:** — | **Date:** — | **Commit:** —
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
 
-> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_mat_transpose_2x3 | ✅ |
+| test_mat_transpose_double_is_identity | ✅ |
+| test_mat_transpose_sq_inplace | ✅ |
+| test_mat_transpose_sq_twice_is_identity | ✅ |
+| test_mat_transpose_null | ✅ |
+| test_mat_transpose_sq_null | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_transpose 8x8 | 100,000 | 8,409 µs | 84 ns |
+| mat_transpose_sq 8x8 | 100,000 | 7,026 µs | 70 ns |
+
+**RESULTS: 6 PASS / 0 FAIL / 6 TOTAL**

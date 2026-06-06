@@ -208,6 +208,18 @@ Covers: `window_rect` · `window_hann` · `window_hamming` · `window_blackman` 
 | ema alpha<0 | rc=-2 | rc=-2 | — | ✅ |
 | ema alpha>1 | rc=-2 | rc=-2 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| signal_window_hann n=64 | 10,000 | — | — |
+| signal_convolve x=64 h=8 | 1,000 | — | — |
+| signal_correlate x=64 y=8 | 1,000 | — | — |
+| signal_fir x=128 ntaps=8 | 1,000 | — | — |
+| signal_iir_biquad n=128 | 5,000 | — | — |
+| signal_peaks n=64 | 5,000 | — | — |
+| signal_ema n=128 alpha=0.1 | 5,000 | — | — |
+
 ### Precision vs reference
 
 | Function | Input | Exact | Computed | Error |
@@ -261,11 +273,68 @@ Covers: `window_rect` · `window_hann` · `window_hamming` · `window_blackman` 
 | test_ema_known_sequence | ✅ |
 | test_ema_invalid_alpha_returns_error | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| signal_window_hann n=64 | 100,000 | 347,909 µs | 3,479 ns |
+| signal_convolve x=64 h=8 | 10,000 | 8,551 µs | 855 ns |
+| signal_correlate x=64 y=8 | 10,000 | 8,410 µs | 841 ns |
+| signal_fir x=128 ntaps=8 | 10,000 | 13,235 µs | 1,323 ns |
+| signal_iir_biquad n=128 | 50,000 | 26,819 µs | 536 ns |
+| signal_peaks n=64 | 50,000 | 3,828 µs | 76 ns |
+| signal_ema n=128 alpha=0.1 | 50,000 | 14,604 µs | 292 ns |
+
 **RESULTS: 28 PASS / 0 FAIL / 28 TOTAL**
 
 ---
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
-**Validator:** — | **Date:** — | **Commit:** —
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
 
-> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_window_rect_all_ones | ✅ |
+| test_window_rect_n1 | ✅ |
+| test_window_hann_endpoints_zero | ✅ |
+| test_window_hann_midpoint_one | ✅ |
+| test_window_hann_n1_returns_one | ✅ |
+| test_window_hamming_endpoints | ✅ |
+| test_window_hamming_midpoint_one | ✅ |
+| test_window_blackman_endpoints_zero | ✅ |
+| test_window_blackman_midpoint_one | ✅ |
+| test_convolve_box | ✅ |
+| test_convolve_unit_impulse | ✅ |
+| test_convolve_null_returns_error | ✅ |
+| test_correlate_autocorr_peak_at_lag0 | ✅ |
+| test_correlate_output_length | ✅ |
+| test_fir_identity_tap | ✅ |
+| test_fir_moving_average | ✅ |
+| test_fir_null_returns_error | ✅ |
+| test_iir_biquad_identity | ✅ |
+| test_iir_biquad_scale | ✅ |
+| test_iir_biquad_null_returns_error | ✅ |
+| test_peaks_two_peaks | ✅ |
+| test_peaks_monotone_no_peaks | ✅ |
+| test_peaks_short_signal_no_peaks | ✅ |
+| test_peaks_buffer_too_small | ✅ |
+| test_ema_alpha1_copies_input | ✅ |
+| test_ema_alpha0_stays_at_first | ✅ |
+| test_ema_known_sequence | ✅ |
+| test_ema_invalid_alpha_returns_error | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| signal_window_hann n=64 | 100,000 | 453,166 µs | 4,531 ns |
+| signal_convolve x=64 h=8 | 10,000 | 6,688 µs | 668 ns |
+| signal_correlate x=64 y=8 | 10,000 | 7,345 µs | 734 ns |
+| signal_fir x=128 ntaps=8 | 10,000 | 13,449 µs | 1,344 ns |
+| signal_iir_biquad n=128 | 50,000 | 26,058 µs | 521 ns |
+| signal_peaks n=64 | 50,000 | 3,574 µs | 71 ns |
+| signal_ema n=128 alpha=0.1 | 50,000 | 15,187 µs | 303 ns |
+
+**RESULTS: 28 PASS / 0 FAIL / 28 TOTAL**

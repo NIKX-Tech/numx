@@ -130,6 +130,17 @@
 | gauss bad-npts=16 | rc=-2 | rc=-2 | — | ✅ |
 | gauss a>b | rc=-2 | rc=-2 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| integrate_trap n=100 | 5,000 | — | — |
+| integrate_trap n=1000 | 1,000 | — | — |
+| integrate_simpson n=100 | 5,000 | — | — |
+| integrate_gauss npts=2 | 5,000 | — | — |
+| integrate_gauss npts=4 | 5,000 | — | — |
+| integrate_gauss npts=8 | 5,000 | — | — |
+
 ### Precision vs reference
 
 | Function | f | Exact | Computed | Error |
@@ -177,11 +188,63 @@
 | test_gauss_invalid_npts | ✅ |
 | test_gauss_a_ge_b | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| integrate_trap n=100 | 50,000 | 58,811 µs | 1,176 ns |
+| integrate_trap n=1000 | 10,000 | 122,892 µs | 12,289 ns |
+| integrate_simpson n=100 | 50,000 | 65,975 µs | 1,319 ns |
+| integrate_gauss npts=2 | 50,000 | 449 µs | 8 ns |
+| integrate_gauss npts=4 | 50,000 | 672 µs | 13 ns |
+| integrate_gauss npts=8 | 50,000 | 1,176 µs | 23 ns |
+
 **RESULTS: 23 PASS / 0 FAIL / 23 TOTAL**
 
 ---
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
-**Validator:** — | **Date:** — | **Commit:** —
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
 
-> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
+> **Note:** Gauss-Legendre nodes/weights stored as float32 literals in `src/integrate.c`; promoted to double they carry ~1e-7 weight error. Gauss tests use `TOL_GAUSS = 1e-6` accordingly.
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_trap_constant_one | ✅ |
+| test_trap_linear | ✅ |
+| test_trap_quadratic | ✅ |
+| test_trap_linearity | ✅ |
+| test_trap_n1 | ✅ |
+| test_trap_null | ✅ |
+| test_trap_a_ge_b | ✅ |
+| test_trap_n_zero | ✅ |
+| test_simpson_constant_one | ✅ |
+| test_simpson_linear_exact | ✅ |
+| test_simpson_quadratic_exact | ✅ |
+| test_simpson_cubic_exact | ✅ |
+| test_simpson_wider_interval | ✅ |
+| test_simpson_odd_n_rejected | ✅ |
+| test_simpson_n_lt_2_rejected | ✅ |
+| test_simpson_null | ✅ |
+| test_gauss2_linear | ✅ |
+| test_gauss4_quadratic_exact | ✅ |
+| test_gauss8_cubic_exact | ✅ |
+| test_gauss8_constant_exact | ✅ |
+| test_gauss_null | ✅ |
+| test_gauss_invalid_npts | ✅ |
+| test_gauss_a_ge_b | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| integrate_trap n=100 | 50,000 | 32,848 µs | 656 ns |
+| integrate_trap n=1000 | 10,000 | 67,912 µs | 6,791 ns |
+| integrate_simpson n=100 | 50,000 | 35,513 µs | 710 ns |
+| integrate_gauss npts=2 | 50,000 | 271 µs | 5 ns |
+| integrate_gauss npts=4 | 50,000 | 440 µs | 8 ns |
+| integrate_gauss npts=8 | 50,000 | 783 µs | 15 ns |
+
+**RESULTS: 23 PASS / 0 FAIL / 23 TOTAL**

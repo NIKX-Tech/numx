@@ -119,6 +119,15 @@
 | brent no-bracket | rc=-2 | rc=-2 | — | ✅ |
 | brent tol=0 | rc=-2 | rc=-2 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| root_bisect x²-4 tol=1e-5 | 1,000 | — | — |
+| root_newton x²-4 tol=1e-5 | 1,000 | — | — |
+| root_brent x²-4 tol=1e-5 | 1,000 | — | — |
+| root_brent x³-x tol=1e-5 | 1,000 | — | — |
+
 ### Precision vs reference
 
 | Function | ref | Computed | Error |
@@ -167,11 +176,59 @@
 | test_brent_no_bracket | ✅ |
 | test_brent_tol_zero | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| root_bisect x^2-4 tol=1e-5 | 10,000 | 1,212 µs | 121 ns |
+| root_newton x^2-4 tol=1e-5 | 10,000 | 493 µs | 49 ns |
+| root_brent x^2-4 tol=1e-5 | 10,000 | 1,255 µs | 125 ns |
+| root_brent x^3-x tol=1e-5 | 10,000 | 1,237 µs | 123 ns |
+
 **RESULTS: 25 PASS / 0 FAIL / 25 TOTAL**
 
 ---
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
-**Validator:** — | **Date:** — | **Commit:** —
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
 
-> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_bisect_linear | ✅ |
+| test_bisect_quadratic_positive | ✅ |
+| test_bisect_quadratic_negative | ✅ |
+| test_bisect_residual_near_zero | ✅ |
+| test_bisect_root_at_left_endpoint | ✅ |
+| test_bisect_root_at_right_endpoint | ✅ |
+| test_bisect_null_f | ✅ |
+| test_bisect_null_root | ✅ |
+| test_bisect_no_bracket | ✅ |
+| test_bisect_tol_zero | ✅ |
+| test_newton_linear | ✅ |
+| test_newton_quadratic | ✅ |
+| test_newton_residual_near_zero | ✅ |
+| test_newton_already_at_root | ✅ |
+| test_newton_null_f | ✅ |
+| test_newton_null_df | ✅ |
+| test_newton_zero_derivative | ✅ |
+| test_newton_tol_negative | ✅ |
+| test_brent_linear | ✅ |
+| test_brent_quadratic | ✅ |
+| test_brent_cubic_root_at_one | ✅ |
+| test_brent_residual_near_zero | ✅ |
+| test_brent_null | ✅ |
+| test_brent_no_bracket | ✅ |
+| test_brent_tol_zero | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| root_bisect x^2-4 tol=1e-5 | 10,000 | 750 µs | 75 ns |
+| root_newton x^2-4 tol=1e-5 | 10,000 | 334 µs | 33 ns |
+| root_brent x^2-4 tol=1e-5 | 10,000 | 1,021 µs | 102 ns |
+| root_brent x^3-x tol=1e-5 | 10,000 | 1,159 µs | 115 ns |
+
+**RESULTS: 25 PASS / 0 FAIL / 25 TOTAL**

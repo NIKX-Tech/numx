@@ -97,6 +97,15 @@ Covers: **forward-mode** (`numx_dual_t` — const, var, add, sub, mul, div, neg,
 | test_ad_log_nonpositive_returns_error | ✅ |
 | test_ad_sqrt_negative_returns_error | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| dual_mul (x*x fwd-mode) | 100,000 | 282 µs | 2 ns |
+| dual_sin (sin(x) fwd-mode) | 100,000 | 4,713 µs | 47 ns |
+| dual fwd: sin(x^2) full expr | 100,000 | 5,270 µs | 52 ns |
+| tape: init+x,x^2,sin+bwd | 10,000 | 47,099 µs | 4,709 ns |
+
 **RESULTS: 28 PASS / 0 FAIL / 28 TOTAL**
 
 ---
@@ -242,6 +251,15 @@ Covers: **forward-mode** (`numx_dual_t` — const, var, add, sub, mul, div, neg,
 | ad_log(0) | rc=-2 | rc=-2 | — | ✅ |
 | ad_sqrt(−1) | rc=-2 | rc=-2 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| dual_mul (x*x fwd-mode) | 10,000 | — | — |
+| dual_sin (sin(x) fwd-mode) | 10,000 | — | — |
+| dual fwd: sin(x^2) full expr | 10,000 | — | — |
+| tape: init+x,x^2,sin+bwd | 1,000 | — | — |
+
 ### Precision vs reference
 
 | Mode | Expression | Exact | Computed | Error |
@@ -260,6 +278,53 @@ Covers: **forward-mode** (`numx_dual_t` — const, var, add, sub, mul, div, neg,
 ---
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
-**Validator:** — | **Date:** — | **Commit:** —
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
 
-> ⚠️ **Build configuration issue:** x64 test binaries were compiled without `UNITY_INCLUDE_DOUBLE`; all double-precision assertions fail with "Unity Double Precision Disabled". `tests/x64/CMakeLists.txt` corrected — rebuild required before recording results.
+### Forward-mode tests
+
+| Test | Result |
+|------|--------|
+| test_dual_const | ✅ |
+| test_dual_var | ✅ |
+| test_dual_add | ✅ |
+| test_dual_sub | ✅ |
+| test_dual_mul | ✅ |
+| test_dual_div | ✅ |
+| test_dual_neg | ✅ |
+| test_dual_sin | ✅ |
+| test_dual_cos | ✅ |
+| test_dual_exp | ✅ |
+| test_dual_log | ✅ |
+| test_dual_sqrt | ✅ |
+| test_dual_chain_quadratic | ✅ |
+| test_dual_div_by_zero | ✅ |
+| test_dual_log_nonpositive | ✅ |
+| test_dual_sqrt_negative | ✅ |
+
+### Reverse-mode tests
+
+| Test | Result |
+|------|--------|
+| test_ad_init | ✅ |
+| test_ad_var | ✅ |
+| test_ad_add_backward | ✅ |
+| test_ad_mul_backward | ✅ |
+| test_ad_div_backward | ✅ |
+| test_ad_sin_backward | ✅ |
+| test_ad_quadratic | ✅ |
+| test_ad_null_returns_error | ✅ |
+| test_ad_invalid_idx_returns_error | ✅ |
+| test_ad_div_by_zero_returns_error | ✅ |
+| test_ad_log_nonpositive_returns_error | ✅ |
+| test_ad_sqrt_negative_returns_error | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| dual_mul (x*x fwd-mode) | 100,000 | 2,100 µs | 21 ns |
+| dual_sin (sin(x) fwd-mode) | 100,000 | 15,568 µs | 155 ns |
+| dual fwd: sin(x^2) full expr | 100,000 | 17,738 µs | 177 ns |
+| tape: init+x,x^2,sin+bwd | 10,000 | 58,258 µs | 5,825 ns |
+
+**RESULTS: 28 PASS / 0 FAIL / 28 TOTAL**
