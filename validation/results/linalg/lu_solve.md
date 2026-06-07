@@ -70,35 +70,90 @@
 
 ---
 
-## ESP32-S3 — ESP32-S3-DevKitC-1 / Xtensa LX7 @ 160 MHz / ESP-IDF v5.5.2 / float32
-**Validator:** Amir Ab Khoshk | **Date:** 2026-05-25 | **Commit:** d81b386
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
 
-### Test cases (A·x = b, 3×3 textbook system)
+### Test cases (3×3 system A·x = b)
 
-| Component | Expected | Computed | Error | Pass |
-|-----------|----------|----------|-------|------|
-| x[0] | 2.0 | 1.9999996 | 3.58e-07 | ✅ |
-| x[1] | 3.0 | 3.0000002 | 2.38e-07 | ✅ |
-| x[2] | -1.0 | -1.0000004 | 3.58e-07 | ✅ |
-| residual b[0] = 8.0 | 8.0 | 8.0000000 | 0.00e+00 | ✅ |
-| residual b[1] = -11.0 | -11.0 | -11.0000000 | 0.00e+00 | ✅ |
-| residual b[2] = -3.0 | -3.0 | -2.9999998 | 2.38e-07 | ✅ |
-| singular → ERR_SINGULAR | -3 | -3 | — | ✅ |
-| NULL checks (5 cases) | -1 | -1 | — | ✅ |
+| Test | Component | Expected | Computed | Error | Pass |
+|------|-----------|----------|----------|-------|------|
+| lu_decompose 3×3 | rc | 0 | 0 | — | ✅ |
+| lu_solve 3×3 | rc | 0 | 0 | — | ✅ |
+| solution x | x[0] | 2.0 | 2.0000000 | 0.00e+00 | ✅ |
+| solution x | x[1] | 3.0 | 2.9999998 | 2.38e-07 | ✅ |
+| solution x | x[2] | −1.0 | −0.9999999 | 5.96e-08 | ✅ |
+| I·x = b | x[0] | 5.0 | 5.0000000 | 0.00e+00 | ✅ |
+| I·x = b | x[1] | 7.0 | 7.0000000 | 0.00e+00 | ✅ |
+| residual Ax | [0] | 8.0 | 8.0000000 | 0.00e+00 | ✅ |
+| residual Ax | [1] | −11.0 | −11.0000000 | 0.00e+00 | ✅ |
+| residual Ax | [2] | −3.0 | −3.0000000 | 0.00e+00 | ✅ |
+| singular matrix | rc | rc=-3 | rc=-3 | — | ✅ |
+| lu_decompose null-A | rc | rc=-1 | rc=-1 | — | ✅ |
+| lu_decompose null-LU | rc | rc=-1 | rc=-1 | — | ✅ |
+| lu_solve null-LU | rc | rc=-1 | rc=-1 | — | ✅ |
+| lu_solve null-x | rc | rc=-1 | rc=-1 | — | ✅ |
 
-*15 / 15 Unity tests PASS*
+*Errors of 2.38e-07 / 5.96e-08 on x[1] and x[2] are within float32 machine epsilon (~1.2e-7). Not a bug.*
 
 ### Performance
 
-*Run `run_benchmarks()` on device to collect.*
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| lu_decompose 4x4 | 10,000 | 104,666 µs | 10,466 ns |
+| lu_solve 4x4 (factored) | 10,000 | 44,181 µs | 4,418 ns |
 
-### Precision vs numpy reference
+**RESULTS: 15 PASS / 0 FAIL / 15 TOTAL**
 
-| Component | numpy | numx | Error |
-|-----------|-------|------|-------|
-| x[0] | 1.0 | 1.00000012 | 1.19e-07 |
-| x[1] | 0.0 | 0.00000000 | 0.00e+00 |
-| x[2] | -1.0 | -1.00000012 | 1.19e-07 |
-| x[3] | 1.0 | 1.00000000 | 0.00e+00 |
+---
 
-*Errors of 1.19e-07 are within float32 machine epsilon (~1.2e-7). Not a bug.*
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_lu_solve_3x3_textbook | ✅ |
+| test_lu_solve_identity_system | ✅ |
+| test_lu_solve_residual_is_zero | ✅ |
+| test_lu_decompose_singular | ✅ |
+| test_lu_decompose_null_A | ✅ |
+| test_lu_decompose_null_LU | ✅ |
+| test_lu_solve_null_LU | ✅ |
+| test_lu_solve_null_x | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| lu_decompose 4x4 | 100,000 | 11,089 µs | 110 ns |
+| lu_solve 4x4 (factored) | 100,000 | 5,508 µs | 55 ns |
+
+**RESULTS: 8 PASS / 0 FAIL / 8 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_lu_solve_3x3_textbook | ✅ |
+| test_lu_solve_identity_system | ✅ |
+| test_lu_solve_residual_is_zero | ✅ |
+| test_lu_decompose_singular | ✅ |
+| test_lu_decompose_null_A | ✅ |
+| test_lu_decompose_null_LU | ✅ |
+| test_lu_solve_null_LU | ✅ |
+| test_lu_solve_null_x | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| lu_decompose 4x4 | 100,000 | 11,171 µs | 111 ns |
+| lu_solve 4x4 (factored) | 100,000 | 4,310 µs | 43 ns |
+
+**RESULTS: 8 PASS / 0 FAIL / 8 TOTAL**

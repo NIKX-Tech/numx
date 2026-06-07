@@ -79,5 +79,179 @@
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
+
+### Test cases — linear
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| linear rc | rc=0 | rc=0 | — | ✅ |
+| linear x=0.5 → 0.5 | 0.5 | 0.5000000 | 0.00e+00 | ✅ |
+| linear x=1.5 → 2.5 | 2.5 | 2.5000000 | 0.00e+00 | ✅ |
+| linear at knots | exact | exact | — | ✅ |
+| linear clamp-below | 10.0 | 10.0000000 | 0.00e+00 | ✅ |
+| linear clamp-above | 30.0 | 30.0000000 | 0.00e+00 | ✅ |
+| linear n=2 midpoint=4 | 4.0 | 4.0000000 | 0.00e+00 | ✅ |
+| linear null-xs | rc=-1 | rc=-1 | — | ✅ |
+| linear null-ys | rc=-1 | rc=-1 | — | ✅ |
+| linear null-out | rc=-1 | rc=-1 | — | ✅ |
+| linear n<2 | rc=-2 | rc=-2 | — | ✅ |
+| linear n=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — spline_cubic
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| spline precompute rc | rc=0 | rc=0 | — | ✅ |
+| spline linear data x=0.5 | 0.5 | 0.5000000 | 0.00e+00 | ✅ |
+| spline linear data x=1.7 | 1.7 | 1.7000000 | 0.00e+00 | ✅ |
+| spline cubic oneshot rc | rc=0 | rc=0 | — | ✅ |
+| spline cubic at 0.5 | 0.35 | 0.3500000 | 2.98e-08 | ✅ |
+| spline at knots | exact | exact | — | ✅ |
+| spline clamp-below | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| spline clamp-above | 9.0 | 9.0000000 | 0.00e+00 | ✅ |
+| spline n=2 linear midpoint=2 | 2.0 | 2.0000000 | 0.00e+00 | ✅ |
+| spline precompute null-xs | rc=-1 | rc=-1 | — | ✅ |
+| spline precompute null-ys | rc=-1 | rc=-1 | — | ✅ |
+| spline precompute null-m | rc=-1 | rc=-1 | — | ✅ |
+| spline precompute n<2 | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — chebyshev
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| cheb const rc | rc=0 | rc=0 | — | ✅ |
+| cheb constant=3 | 3.0 | 3.0000002 | 2.38e-07 | ✅ |
+| cheb linear=1.0 | 1.0 | 1.0000001 | 1.19e-07 | ✅ |
+| cheb x²  at 0.5 | 0.25 | 0.2500000 | 0.00e+00 | ✅ |
+| cheb x²  at 0 | 0.0 | 0.0000000 | 7.45e-09 | ✅ |
+| cheb n=2 x²  at 0 ≈ 0.5 | 0.5 | 0.5000000 | 0.00e+00 | ✅ |
+| cheb null-f | rc=-1 | rc=-1 | — | ✅ |
+| cheb null-out | rc=-1 | rc=-1 | — | ✅ |
+| cheb b<=a | rc=-2 | rc=-2 | — | ✅ |
+| cheb a=b | rc=-2 | rc=-2 | — | ✅ |
+| cheb n<2 | rc=-2 | rc=-2 | — | ✅ |
+| cheb n=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| interp_linear n=16 | 5,000 | 6,907 µs | 1,381 ns |
+| interp_spline_cubic n=16 | 5,000 | 167,179 µs | 33,435 ns |
+| interp_spline_eval (precomp) | 5,000 | 12,395 µs | 2,479 ns |
+| interp_spline_precompute n=16 | 5,000 | 153,953 µs | 30,790 ns |
+| interp_chebyshev n=8 | 5,000 | 631,558 µs | 126,311 ns |
+| interp_chebyshev n=16 | 1,000 | 237,083 µs | 237,083 ns |
+
+### Precision vs reference
+
+| Function | Input | Exact | Computed | Error |
+|----------|-------|-------|----------|-------|
+| linear | x=0.5 | 0.5 | 0.5000000 | 0.00e+00 |
+| linear | x=1.5 | 2.5 | 2.5000000 | 0.00e+00 |
+| spline linear | x=0.5 | 0.5 | 0.5000000 | 0.00e+00 |
+| spline cubic | x=0.5 | 0.35 | 0.3500000 | 2.98e-08 |
+| chebyshev | constant=3 | 3.0 | 3.0000002 | 2.38e-07 |
+| chebyshev | linear x=1 | 1.0 | 1.0000001 | 1.19e-07 |
+| chebyshev | x² at 0.5 | 0.25 | 0.2500000 | 0.00e+00 |
+| chebyshev | x² at 0 | 0.0 | 0.0000000 | 7.45e-09 |
+
+*Chebyshev errors of 2.38e-07 and 1.19e-07 are at float32 machine epsilon (~1.2e-07) — expected for polynomial interpolation in floating-point arithmetic. Spline cubic error of 2.98e-08 is sub-epsilon.*
+
+**RESULTS: 37 PASS / 0 FAIL / 37 TOTAL**
+
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_linear_midpoint_known | ✅ |
+| test_linear_second_interval | ✅ |
+| test_linear_at_knots | ✅ |
+| test_linear_clamp_below | ✅ |
+| test_linear_clamp_above | ✅ |
+| test_linear_n2 | ✅ |
+| test_linear_null | ✅ |
+| test_linear_n_lt_2 | ✅ |
+| test_spline_linear_data_exact | ✅ |
+| test_spline_cubic_oneshot_midpoint | ✅ |
+| test_spline_at_knots | ✅ |
+| test_spline_clamp_below | ✅ |
+| test_spline_clamp_above | ✅ |
+| test_spline_n2 | ✅ |
+| test_spline_precompute_null | ✅ |
+| test_spline_precompute_n_lt_2 | ✅ |
+| test_cheb_constant | ✅ |
+| test_cheb_linear_exact | ✅ |
+| test_cheb_quadratic_exact | ✅ |
+| test_cheb_quadratic_at_zero | ✅ |
+| test_cheb_n2_gives_linear_interp | ✅ |
+| test_cheb_null | ✅ |
+| test_cheb_b_le_a | ✅ |
+| test_cheb_n_lt_2 | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| interp_linear n=16 | 50,000 | 504 µs | 10 ns |
+| interp_spline_cubic n=16 | 50,000 | 11,000 µs | 220 ns |
+| interp_spline_eval (precomp) | 50,000 | 563 µs | 11 ns |
+| interp_spline_precompute n=16 | 50,000 | 9,608 µs | 192 ns |
+| interp_chebyshev n=8 | 50,000 | 38,619 µs | 772 ns |
+| interp_chebyshev n=16 | 10,000 | 15,942 µs | 1,594 ns |
+
+**RESULTS: 24 PASS / 0 FAIL / 24 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_linear_midpoint_known | ✅ |
+| test_linear_second_interval | ✅ |
+| test_linear_at_knots | ✅ |
+| test_linear_clamp_below | ✅ |
+| test_linear_clamp_above | ✅ |
+| test_linear_n2 | ✅ |
+| test_linear_null | ✅ |
+| test_linear_n_lt_2 | ✅ |
+| test_spline_linear_data_exact | ✅ |
+| test_spline_cubic_oneshot_midpoint | ✅ |
+| test_spline_at_knots | ✅ |
+| test_spline_clamp_below | ✅ |
+| test_spline_clamp_above | ✅ |
+| test_spline_n2 | ✅ |
+| test_spline_precompute_null | ✅ |
+| test_spline_precompute_n_lt_2 | ✅ |
+| test_cheb_constant | ✅ |
+| test_cheb_linear_exact | ✅ |
+| test_cheb_quadratic_exact | ✅ |
+| test_cheb_quadratic_at_zero | ✅ |
+| test_cheb_n2_gives_linear_interp | ✅ |
+| test_cheb_null | ✅ |
+| test_cheb_b_le_a | ✅ |
+| test_cheb_n_lt_2 | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| interp_linear n=16 | 50,000 | 386 µs | 7 ns |
+| interp_spline_cubic n=16 | 50,000 | 11,040 µs | 220 ns |
+| interp_spline_eval (precomp) | 50,000 | 555 µs | 11 ns |
+| interp_spline_precompute n=16 | 50,000 | 9,935 µs | 198 ns |
+| interp_chebyshev n=8 | 50,000 | 44,093 µs | 881 ns |
+| interp_chebyshev n=16 | 10,000 | 17,814 µs | 1,781 ns |
+
+**RESULTS: 24 PASS / 0 FAIL / 24 TOTAL**
