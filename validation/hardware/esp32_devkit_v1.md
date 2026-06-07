@@ -4,10 +4,9 @@
 > board being validated is an **ESP32-S3** (Xtensa LX7), not the classic
 > ESP32 DevKit V1 (Xtensa LX6). Results collected here are for ESP32-S3.
 
-> **Status: pending — hardware not yet flashed.**
-> All benchmark values are TBD. This file will be updated with real
-> measured results once `idf.py flash monitor` has been run on the
-> physical device. The incomplete state is intentional, not an oversight.
+> **Status: Phase 1 complete ✅ — 243/243 Unity tests passed (2026-05-29).**
+> Per-function timing results are recorded in each module's result file under `validation/results/`.
+> Per-function timing summary table below will be filled in during Phase 2 validation.
 
 **Profile date:** 2026-05-25
 **numx commit:** d81b386
@@ -24,7 +23,7 @@
 | Flash        | 8 MB (typical)                               |
 | PSRAM        | varies by board                              |
 | RAM (SRAM)   | 512 KB internal                              |
-| IDF version  | ESP-IDF 5.5.4                                |
+| IDF version  | ESP-IDF 5.5.2                                |
 | Compiler     | xtensa-esp32s3-elf-gcc (bundled with IDF)    |
 | C standard   | C99 (`-std=c99`)                             |
 | Optimisation | `-O2`                                        |

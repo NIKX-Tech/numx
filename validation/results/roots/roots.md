@@ -119,6 +119,15 @@
 | brent no-bracket | rc=-2 | rc=-2 | — | ✅ |
 | brent tol=0 | rc=-2 | rc=-2 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| root_bisect x²-4 tol=1e-5 | 1,000 | 11,819 µs | 11,819 ns |
+| root_newton x²-4 tol=1e-5 | 1,000 | 5,039 µs | 5,039 ns |
+| root_brent x²-4 tol=1e-5 | 1,000 | 19,858 µs | 19,858 ns |
+| root_brent x³-x tol=1e-5 | 1,000 | 18,708 µs | 18,708 ns |
+
 ### Precision vs reference
 
 | Function | ref | Computed | Error |
@@ -131,3 +140,95 @@
 *bisect errors of 1.91e-06 reflect convergence to tolerance; newton and brent converge to exact float32 representation for integer roots.*
 
 **RESULTS: 29 PASS / 0 FAIL / 29 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_bisect_linear | ✅ |
+| test_bisect_quadratic_positive | ✅ |
+| test_bisect_quadratic_negative | ✅ |
+| test_bisect_residual_near_zero | ✅ |
+| test_bisect_root_at_left_endpoint | ✅ |
+| test_bisect_root_at_right_endpoint | ✅ |
+| test_bisect_null_f | ✅ |
+| test_bisect_null_root | ✅ |
+| test_bisect_no_bracket | ✅ |
+| test_bisect_tol_zero | ✅ |
+| test_newton_linear | ✅ |
+| test_newton_quadratic | ✅ |
+| test_newton_residual_near_zero | ✅ |
+| test_newton_already_at_root | ✅ |
+| test_newton_null_f | ✅ |
+| test_newton_null_df | ✅ |
+| test_newton_zero_derivative | ✅ |
+| test_newton_tol_negative | ✅ |
+| test_brent_linear | ✅ |
+| test_brent_quadratic | ✅ |
+| test_brent_cubic_root_at_one | ✅ |
+| test_brent_residual_near_zero | ✅ |
+| test_brent_null | ✅ |
+| test_brent_no_bracket | ✅ |
+| test_brent_tol_zero | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| root_bisect x^2-4 tol=1e-5 | 10,000 | 1,212 µs | 121 ns |
+| root_newton x^2-4 tol=1e-5 | 10,000 | 493 µs | 49 ns |
+| root_brent x^2-4 tol=1e-5 | 10,000 | 1,255 µs | 125 ns |
+| root_brent x^3-x tol=1e-5 | 10,000 | 1,237 µs | 123 ns |
+
+**RESULTS: 25 PASS / 0 FAIL / 25 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_bisect_linear | ✅ |
+| test_bisect_quadratic_positive | ✅ |
+| test_bisect_quadratic_negative | ✅ |
+| test_bisect_residual_near_zero | ✅ |
+| test_bisect_root_at_left_endpoint | ✅ |
+| test_bisect_root_at_right_endpoint | ✅ |
+| test_bisect_null_f | ✅ |
+| test_bisect_null_root | ✅ |
+| test_bisect_no_bracket | ✅ |
+| test_bisect_tol_zero | ✅ |
+| test_newton_linear | ✅ |
+| test_newton_quadratic | ✅ |
+| test_newton_residual_near_zero | ✅ |
+| test_newton_already_at_root | ✅ |
+| test_newton_null_f | ✅ |
+| test_newton_null_df | ✅ |
+| test_newton_zero_derivative | ✅ |
+| test_newton_tol_negative | ✅ |
+| test_brent_linear | ✅ |
+| test_brent_quadratic | ✅ |
+| test_brent_cubic_root_at_one | ✅ |
+| test_brent_residual_near_zero | ✅ |
+| test_brent_null | ✅ |
+| test_brent_no_bracket | ✅ |
+| test_brent_tol_zero | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| root_bisect x^2-4 tol=1e-5 | 10,000 | 750 µs | 75 ns |
+| root_newton x^2-4 tol=1e-5 | 10,000 | 334 µs | 33 ns |
+| root_brent x^2-4 tol=1e-5 | 10,000 | 1,021 µs | 102 ns |
+| root_brent x^3-x tol=1e-5 | 10,000 | 1,159 µs | 115 ns |
+
+**RESULTS: 25 PASS / 0 FAIL / 25 TOTAL**

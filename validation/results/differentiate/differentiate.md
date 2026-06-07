@@ -117,6 +117,14 @@ Identical values to x86-64 — confirms float32 cancellation is deterministic ac
 | rich h=0 | rc=-2 | rc=-2 | — | ✅ |
 | rich h<0 | rc=-2 | rc=-2 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| diff_forward h=1e-3 | 10,000 | 8,644 µs | 864 ns |
+| diff_central h=1e-3 | 10,000 | 9,393 µs | 939 ns |
+| diff_richardson h=1e-3 | 10,000 | 21,410 µs | 2,141 ns |
+
 ### Precision vs reference
 
 | Function | f | x | Expected f′ | Computed | Error | Note |
@@ -131,3 +139,86 @@ Identical values to x86-64 — confirms float32 cancellation is deterministic ac
 *Errors are consistent with FLAG F-01 (float32 cancellation at small h). Matches x86-64/ARM64 behaviour — not a bug.*
 
 **RESULTS: 29 PASS / 0 FAIL / 29 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_fwd_quadratic_at_3 | ✅ |
+| test_fwd_cubic_at_2 | ✅ |
+| test_fwd_constant_is_zero | ✅ |
+| test_fwd_linear_is_one | ✅ |
+| test_fwd_null | ✅ |
+| test_fwd_nonpositive_h | ✅ |
+| test_central_quadratic_at_3 | ✅ |
+| test_central_quadratic_at_neg2 | ✅ |
+| test_central_cubic_at_2 | ✅ |
+| test_central_constant_is_zero | ✅ |
+| test_central_linear_exact | ✅ |
+| test_central_null | ✅ |
+| test_central_nonpositive_h | ✅ |
+| test_richardson_quadratic_at_3 | ✅ |
+| test_richardson_cubic_at_2 | ✅ |
+| test_richardson_more_accurate_than_central | ✅ |
+| test_richardson_constant_is_zero | ✅ |
+| test_richardson_null | ✅ |
+| test_richardson_nonpositive_h | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| diff_forward h=1e-3 | 100,000 | 813 µs | 8 ns |
+| diff_central h=1e-3 | 100,000 | 770 µs | 7 ns |
+| diff_richardson h=1e-3 | 100,000 | 1,195 µs | 11 ns |
+
+**RESULTS: 19 PASS / 0 FAIL / 19 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
+
+> Build note: Some Unity assertions use float32 tolerances even when built with
+> NUMX_USE_DOUBLE. Affected tests still pass because the errors are well within
+> float32 tolerance, but the assertion threshold does not tighten to double precision.
+> This is a test harness configuration issue, not a library bug.
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_fwd_quadratic_at_3 | ✅ |
+| test_fwd_cubic_at_2 | ✅ |
+| test_fwd_constant_is_zero | ✅ |
+| test_fwd_linear_is_one | ✅ |
+| test_fwd_null | ✅ |
+| test_fwd_nonpositive_h | ✅ |
+| test_central_quadratic_at_3 | ✅ |
+| test_central_quadratic_at_neg2 | ✅ |
+| test_central_cubic_at_2 | ✅ |
+| test_central_constant_is_zero | ✅ |
+| test_central_linear_exact | ✅ |
+| test_central_null | ✅ |
+| test_central_nonpositive_h | ✅ |
+| test_richardson_quadratic_at_3 | ✅ |
+| test_richardson_cubic_at_2 | ✅ |
+| test_richardson_more_accurate_than_central | ✅ |
+| test_richardson_constant_is_zero | ✅ |
+| test_richardson_null | ✅ |
+| test_richardson_nonpositive_h | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| diff_forward h=1e-3 | 100,000 | 368 µs | 3 ns |
+| diff_central h=1e-3 | 100,000 | 439 µs | 4 ns |
+| diff_richardson h=1e-3 | 100,000 | 558 µs | 5 ns |
+
+**RESULTS: 19 PASS / 0 FAIL / 19 TOTAL**
