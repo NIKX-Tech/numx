@@ -3,7 +3,7 @@
 **numx commit:** d81b386 (x86) / 0248577 (Apple Silicon)
 **Validators:** Amir Ab Khoshk (x86), Erfan Jazeb Nikoo (Apple Silicon)
 **Validation start:** 2026-05-25
-**Status:** x86 complete ✅ | Apple Silicon complete ✅ | ESP32 pending ⚠️
+**Status:** x86 complete ✅ | Apple Silicon complete ✅ | Windows complete ✅ | ESP32 pending ⚠️
 
 ---
 
@@ -15,6 +15,7 @@ validation/
 ├── hardware/
 │   ├── host_linux_x86_64.md   ← x86 host profile
 │   ├── mac_mini_m4_pro.md     ← Apple Silicon profile (macOS 26.2 / arm64)
+│   ├── windows_msvc.md        ← Windows x64 profile (MSVC 14.51 / VS 2026 Build Tools)
 │   └── esp32_devkit_v1.md     ← ESP32-S3 profile (details pending; see note in file)
 ├── results/
 │   ├── linalg/
@@ -83,11 +84,17 @@ validation/
 
 ## Unity test summary
 
-| Platform                        | Tests | Failures | Date       |
-|---------------------------------|-------|----------|------------|
-| x86-64 (Ubuntu 22.04 / gcc)     | 300   | 0        | 2026-05-25 |
-| ARM64 (macOS 26.2 / Apple clang)| 300   | 0        | 2026-05-29 |
-| ESP32-S3                        | —     | —        | pending    |
+| Platform                           | Tests | Failures | Date       |
+|------------------------------------|-------|----------|------------|
+| x86-64 (Ubuntu 22.04 / gcc)        | 300   | 0        | 2026-05-25 |
+| ARM64 (macOS 26.2 / Apple clang)   | 300   | 0        | 2026-05-29 |
+| Windows x64 (float32 / MSVC 14.51) | 295   | 0        | 2026-06-05 |
+| Windows x64 (float64 / MSVC 14.51) | 294   | 0        | 2026-06-06 |
+| ESP32-S3                           | —     | —        | pending    |
+
+> **float64 rows** used the `NUMX_USE_DOUBLE` build flag. Some Unity assertions
+> retain float32-level tolerances; affected tests still pass. See individual
+> result files for per-module detail.
 
 ---
 

@@ -8,6 +8,9 @@ Covers: `window_rect` · `window_hann` · `window_hamming` · `window_blackman` 
 ## x86-64 — Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 / float32
 **Validator:** — | **Date:** — | **Commit:** —
 
+> Status: Results pending. Windows (float32 and float64) and ESP32-S3 results
+> are available above. x86-64 Linux/gcc run planned as the reference baseline.
+
 ### Test cases
 
 | Function | Input / scenario | Expected | Computed | Error | Pass |
@@ -239,7 +242,7 @@ Covers: `window_rect` · `window_hann` · `window_hamming` · `window_blackman` 
 
 ---
 
-## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
 **Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
 
 ### Test cases

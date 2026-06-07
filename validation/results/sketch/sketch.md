@@ -7,6 +7,9 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 ## x86-64 — Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 / float32
 **Validator:** — | **Date:** — | **Commit:** —
 
+> Status: Results pending. Windows (float32 and float64) and ESP32-S3 results
+> are available above. x86-64 Linux/gcc run planned as the reference baseline.
+
 ### Test cases
 
 | A | m | n | rank | oversample | seed | σ expected | σ computed | Error | Pass |
@@ -119,7 +122,7 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 
 ---
 
-## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
 **Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
 
 ### Test cases

@@ -142,7 +142,7 @@ Identical values to x86-64 — confirms float32 cancellation is deterministic ac
 
 ---
 
-## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
 **Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
 
 ### Test cases
@@ -183,6 +183,11 @@ Identical values to x86-64 — confirms float32 cancellation is deterministic ac
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
 **Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
+
+> Build note: Some Unity assertions use float32 tolerances even when built with
+> NUMX_USE_DOUBLE. Affected tests still pass because the errors are well within
+> float32 tolerance, but the assertion threshold does not tighten to double precision.
+> This is a test harness configuration issue, not a library bug.
 
 ### Test cases
 

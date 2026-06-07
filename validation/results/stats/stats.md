@@ -158,7 +158,7 @@
 
 ---
 
-## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
 **Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
 
 ### Test cases
