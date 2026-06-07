@@ -2,27 +2,6 @@
 
 ---
 
-## x86-64 — Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 / float32
-**Validator:** Amir Ab Khoshk | **Date:** 2026-05-25 | **Commit:** d81b386
-
-> `numx_mat_transpose` and `numx_mat_transpose_sq` are covered by the Unity test suite
-> (`test_linalg.c`) but are not exercised in `validation/c/val_runner.c`. All relevant
-> Unity tests pass (included in the 300/300 total for this platform).
-> Dedicated per-formula precision and timing data are not available for this platform.
-
-*All Unity tests: PASS (included in 300/300 total)*
-
----
-
-## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32
-**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-05-29 | **Commit:** 37e581f
-
-> Same coverage note as x86-64 above — Unity tests pass, no dedicated val_runner section.
-
-*All Unity tests: PASS (included in 300/300 total)*
-
----
-
 ## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
 **Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
 
@@ -67,7 +46,7 @@ Expected Sᵀ (in-place): [1,3,2,4]
 
 ---
 
-## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
 **Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
 
 ### Test cases
@@ -94,6 +73,11 @@ Expected Sᵀ (in-place): [1,3,2,4]
 
 ## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
 **Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
+
+> Build note: Some Unity assertions use float32 tolerances even when built with
+> NUMX_USE_DOUBLE. Affected tests still pass because the errors are well within
+> float32 tolerance, but the assertion threshold does not tighten to double precision.
+> This is a test harness configuration issue, not a library bug.
 
 ### Test cases
 

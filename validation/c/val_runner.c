@@ -692,7 +692,6 @@ static void val_ode(void)
 /* ════════════════════════════════════════════════════════════════════ */
 int main(void)
 {
-    /* Update the two lines below before running on a new platform. */
     printf("════════════════════════════════════════════════════════════════════════\n");
     printf("  numx Phase 1 — scientific validation runner\n");
     printf("  Platform : ARM64 / macOS 26.2 / Apple clang 21.0.0 / float32\n");
