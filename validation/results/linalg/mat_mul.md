@@ -83,4 +83,66 @@
 | null-A | — | rc=-1 | rc=-1 | — | ✅ |
 | null-C | — | rc=-1 | rc=-1 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_mul 4x4 | 10,000 | 112,629 µs | 11,262 ns |
+| mat_mul 8x8 | 100 | 7,881 µs | 78,810 ns |
+| mat_transpose 8x8 | 10,000 | 73,511 µs | 7,351 ns |
+| mat_transpose_sq 8x8 | 10,000 | 35,418 µs | 3,541 ns |
+
 **RESULTS: 16 PASS / 0 FAIL / 16 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_mat_mul_2x2 | ✅ |
+| test_mat_mul_2x3_times_3x2 | ✅ |
+| test_mat_mul_identity | ✅ |
+| test_mat_mul_dim_mismatch | ✅ |
+| test_mat_mul_null_A | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_mul 4x4 | 100,000 | 9,872 µs | 98 ns |
+| mat_mul 8x8 | 10,000 | 7,472 µs | 747 ns |
+
+**RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
+
+> Build note: Some Unity assertions use float32 tolerances even when built with
+> NUMX_USE_DOUBLE. Affected tests still pass because the errors are well within
+> float32 tolerance, but the assertion threshold does not tighten to double precision.
+> This is a test harness configuration issue, not a library bug.
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_mat_mul_2x2 | ✅ |
+| test_mat_mul_2x3_times_3x2 | ✅ |
+| test_mat_mul_identity | ✅ |
+| test_mat_mul_dim_mismatch | ✅ |
+| test_mat_mul_null_A | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_mul 4x4 | 100,000 | 11,027 µs | 110 ns |
+| mat_mul 8x8 | 10,000 | 7,878 µs | 787 ns |
+
+**RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**
