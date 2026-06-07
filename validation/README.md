@@ -1,9 +1,9 @@
 # numx Validation — Phase 1
 
-**numx commit:** d81b386 (x86 / ESP32-S3) / 0248577 (Apple Silicon)
-**Validators:** Amir Ab Khoshk (x86, ESP32-S3), Erfan Jazeb Nikoo (Apple Silicon)
+**numx commit:** d81b386 (x86) / 0248577 (Apple Silicon)
+**Validators:** Amir Ab Khoshk (x86), Erfan Jazeb Nikoo (Apple Silicon)
 **Validation start:** 2026-05-25
-**Status:** x86 complete ✅ | Apple Silicon complete ✅ | ESP32-S3 complete ✅
+**Status:** x86 complete ✅ | Apple Silicon complete ✅ | Windows complete ✅ | ESP32 pending ⚠️
 
 ---
 
@@ -15,7 +15,8 @@ validation/
 ├── hardware/
 │   ├── host_linux_x86_64.md   ← x86 host profile
 │   ├── mac_mini_m4_pro.md     ← Apple Silicon profile (macOS 26.2 / arm64)
-│   └── esp32_devkit_v1.md     ← ESP32-S3 profile (ESP-IDF v5.5.2 / Xtensa LX7)
+│   ├── windows_msvc.md        ← Windows x64 profile (MSVC 14.51 / VS 2026 Build Tools)
+│   └── esp32_devkit_v1.md     ← ESP32-S3 profile (details pending; see note in file)
 ├── results/
 │   ├── linalg/
 │   │   ├── vec_dot.md
@@ -23,7 +24,6 @@ validation/
 │   │   ├── vec_cross3.md
 │   │   ├── mat_mul.md
 │   │   ├── mat_det.md
-│   │   ├── mat_transpose.md
 │   │   └── lu_solve.md
 │   ├── stats/
 │   │   └── stats.md           (mean, variance, median, percentile)
@@ -49,50 +49,52 @@ validation/
 
 | ID    | Function                          | Module       | Tests | x86 bench | x86 prec | ARM64 | ESP32 |
 |-------|-----------------------------------|--------------|-------|-----------|----------|-------|-------|
-| P1.01 | numx_vec_dot                      | linalg       | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.02 | numx_vec_norm (L1/L2/Linf)        | linalg       | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.03 | numx_vec_cross3                   | linalg       | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.04 | numx_mat_mul                      | linalg       | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.05 | numx_mat_transpose                | linalg       | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.06 | numx_mat_transpose_sq             | linalg       | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.07 | numx_mat_det                      | linalg       | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.08 | numx_lu_decompose                 | linalg       | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.09 | numx_lu_solve                     | linalg       | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.10 | numx_stats_mean                   | stats        | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.11 | numx_stats_variance               | stats        | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.12 | numx_stats_median                 | stats        | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.13 | numx_stats_percentile             | stats        | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.14 | numx_root_bisect                  | roots        | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.15 | numx_root_newton                  | roots        | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.16 | numx_root_brent                   | roots        | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.17 | numx_integrate_trap               | integrate    | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.18 | numx_integrate_simpson            | integrate    | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.19 | numx_integrate_gauss              | integrate    | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.20 | numx_diff_forward                 | differentiate| ✅    | ✅        | ⚠️ FLAG  | ✅    | ⚠️ FLAG |
-| P1.21 | numx_diff_central                 | differentiate| ✅    | ✅        | ⚠️ FLAG  | ✅    | ⚠️ FLAG |
-| P1.22 | numx_diff_richardson              | differentiate| ✅    | ✅        | ⚠️ FLAG  | ✅    | ⚠️ FLAG |
-| P1.23 | numx_interp_linear                | interpolate  | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.24 | numx_interp_spline_precompute     | interpolate  | ✅    | ✅        | ⚠️ NOTE  | ✅    | ✅    |
-| P1.25 | numx_interp_spline_eval           | interpolate  | ✅    | ✅        | ⚠️ NOTE  | ✅    | ✅    |
-| P1.26 | numx_interp_chebyshev             | interpolate  | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.27 | numx_poly_eval                    | poly         | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.28 | numx_poly_roots                   | poly         | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.29 | numx_ode_rk4                      | ode          | ✅    | ✅        | ✅       | ✅    | ✅    |
-| P1.30 | numx_ode_rk45                     | ode          | ✅    | ✅        | ✅       | ✅    | ✅    |
+| P1.01 | numx_vec_dot                      | linalg       | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.02 | numx_vec_norm (L1/L2/Linf)        | linalg       | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.03 | numx_vec_cross3                   | linalg       | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.04 | numx_mat_mul                      | linalg       | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.05 | numx_mat_transpose                | linalg       | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.06 | numx_mat_transpose_sq             | linalg       | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.07 | numx_mat_det                      | linalg       | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.08 | numx_lu_decompose                 | linalg       | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.09 | numx_lu_solve                     | linalg       | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.10 | numx_stats_mean                   | stats        | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.11 | numx_stats_variance               | stats        | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.12 | numx_stats_median                 | stats        | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.13 | numx_stats_percentile             | stats        | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.14 | numx_root_bisect                  | roots        | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.15 | numx_root_newton                  | roots        | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.16 | numx_root_brent                   | roots        | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.17 | numx_integrate_trap               | integrate    | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.18 | numx_integrate_simpson            | integrate    | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.19 | numx_integrate_gauss              | integrate    | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.20 | numx_diff_forward                 | differentiate| ✅    | ✅        | ⚠️ FLAG  | ✅    | ⚠️    |
+| P1.21 | numx_diff_central                 | differentiate| ✅    | ✅        | ⚠️ FLAG  | ✅    | ⚠️    |
+| P1.22 | numx_diff_richardson              | differentiate| ✅    | ✅        | ⚠️ FLAG  | ✅    | ⚠️    |
+| P1.23 | numx_interp_linear                | interpolate  | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.24 | numx_interp_spline_precompute     | interpolate  | ✅    | ✅        | ⚠️ NOTE  | ✅    | ⚠️    |
+| P1.25 | numx_interp_spline_eval           | interpolate  | ✅    | ✅        | ⚠️ NOTE  | ✅    | ⚠️    |
+| P1.26 | numx_interp_chebyshev             | interpolate  | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.27 | numx_poly_eval                    | poly         | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.28 | numx_poly_roots                   | poly         | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.29 | numx_ode_rk4                      | ode          | ✅    | ✅        | ✅       | ✅    | ⚠️    |
+| P1.30 | numx_ode_rk45                     | ode          | ✅    | ✅        | ✅       | ✅    | ⚠️    |
 
 ---
 
 ## Unity test summary
 
-| Platform                        | Tests | Failures | Date       |
-|---------------------------------|-------|----------|------------|
-| x86-64 (Ubuntu 22.04 / gcc)     | 300   | 0        | 2026-05-25 |
-| ARM64 (macOS 26.2 / Apple clang)| 300   | 0        | 2026-05-29 |
-| ESP32-S3 (IDF v5.5.2 / LX7)    | 243   | 0        | 2026-05-29 |
+| Platform                           | Tests | Failures | Date       |
+|------------------------------------|-------|----------|------------|
+| x86-64 (Ubuntu 22.04 / gcc)        | 300   | 0        | 2026-05-25 |
+| ARM64 (macOS 26.2 / Apple clang)   | 300   | 0        | 2026-05-29 |
+| Windows x64 (float32 / MSVC 14.51) | 295   | 0        | 2026-06-05 |
+| Windows x64 (float64 / MSVC 14.51) | 294   | 0        | 2026-06-06 |
+| ESP32-S3                           | —     | —        | pending    |
 
-> **Note:** ESP32-S3 test count (243) is lower than x86/ARM64 (300) because Phase 2 modules
-> (autodiff, fft, signal, sketch, compressed_sensing) were not yet ported to the IDF test
-> build at the time of this run. All 30 Phase 1 functions pass.
+> **float64 rows** used the `NUMX_USE_DOUBLE` build flag. Some Unity assertions
+> retain float32-level tolerances; affected tests still pass. See individual
+> result files for per-module detail.
 
 ---
 
@@ -127,15 +129,11 @@ validation/
 
 ---
 
-## ESP32 — remaining work
+## ESP32 — next steps
 
-Phase 1 validation is complete (243/243 PASS). Outstanding items:
-
-1. **Timing benchmarks** — per-call timing not yet collected on ESP32-S3. The IDF test harness
-   ran functional Unity tests only; `esp_timer_get_time()` bench loops still need a dedicated
-   run and results filled into each per-module result file.
-2. **Phase 2 modules** — autodiff, fft, signal, sketch, compressed_sensing IDF test builds are
-   scaffolded (`validation/results/*/`) but not yet run on hardware. See scaffold files for the
-   expected test cases.
-3. **Hardware profile** — `validation/hardware/esp32_devkit_v1.md` has the system profile;
-   the "Actual results" section there can be removed once per-module files are complete.
+1. Flash numx with `idf.py build flash` on the validation branch.
+2. Implement `esp_timer_get_time()` variant of bench harness (replace `clock_gettime`).
+3. Run Unity tests via serial console — compare against x86 pass/fail.
+4. Record timing for each function at the same N counts (or lower where needed).
+5. Watch for: float rounding differences at E-7 range (LU, ODE), stack usage (mat_det n>4).
+6. Fill in `validation/hardware/esp32_devkit_v1.md` with exact IDF version and compiler.
