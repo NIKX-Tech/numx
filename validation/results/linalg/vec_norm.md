@@ -65,5 +65,86 @@
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
+
+### Test cases
+
+| Test case | Norm | Expected | Computed | Error | Pass |
+|-----------|------|----------|----------|-------|------|
+| [3,4] = 5 | L2 | 5.0 | 5.0000000 | 0.00e+00 | ✅ |
+| [3,−4,0] = 7 | L1 | 7.0 | 7.0000000 | 0.00e+00 | ✅ |
+| [3,−5,4] = 5 | Linf | 5.0 | 5.0000000 | 0.00e+00 | ✅ |
+| unit vector = 1 | L2 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| zero vector = 0 | L2 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| null-a | — | rc=-1 | rc=-1 | — | ✅ |
+| null-out | — | rc=-1 | rc=-1 | — | ✅ |
+| bad norm type | — | rc=-2 | rc=-2 | — | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_norm L2 n=64 | 10,000 | 119,700 µs | 11,970 ns |
+| vec_norm L1 n=64 | 10,000 | 146,901 µs | 14,690 ns |
+
+**RESULTS: 9 PASS / 0 FAIL / 9 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_vec_norm_l2_pythagorean | ✅ |
+| test_vec_norm_l1_known | ✅ |
+| test_vec_norm_linf_known | ✅ |
+| test_vec_norm_unit_vector_is_one | ✅ |
+| test_vec_norm_zero_vector_is_zero | ✅ |
+| test_vec_norm_null_a | ✅ |
+| test_vec_norm_null_result | ✅ |
+| test_vec_norm_unknown_type | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_norm L2 n=64 | 100,000 | 16,647 µs | 166 ns |
+| vec_norm L1 n=64 | 100,000 | 12,477 µs | 124 ns |
+
+**RESULTS: 8 PASS / 0 FAIL / 8 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
+
+> Build note: Some Unity assertions use float32 tolerances even when built with
+> NUMX_USE_DOUBLE. Affected tests still pass because the errors are well within
+> float32 tolerance, but the assertion threshold does not tighten to double precision.
+> This is a test harness configuration issue, not a library bug.
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_vec_norm_l2_pythagorean | ✅ |
+| test_vec_norm_l1_known | ✅ |
+| test_vec_norm_linf_known | ✅ |
+| test_vec_norm_unit_vector_is_one | ✅ |
+| test_vec_norm_zero_vector_is_zero | ✅ |
+| test_vec_norm_null_a | ✅ |
+| test_vec_norm_null_result | ✅ |
+| test_vec_norm_unknown_type | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_norm L2 n=64 | 100,000 | 17,927 µs | 179 ns |
+| vec_norm L1 n=64 | 100,000 | 10,408 µs | 104 ns |
+
+**RESULTS: 8 PASS / 0 FAIL / 8 TOTAL**

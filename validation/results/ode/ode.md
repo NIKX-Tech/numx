@@ -81,5 +81,144 @@
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
+
+### Test cases — rk4
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| rk4 growth rc | rc=0 | rc=0 | — | ✅ |
+| rk4 growth y(1)=e | 2.7182818 | 2.7182817 | 1.67e-06 | ✅ |
+| rk4 decay y(1)=1/e | 0.3678794 | 0.3678795 | 5.07e-07 | ✅ |
+| rk4 growth y(2)=e² | 7.3890561 | 7.3890595 | 4.77e-07 | ✅ |
+| rk4 harmonic energy conserved | ~0.5 | confirmed | — | ✅ |
+| rk4 single step | 1.0100502 | 1.0100502 | 1.19e-07 | ✅ |
+| rk4 rhs-error propagated | rc=-3 | rc=-3 | — | ✅ |
+| rk4 null-f | rc=-1 | rc=-1 | — | ✅ |
+| rk4 null-y0 | rc=-1 | rc=-1 | — | ✅ |
+| rk4 null-yout | rc=-1 | rc=-1 | — | ✅ |
+| rk4 h=0 | rc=-2 | rc=-2 | — | ✅ |
+| rk4 h<0 | rc=-2 | rc=-2 | — | ✅ |
+| rk4 steps=0 | rc=-2 | rc=-2 | — | ✅ |
+| rk4 n=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Test cases — rk45
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| rk45 growth rc | rc=0 | rc=0 | — | ✅ |
+| rk45 growth y(1)=e | 2.7182818 | 2.7182815 | 1.43e-06 | ✅ |
+| rk45 decay y(1)=1/e | 0.3678794 | 0.3678795 | 5.36e-07 | ✅ |
+| rk45 harmonic energy conserved | ~0.5 | confirmed | — | ✅ |
+| rk45 rhs-error propagated | rc=-3 | rc=-3 | — | ✅ |
+| rk45 null-f | rc=-1 | rc=-1 | — | ✅ |
+| rk45 null-y0 | rc=-1 | rc=-1 | — | ✅ |
+| rk45 null-yout | rc=-1 | rc=-1 | — | ✅ |
+| rk45 t1<=t0 | rc=-2 | rc=-2 | — | ✅ |
+| rk45 t1=t0 | rc=-2 | rc=-2 | — | ✅ |
+| rk45 tol=0 | rc=-2 | rc=-2 | — | ✅ |
+| rk45 tol<0 | rc=-2 | rc=-2 | — | ✅ |
+| rk45 n=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| ode_rk4 decay n=1 100-steps | 1,000 | 173,201 µs | 173,201 ns |
+| ode_rk4 harmonic n=2 100-steps | 1,000 | 274,568 µs | 274,568 ns |
+| ode_rk45 decay n=1 tol=1e-4 | 1,000 | 39,634 µs | 39,634 ns |
+| ode_rk45 harmonic n=2 tol=1e-4 | 1,000 | 63,362 µs | 63,362 ns |
+
+### Precision vs reference
+
+| Function | Problem | Exact | Computed | Error |
+|----------|---------|-------|----------|-------|
+| rk4 | y(1): y′=y, y0=1 | e=2.7182818 | 2.7182817 | 1.67e-06 |
+| rk4 | y(1): y′=−y, y0=1 | 1/e=0.3678794 | 0.3678795 | 5.07e-07 |
+| rk4 | y(2): y′=y, y0=1 | e²=7.3890561 | 7.3890595 | 4.77e-07 |
+| rk4 | single step h=0.01 | e^0.01=1.0100502 | 1.0100502 | 1.19e-07 |
+| rk45 | y(1): y′=y, y0=1 | e=2.7182818 | 2.7182815 | 1.43e-06 |
+| rk45 | y(1): y′=−y, y0=1 | 1/e=0.3678794 | 0.3678795 | 5.36e-07 |
+
+*Errors on growth problems (1.67e-06 / 1.43e-06) are ODE integration truncation error, not float32 rounding — inherent in finite step size. Single-step and decay errors are at float32 epsilon level (~1.2e-07).*
+
+**RESULTS: 27 PASS / 0 FAIL / 27 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_rk4_growth_at_t1 | ✅ |
+| test_rk4_decay_at_t1 | ✅ |
+| test_rk4_growth_at_t2 | ✅ |
+| test_rk4_harmonic_energy_conserved | ✅ |
+| test_rk4_single_step | ✅ |
+| test_rk4_propagates_rhs_error | ✅ |
+| test_rk4_null | ✅ |
+| test_rk4_h_nonpositive | ✅ |
+| test_rk4_steps_zero | ✅ |
+| test_rk4_n_zero | ✅ |
+| test_rk45_growth_at_t1 | ✅ |
+| test_rk45_decay_at_t1 | ✅ |
+| test_rk45_harmonic_energy_conserved | ✅ |
+| test_rk45_propagates_rhs_error | ✅ |
+| test_rk45_null | ✅ |
+| test_rk45_t1_le_t0 | ✅ |
+| test_rk45_tol_nonpositive | ✅ |
+| test_rk45_n_zero | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| ode_rk4 decay n=1 100-steps | 1,000 | 1,745 µs | 1,745 ns |
+| ode_rk4 harmonic n=2 100-steps | 1,000 | 2,141 µs | 2,141 ns |
+| ode_rk45 decay n=1 tol=1e-4 | 1,000 | 339 µs | 339 ns |
+| ode_rk45 harmonic n=2 tol=1e-4 | 1,000 | 416 µs | 416 ns |
+
+**RESULTS: 18 PASS / 0 FAIL / 18 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_rk4_growth_at_t1 | ✅ |
+| test_rk4_decay_at_t1 | ✅ |
+| test_rk4_growth_at_t2 | ✅ |
+| test_rk4_harmonic_energy_conserved | ✅ |
+| test_rk4_single_step | ✅ |
+| test_rk4_propagates_rhs_error | ✅ |
+| test_rk4_null | ✅ |
+| test_rk4_h_nonpositive | ✅ |
+| test_rk4_steps_zero | ✅ |
+| test_rk4_n_zero | ✅ |
+| test_rk45_growth_at_t1 | ✅ |
+| test_rk45_decay_at_t1 | ✅ |
+| test_rk45_harmonic_energy_conserved | ✅ |
+| test_rk45_propagates_rhs_error | ✅ |
+| test_rk45_null | ✅ |
+| test_rk45_t1_le_t0 | ✅ |
+| test_rk45_tol_nonpositive | ✅ |
+| test_rk45_n_zero | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| ode_rk4 decay n=1 100-steps | 1,000 | 1,813 µs | 1,813 ns |
+| ode_rk4 harmonic n=2 100-steps | 1,000 | 1,827 µs | 1,827 ns |
+| ode_rk45 decay n=1 tol=1e-4 | 1,000 | 347 µs | 347 ns |
+| ode_rk45 harmonic n=2 tol=1e-4 | 1,000 | 450 µs | 450 ns |
+
+**RESULTS: 18 PASS / 0 FAIL / 18 TOTAL**

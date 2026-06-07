@@ -61,5 +61,83 @@
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
+
+### Test cases
+
+| Test case | Component | Expected | Computed | Error | Pass |
+|-----------|-----------|----------|----------|-------|------|
+| x̂×ŷ = ẑ | [0] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| x̂×ŷ = ẑ | [1] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| x̂×ŷ = ẑ | [2] | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| anti-commutative b×a = −(a×b) | [0] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| anti-commutative b×a = −(a×b) | [1] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| anti-commutative b×a = −(a×b) | [2] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| parallel → zero | [0] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| parallel → zero | [2] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| alias-safe (out=a) | [0] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| alias-safe (out=a) | [1] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| alias-safe (out=a) | [2] | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| null-a | — | rc=-1 | rc=-1 | — | ✅ |
+| null-b | — | rc=-1 | rc=-1 | — | ✅ |
+| null-c | — | rc=-1 | rc=-1 | — | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_cross3 | 10,000 | 3,324 µs | 332 ns |
+
+**RESULTS: 15 PASS / 0 FAIL / 15 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_vec_cross3_x_cross_y | ✅ |
+| test_vec_cross3_anticommutative | ✅ |
+| test_vec_cross3_parallel_is_zero | ✅ |
+| test_vec_cross3_alias_safe | ✅ |
+| test_vec_cross3_null | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_cross3 | 100,000 | 343 µs | 3 ns |
+
+**RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
+
+> Build note: Some Unity assertions use float32 tolerances even when built with
+> NUMX_USE_DOUBLE. Affected tests still pass because the errors are well within
+> float32 tolerance, but the assertion threshold does not tighten to double precision.
+> This is a test harness configuration issue, not a library bug.
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_vec_cross3_x_cross_y | ✅ |
+| test_vec_cross3_anticommutative | ✅ |
+| test_vec_cross3_parallel_is_zero | ✅ |
+| test_vec_cross3_alias_safe | ✅ |
+| test_vec_cross3_null | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_cross3 | 100,000 | 507 µs | 5 ns |
+
+**RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**
