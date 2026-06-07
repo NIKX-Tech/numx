@@ -68,7 +68,7 @@ All results are device-run, per-formula values with measured error margins — n
 | Windows x64 — MSVC 14.51 (VS 2026 Build Tools) | MSVC /O2 / float64 | 13 / 13 | 294 / 294 ✅ |
 | ESP32-S3 — Xtensa LX7 / ESP-IDF v5.5.2 | xtensa-esp32s3-elf-gcc -O2 / float32 | 8 / 13 | 308 / 308 ✅ |
 
-ESP32-S3 results for autodiff, compressed_sensing, fft, signal, and sketch are in progress.
+Phase 1 ESP32-S3 validation (linalg, stats, roots, integrate, differentiate, interpolate, poly, ode) is complete. Phase 2 validation (autodiff, fft, signal, sketch, compressed_sensing) on ESP32-S3 is pending.
 
 ---
 
