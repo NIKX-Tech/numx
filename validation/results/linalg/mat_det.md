@@ -64,30 +64,75 @@
 
 ---
 
-## ESP32-S3 — ESP32-S3-DevKitC-1 / Xtensa LX7 @ 160 MHz / ESP-IDF v5.5.2 / float32
-**Validator:** Amir Ab Khoshk | **Date:** 2026-05-25 | **Commit:** d81b386
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
 
 ### Test cases
 
-| n | Input | Expected | Computed | Error | Pass |
-|---|-------|----------|----------|-------|------|
-| 1 | [[7]] | 7.0 | 7.0000000 | 0.00e+00 | ✅ |
-| 2 | [[1,2],[3,4]] | -2.0 | -2.0000000 | 0.00e+00 | ✅ |
-| 3 | textbook | -3.0 | -3.0000000 | 0.00e+00 | ✅ |
-| 3 | identity | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
-| 2 | singular | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
-| — | NULL checks | -1 | -1 | — | ✅ |
-
-*8 / 8 Unity tests PASS*
+| n | Test case | Expected | Computed | Error | Pass |
+|---|-----------|----------|----------|-------|------|
+| 1×1 | det = 7 | 7.0 | 7.0000000 | 0.00e+00 | ✅ |
+| 2×2 | det = −2 | −2.0 | −2.0000000 | 0.00e+00 | ✅ |
+| 3×3 | det = −3 | −3.0 | −3.0000000 | 0.00e+00 | ✅ |
+| n×n | identity = 1 | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| 2×2 | singular = 0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| — | null-A | rc=-1 | rc=-1 | — | ✅ |
+| — | null-out | rc=-1 | rc=-1 | — | ✅ |
 
 ### Performance
 
-*Run `run_benchmarks()` on device to collect.*
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_det 4x4 | 10,000 | 52,364 µs | 5,236 ns |
 
-### Precision vs numpy reference
+**RESULTS: 8 PASS / 0 FAIL / 8 TOTAL**
 
-| n | numpy | numx | Error |
-|---|-------|------|-------|
-| 2 | -2.0 | -2.0 | 0.00e+00 |
-| 3 | 4.0 | 4.0 | 0.00e+00 |
-| 4 | 20.0 | 20.0 | 0.00e+00 |
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_mat_det_1x1 | ✅ |
+| test_mat_det_2x2 | ✅ |
+| test_mat_det_3x3 | ✅ |
+| test_mat_det_identity_is_one | ✅ |
+| test_mat_det_singular_is_zero | ✅ |
+| test_mat_det_null | ✅ |
+| test_mat_det_null_result | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_det 4x4 | 100,000 | 7,449 µs | 74 ns |
+
+**RESULTS: 7 PASS / 0 FAIL / 7 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_mat_det_1x1 | ✅ |
+| test_mat_det_2x2 | ✅ |
+| test_mat_det_3x3 | ✅ |
+| test_mat_det_identity_is_one | ✅ |
+| test_mat_det_singular_is_zero | ✅ |
+| test_mat_det_null | ✅ |
+| test_mat_det_null_result | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_det 4x4 | 100,000 | 6,224 µs | 62 ns |
+
+**RESULTS: 7 PASS / 0 FAIL / 7 TOTAL**

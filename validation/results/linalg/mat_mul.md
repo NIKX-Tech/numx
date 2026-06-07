@@ -60,27 +60,84 @@
 
 ---
 
-## ESP32-S3 — ESP32-S3-DevKitC-1 / Xtensa LX7 @ 160 MHz / ESP-IDF v5.5.2 / float32
-**Validator:** Amir Ab Khoshk | **Date:** 2026-05-25 | **Commit:** d81b386
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
 
 ### Test cases
 
-| Case | Expected | Computed | Pass |
-|------|----------|----------|------|
-| 2×2: [[1,2],[3,4]] @ [[5,6],[7,8]] | [[19,22],[43,50]] | [[19,22],[43,50]] | ✅ |
-| 2×3 @ 3×2: C[0,0]=58, C[1,1]=154 | [58, 154] | [58, 154] | ✅ |
-| A × I (identity) | A | A | ✅ |
-| dim mismatch (ca≠rb) | ERR_INVALID_ARG | -2 | ✅ |
-| mat_transpose 2×3 + square in-place | correct | correct | ✅ |
-
-*24 / 24 Unity tests PASS (12 mat_mul + 12 mat_transpose)*
+| Test case | Element | Expected | Computed | Error | Pass |
+|-----------|---------|----------|----------|-------|------|
+| 2×2 A@B | C[0,0] | 19.0 | 19.0000000 | 0.00e+00 | ✅ |
+| 2×2 A@B | C[0,1] | 22.0 | 22.0000000 | 0.00e+00 | ✅ |
+| 2×2 A@B | C[1,0] | 43.0 | 43.0000000 | 0.00e+00 | ✅ |
+| 2×2 A@B | C[1,1] | 50.0 | 50.0000000 | 0.00e+00 | ✅ |
+| 2×3 @ 3×2 | C[0,0] | 58.0 | 58.0000000 | 0.00e+00 | ✅ |
+| 2×3 @ 3×2 | C[0,1] | 64.0 | 64.0000000 | 0.00e+00 | ✅ |
+| 2×3 @ 3×2 | C[1,0] | 139.0 | 139.0000000 | 0.00e+00 | ✅ |
+| 2×3 @ 3×2 | C[1,1] | 154.0 | 154.0000000 | 0.00e+00 | ✅ |
+| A × I = A | [0] | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| A × I = A | [1] | 2.0 | 2.0000000 | 0.00e+00 | ✅ |
+| A × I = A | [2] | 3.0 | 3.0000000 | 0.00e+00 | ✅ |
+| A × I = A | [3] | 4.0 | 4.0000000 | 0.00e+00 | ✅ |
+| dim mismatch (ca≠rb) | — | rc=-2 | rc=-2 | — | ✅ |
+| null-A | — | rc=-1 | rc=-1 | — | ✅ |
+| null-C | — | rc=-1 | rc=-1 | — | ✅ |
 
 ### Performance
 
-*Run `run_benchmarks()` on device to collect.*
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_mul 4x4 | 10,000 | 112,629 µs | 11,262 ns |
+| mat_mul 8x8 | 100 | 7,881 µs | 78,810 ns |
+| mat_transpose 8x8 | 10,000 | 73,511 µs | 7,351 ns |
+| mat_transpose_sq 8x8 | 10,000 | 35,418 µs | 3,541 ns |
 
-### Precision vs numpy reference
+**RESULTS: 16 PASS / 0 FAIL / 16 TOTAL**
 
-| Case | numpy | numx | Error |
-|------|-------|------|-------|
-| 2×2 all elements | exact integers | exact match | 0.00e+00 |
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_mat_mul_2x2 | ✅ |
+| test_mat_mul_2x3_times_3x2 | ✅ |
+| test_mat_mul_identity | ✅ |
+| test_mat_mul_dim_mismatch | ✅ |
+| test_mat_mul_null_A | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_mul 4x4 | 100,000 | 9,872 µs | 98 ns |
+| mat_mul 8x8 | 10,000 | 7,472 µs | 747 ns |
+
+**RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_mat_mul_2x2 | ✅ |
+| test_mat_mul_2x3_times_3x2 | ✅ |
+| test_mat_mul_identity | ✅ |
+| test_mat_mul_dim_mismatch | ✅ |
+| test_mat_mul_null_A | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_mul 4x4 | 100,000 | 11,027 µs | 110 ns |
+| mat_mul 8x8 | 10,000 | 7,878 µs | 787 ns |
+
+**RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**

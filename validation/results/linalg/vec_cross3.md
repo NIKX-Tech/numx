@@ -61,28 +61,78 @@
 
 ---
 
-## ESP32-S3 — ESP32-S3-DevKitC-1 / Xtensa LX7 @ 160 MHz / ESP-IDF v5.5.2 / float32
-**Validator:** Amir Ab Khoshk | **Date:** 2026-05-25 | **Commit:** d81b386
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
 
 ### Test cases
 
-| Input | Expected | Computed | Pass |
-|-------|----------|----------|------|
-| [1,0,0]×[0,1,0] | [0,0,1] | [0,0,1] | ✅ |
-| [1,2,3]×[4,5,6] anti-commutative (axb+bxa=0) | [0,0,0] | [0,0,0] | ✅ |
-| [2,0,0]×[5,0,0] (parallel) | [0,0,0] | [0,0,0] | ✅ |
-| NULL checks (a, b, c) | -1 | -1 | ✅ |
-
-*12 / 12 Unity tests PASS*
+| Test case | Component | Expected | Computed | Error | Pass |
+|-----------|-----------|----------|----------|-------|------|
+| x̂×ŷ = ẑ | [0] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| x̂×ŷ = ẑ | [1] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| x̂×ŷ = ẑ | [2] | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| anti-commutative b×a = −(a×b) | [0] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| anti-commutative b×a = −(a×b) | [1] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| anti-commutative b×a = −(a×b) | [2] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| parallel → zero | [0] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| parallel → zero | [2] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| alias-safe (out=a) | [0] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| alias-safe (out=a) | [1] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| alias-safe (out=a) | [2] | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| null-a | — | rc=-1 | rc=-1 | — | ✅ |
+| null-b | — | rc=-1 | rc=-1 | — | ✅ |
+| null-c | — | rc=-1 | rc=-1 | — | ✅ |
 
 ### Performance
 
-*Run `run_benchmarks()` on device to collect.*
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_cross3 | 10,000 | 3,324 µs | 332 ns |
 
-### Precision vs numpy reference
+**RESULTS: 15 PASS / 0 FAIL / 15 TOTAL**
 
-| Input | component | numpy | numx | Error |
-|-------|-----------|-------|------|-------|
-| [1,2,3]×[4,5,6] | [0] | -3.0 | -3.0 | 0.00e+00 |
-| [1,2,3]×[4,5,6] | [1] | 6.0 | 6.0 | 0.00e+00 |
-| [1,2,3]×[4,5,6] | [2] | -3.0 | -3.0 | 0.00e+00 |
+---
+
+## Windows x86 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_vec_cross3_x_cross_y | ✅ |
+| test_vec_cross3_anticommutative | ✅ |
+| test_vec_cross3_parallel_is_zero | ✅ |
+| test_vec_cross3_alias_safe | ✅ |
+| test_vec_cross3_null | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_cross3 | 100,000 | 343 µs | 3 ns |
+
+**RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_vec_cross3_x_cross_y | ✅ |
+| test_vec_cross3_anticommutative | ✅ |
+| test_vec_cross3_parallel_is_zero | ✅ |
+| test_vec_cross3_alias_safe | ✅ |
+| test_vec_cross3_null | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_cross3 | 100,000 | 507 µs | 5 ns |
+
+**RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**
