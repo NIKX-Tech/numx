@@ -6,52 +6,49 @@ Covers: `window_rect` · `window_hann` · `window_hamming` · `window_blackman` 
 ---
 
 ## x86-64 — Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 / float32
-**Validator:** — | **Date:** — | **Commit:** —
-
-> Status: Results pending. Windows (float32 and float64) and ESP32-S3 results
-> are available above. x86-64 Linux/gcc run planned as the reference baseline.
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-07 | **Commit:** d81b386
 
 ### Test cases
 
 | Function | Input / scenario | Expected | Computed | Error | Pass |
 |----------|-----------------|----------|----------|-------|------|
-| window_rect | n=4, all samples | 1.0 | — | — | — |
-| window_hann | n=5, endpoint w[0] | 0.0 | — | — | — |
-| window_hann | n=5, peak w[2] | 1.0 | — | — | — |
-| window_hamming | n=5, w[0] | 0.08 | — | — | — |
-| window_hamming | n=5, peak w[2] | 1.0 | — | — | — |
-| window_blackman | n=5, w[0] | 0.0 | — | — | — |
-| window_blackman | n=5, peak w[2] | 1.0 | — | — | — |
-| convolve | [1,0,0] * [1,2,3] → [1,2,3,0,0] | see array | — | — | — |
-| correlate | auto-correlation peak at lag 0 | 14.0 | — | — | — |
-| fir | identity tap [1] → pass-through | x[i] | — | — | — |
-| fir | box [0.5,0.5], out[1] | 1.5 | — | — | — |
-| iir_biquad | all-pass b=[1,0,0] a=[0,0] | x[i] | — | — | — |
-| peaks | [1,3,1,2,1] → count | 2 | — | — | — |
-| peaks | monotone [1,2,3,4] → count | 0 | — | — | — |
-| ema | alpha=1 → identity | x[i] | — | — | — |
-| ema | alpha=0 → constant | x[0] | — | — | — |
-| ema | alpha=0.5, [1,2,3] → [1,1.5,2.25] | 2.25 | — | — | — |
-| null-ptr guards | all functions | rc=-1 | — | — | — |
-| invalid-arg guards | n=0, alpha out of [0,1] | rc=-2 | — | — | — |
+| window_rect | n=4, all samples | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| window_hann | n=5, endpoint w[0] | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| window_hann | n=5, peak w[2] | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| window_hamming | n=5, w[0] | 0.08 | 0.0800000 | 1.49e-08 | ✅ |
+| window_hamming | n=5, peak w[2] | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| window_blackman | n=5, w[0] | 0.0 | −0.0000000 | 1.49e-08 | ✅ |
+| window_blackman | n=5, peak w[2] | 1.0 | 0.9999999 | 5.96e-08 | ✅ |
+| convolve | [1,0,0] * [1,2,3] → [1,2,3,0,0] | see array | [1,2,3,0,0] | 0.00e+00 | ✅ |
+| correlate | auto-correlation peak at lag 0 | 14.0 | 14.0000000 | 0.00e+00 | ✅ |
+| fir | identity tap [1] → pass-through | x[i] | x[i] | 0.00e+00 | ✅ |
+| fir | box [0.5,0.5], out[1] | 1.5 | 1.5000000 | 0.00e+00 | ✅ |
+| iir_biquad | all-pass b=[1,0,0] a=[0,0] | x[i] | x[i] | 0.00e+00 | ✅ |
+| peaks | [1,3,1,2,1] → count | 2 | 2 | — | ✅ |
+| peaks | monotone [1,2,3,4] → count | 0 | 0 | — | ✅ |
+| ema | alpha=1 → identity | x[i] | x[i] | 0.00e+00 | ✅ |
+| ema | alpha=0 → constant | x[0] | x[0] | 0.00e+00 | ✅ |
+| ema | alpha=0.5, [1,2,3] → [1,1.5,2.25] | 2.25 | 2.2500000 | 0.00e+00 | ✅ |
+| null-ptr guards | all functions | rc=-1 | rc=-1 | — | ✅ |
+| invalid-arg guards | n=0, alpha out of [0,1] | rc=-2 | rc=-2 | — | ✅ |
 
 ### Performance
 
 | Function | N | Total | Per call |
 |----------|---|-------|----------|
-| window_hann n=512 | — | — | — |
-| convolve xn=256 hn=32 | — | — | — |
-| fir xn=256 ntaps=32 | — | — | — |
-| iir_biquad n=256 | — | — | — |
-| ema n=256 | — | — | — |
+| window_hann n=512 | 100,000 | 905,816 µs | 9,058 ns |
+| convolve xn=256 hn=32 | 10,000 | 32,414 µs | 3,241 ns |
+| fir xn=256 ntaps=32 | 10,000 | 30,527 µs | 3,052 ns |
+| iir_biquad n=256 | 50,000 | 25,419 µs | 508 ns |
+| ema n=256 | 50,000 | 15,923 µs | 318 ns |
 
 ### Precision vs reference
 
 | Function | Reference | numx (float32) | Error |
 |----------|-----------|----------------|-------|
-| window_hann peak | 1.0 | — | — |
-| convolve [1,1]*[1,1] centre | 2.0 | — | — |
-| ema alpha=0.5 final | 2.25 | — | — |
+| window_hann peak | 1.0 | 1.0000000 | 0.00e+00 |
+| convolve [1,1]*[1,1] centre | 2.0 | 2.0000000 | 0.00e+00 |
+| ema alpha=0.5 final | 2.25 | 2.2500000 | 0.00e+00 |
 
 ---
 

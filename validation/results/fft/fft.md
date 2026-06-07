@@ -5,45 +5,42 @@ Covers: `fft_f32` · `ifft_f32` · `fft_q15` · `fft_magnitude`
 ---
 
 ## x86-64 — Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 / float32
-**Validator:** — | **Date:** — | **Commit:** —
-
-> Status: Results pending. Windows (float32 and float64) and ESP32-S3 results
-> are available above. x86-64 Linux/gcc run planned as the reference baseline.
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-07 | **Commit:** d81b386
 
 ### Test cases
 
 | Function | Input / scenario | Expected | Computed | Error | Pass |
 |----------|-----------------|----------|----------|-------|------|
-| fft_f32 | DC N=8, X[0].re | 8.0 | — | — | — |
-| fft_f32 | DC N=8, X[0].im | 0.0 | — | — | — |
-| fft_f32 | DC N=8, X[1].re | ≈0.0 | — | — | — |
-| fft_f32 | impulse N=4, X[k].re (all bins) | 1.0 | — | — | — |
-| ifft_f32 | round-trip IFFT(FFT(x))=x | x[i] | — | — | — |
-| fft_magnitude | DC N=4, mag[0] | 4.0 | — | — | — |
-| fft_magnitude | DC N=4, mag[1] | ≈0.0 | — | — | — |
-| fft_q15 | DC N=2, X[0].re>0 | >0 | — | — | — |
-| fft_q15 | impulse N=2, X[0].re>0 | >0 | — | — | — |
-| null-ptr guards | fft_f32, ifft_f32, fft_q15, magnitude | rc=-1 | — | — | — |
-| invalid-arg guards | n=0, n=3 (non-pow2), n>MAX | rc=-2 | — | — | — |
+| fft_f32 | DC N=8, X[0].re | 8.0 | 8.0000000 | 0.00e+00 | ✅ |
+| fft_f32 | DC N=8, X[0].im | 0.0 | 0.0000007 | 7.50e-07 | ✅ |
+| fft_f32 | DC N=8, X[1].re | ≈0.0 | −0.0000002 | 1.51e-07 | ✅ |
+| fft_f32 | impulse N=4, X[k].re (all bins) | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| ifft_f32 | round-trip IFFT(FFT(x))=x | x[i] | x[i] | 0.00e+00 | ✅ |
+| fft_magnitude | DC N=4, mag[0] | 4.0 | 4.0000000 | 0.00e+00 | ✅ |
+| fft_magnitude | DC N=4, mag[1] | ≈0.0 | 0.0000001 | 8.84e-08 | ✅ |
+| fft_q15 | DC N=2, X[0].re>0 | >0 | confirmed | — | ✅ |
+| fft_q15 | impulse N=2, X[0].re>0 | >0 | confirmed | — | ✅ |
+| null-ptr guards | fft_f32, ifft_f32, fft_q15, magnitude | rc=-1 | rc=-1 | — | ✅ |
+| invalid-arg guards | n=0, n=3 (non-pow2), n>MAX | rc=-2 | rc=-2 | — | ✅ |
 
 ### Performance
 
 | Function | N | Total | Per call |
 |----------|---|-------|----------|
-| fft_f32 N=64 | — | — | — |
-| fft_f32 N=256 | — | — | — |
-| fft_f32 N=512 | — | — | — |
-| ifft_f32 N=256 | — | — | — |
-| fft_q15 N=256 | — | — | — |
-| fft_magnitude N=256 | — | — | — |
+| fft_f32 N=64 | 10,000 | 35,824 µs | 3,582 ns |
+| fft_f32 N=256 | 5,000 | 112,890 µs | 22,578 ns |
+| fft_f32 N=512 | 1,000 | 54,699 µs | 54,699 ns |
+| ifft_f32 N=256 | 5,000 | 112,377 µs | 22,475 ns |
+| fft_q15 N=256 | 5,000 | 115,149 µs | 23,029 ns |
+| fft_magnitude N=256 | 100,000 | 1,633,641 µs | 16,336 ns |
 
 ### Precision vs reference (scipy.fft)
 
 | Scenario | Bin | scipy (float64) | numx (float32) | Error |
 |----------|-----|----------------|----------------|-------|
-| DC N=8 | X[0].re | 8.0 | — | — |
-| Impulse N=4 | X[k].re (all) | 1.0 | — | — |
-| Round-trip N=4 | re[0] | 3.0 | — | — |
+| DC N=8 | X[0].re | 8.0 | 8.0000000 | 0.00e+00 |
+| Impulse N=4 | X[k].re (all) | 1.0 | 1.0000000 | 0.00e+00 |
+| Round-trip N=4 | re[0] | 3.0 | 3.0000000 | 0.00e+00 |
 
 ---
 

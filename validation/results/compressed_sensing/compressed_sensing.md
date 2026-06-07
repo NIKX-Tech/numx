@@ -5,44 +5,41 @@ Covers: `numx_cs_spectral_norm` · `numx_cs_omp` (Orthogonal Matching Pursuit) �
 ---
 
 ## x86-64 — Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 / float32
-**Validator:** — | **Date:** — | **Commit:** —
-
-> Status: Results pending. Windows (float32 and float64) and ESP32-S3 results
-> are available above. x86-64 Linux/gcc run planned as the reference baseline.
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-07 | **Commit:** d81b386
 
 ### spectral_norm test cases
 
 | Matrix | σ_max expected | σ_max computed | Error | Pass |
 |--------|---------------|----------------|-------|------|
-| I₃ (3×3 identity) | 1.0 | — | — | — |
-| diag(3,1,1) 3×3 | 3.0 | — | — | — |
-| null-ptr guards | rc=-1 | — | — | — |
-| m=0 / n=0 | rc=-2 | — | — | — |
+| I₃ (3×3 identity) | 1.0 | 1.0000000 | 0.00e+00 | ✅ |
+| diag(3,1,1) 3×3 | 3.0 | 3.0000000 | 0.00e+00 | ✅ |
+| null-ptr guards | rc=-1 | rc=-1 | — | ✅ |
+| m=0 / n=0 | rc=-2 | rc=-2 | — | ✅ |
 
 ### OMP test cases
 
 | A | y | k | x expected | x computed | Error | Pass |
 |---|---|---|-----------|-----------|-------|------|
-| I₄ | [3,0,0,0] | 1 | [3,0,0,0] | — | — | — |
-| I₄ | [2,0,5,0] | 2 | [2,0,5,0] | — | — | — |
-| null-ptr guards | — | — | rc=-1 | — | — | — |
-| m=0 / n=0 / k=0 | — | — | rc=-2 | — | — | — |
+| I₄ | [3,0,0,0] | 1 | [3,0,0,0] | [3.0000000, 0, 0, 0] | 0.00e+00 | ✅ |
+| I₄ | [2,0,5,0] | 2 | [2,0,5,0] | [2.0000000, 0, 5.0000000, 0] | 0.00e+00 | ✅ |
+| null-ptr guards | — | — | rc=-1 | rc=-1 | — | ✅ |
+| m=0 / n=0 / k=0 | — | — | rc=-2 | rc=-2 | — | ✅ |
 
 ### ISTA test cases
 
 | A | y | λ | step | iters | x[0] expected | x[0] computed | Error | Pass |
 |---|---|---|------|-------|--------------|--------------|-------|------|
-| I₄ | [5,0,0,0] | 0.5 | 0.9 | 1000 | 4.5 | — | — | — |
-| null-ptr guards | — | — | — | — | rc=-1 | — | — | — |
-| step≤0 / λ<0 | — | — | — | — | rc=-2 | — | — | — |
+| I₄ | [5,0,0,0] | 0.5 | 0.9 | 1000 | 4.5 | 4.5000000 | 0.00e+00 | ✅ |
+| null-ptr guards | — | — | — | — | rc=-1 | rc=-1 | — | ✅ |
+| step≤0 / λ<0 | — | — | — | — | rc=-2 | rc=-2 | — | ✅ |
 
 ### Performance
 
 | Function | A | Total | Per call |
 |----------|---|-------|----------|
-| spectral_norm 16×16, iter=32 | — | — | — |
-| omp A=16×32, k=4 | — | — | — |
-| ista A=16×32, λ=0.1, iter=500 | — | — | — |
+| spectral_norm 16×32, iter=32 | 100 | 2,032 µs | 20,327 ns |
+| omp A=16×32, k=4 | 100 | 136 µs | 1,363 ns |
+| ista A=16×32, λ=0.1, iter=500 | 100 | 18,262 µs | 182,629 ns |
 
 ---
 

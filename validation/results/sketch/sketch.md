@@ -5,36 +5,33 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 ---
 
 ## x86-64 — Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 / float32
-**Validator:** — | **Date:** — | **Commit:** —
-
-> Status: Results pending. Windows (float32 and float64) and ESP32-S3 results
-> are available above. x86-64 Linux/gcc run planned as the reference baseline.
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-07 | **Commit:** d81b386
 
 ### Test cases
 
 | A | m | n | rank | oversample | seed | σ expected | σ computed | Error | Pass |
 |---|---|---|------|-----------|------|-----------|-----------|-------|------|
-| diag(2,0,0) | 3 | 3 | 1 | 2 | 42 | S[0]=2.0 | — | — | — |
-| diag(4,2,0,0) | 4 | 4 | 2 | 2 | 12345 | S[0]=4.0, S[1]=2.0 | — | — | — |
-| diag(3,1) | 2 | 2 | 1 | 1 | 0 | S[0]=3.0 | — | — | — |
-| S descending | — | — | 2 | — | — | S[0]≥S[1]≥0 | — | — | — |
-| null-ptr guards | — | — | — | — | — | rc=-1 | — | — | — |
-| m=0 / n=0 / rank=0 | — | — | — | — | — | rc=-2 | — | — | — |
+| diag(2,0,0) | 3 | 3 | 1 | 2 | 42 | S[0]=2.0 | 2.0000000 | 0.00e+00 | ✅ |
+| diag(4,2,0,0) | 4 | 4 | 2 | 2 | 12345 | S[0]=4.0, S[1]=2.0 | 4.0000000, 2.0000000 | 0.00e+00 | ✅ |
+| diag(3,1) | 2 | 2 | 1 | 1 | 0 | S[0]=3.0 | 3.0000000 | 0.00e+00 | ✅ |
+| S descending | — | — | 2 | — | — | S[0]≥S[1]≥0 | confirmed | — | ✅ |
+| null-ptr guards | — | — | — | — | — | rc=-1 | rc=-1 | — | ✅ |
+| m=0 / n=0 / rank=0 | — | — | — | — | — | rc=-2 | rc=-2 | — | ✅ |
 
 ### Reconstruction quality
 
 | A | rank | ‖A − UΣVᵀ‖_F / ‖A‖_F | Pass |
 |---|------|----------------------|------|
-| diag(2,0,0) 3×3 | 1 | ≈0 | — |
-| diag(4,2,0,0) 4×4 | 2 | ≈0 | — |
+| diag(2,0,0) 3×3 | 1 | ≈0 | ✅ |
+| diag(4,2,0,0) 4×4 | 2 | ≈0 | ✅ |
 
 ### Performance
 
 | A size | rank | oversample | Total | Per call |
 |--------|------|-----------|-------|----------|
-| 16×16 | 4 | 4 | — | — |
-| 32×32 | 8 | 4 | — | — |
-| 64×64 | 8 | 4 | — | — |
+| 16×16 | 4 | 4 | 33,297 µs | 332,972 ns |
+| 32×32 | 8 | 4 | 80,575 µs | 805,758 ns |
+| 64×64 | 8 | 4 | 93,132 µs | 931,322 ns |
 
 ---
 
