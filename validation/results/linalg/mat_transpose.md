@@ -2,6 +2,27 @@
 
 ---
 
+## x86-64 — Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-25 | **Commit:** d81b386
+
+> `numx_mat_transpose` and `numx_mat_transpose_sq` are covered by the Unity test suite
+> (`test_linalg.c`) but are not exercised in `validation/c/val_runner.c`. All relevant
+> Unity tests pass (included in the 300/300 total for this platform).
+> Dedicated per-formula precision and timing data are not available for this platform.
+
+*All Unity tests: PASS (included in 300/300 total)*
+
+---
+
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-05-29 | **Commit:** 37e581f
+
+> Same coverage note as x86-64 above — Unity tests pass, no dedicated val_runner section.
+
+*All Unity tests: PASS (included in 300/300 total)*
+
+---
+
 ## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
 **Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
 
