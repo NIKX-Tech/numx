@@ -81,5 +81,136 @@
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
+
+### Test cases — poly_eval
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| poly_eval rc | rc=0 | rc=0 | — | ✅ |
+| x²+1 at 3 = 10 | 10.0 | 10.0000000 | 0.00e+00 | ✅ |
+| x³−2x+1 at 2 = 5 | 5.0 | 5.0000000 | 0.00e+00 | ✅ |
+| at 0 = const = −2 | −2.0 | −2.0000000 | 0.00e+00 | ✅ |
+| degree-0 = 5 | 5.0 | 5.0000000 | 0.00e+00 | ✅ |
+| Horner 2x²+3x+4 at 5 = 69 | 69.0 | 69.0000000 | 0.00e+00 | ✅ |
+| (x−1)(x−2)(x−3) at 1 = 0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| (x−1)(x−2)(x−3) at 2 = 0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| (x−1)(x−2)(x−3) at 3 = 0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| x²−3x+2 at 1 = 0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| poly_eval null-c | rc=-1 | rc=-1 | — | ✅ |
+| poly_eval null-out | rc=-1 | rc=-1 | — | ✅ |
+
+### Test cases — poly_roots
+
+| Test | Expected | Computed | Error | Pass |
+|------|----------|----------|-------|------|
+| poly_roots linear rc | rc=0 | rc=0 | — | ✅ |
+| poly_roots linear nroots=1 | 1 | 1 | — | ✅ |
+| poly_roots linear root=−1 | −1.0 | −1.0000000 | 0.00e+00 | ✅ |
+| poly_roots quad nroots=2 | 2 | 2 | — | ✅ |
+| poly_roots quad f(r0)≈0 | 0.0 | 0.0000019 | 1.91e-06 | ✅ |
+| poly_roots quad f(r1)≈0 | 0.0 | 0.0000024 | 2.38e-06 | ✅ |
+| poly_roots quad root=2 found | 2.0 | confirmed | — | ✅ |
+| poly_roots quad root=3 found | 3.0 | confirmed | — | ✅ |
+| poly_roots cubic residuals all ≈ 0 | ~0 | confirmed | — | ✅ |
+| poly_roots x³−8 has root | confirmed | confirmed | — | ✅ |
+| poly_roots x³−8 real root≈2 | 2.0 | ≈2.0 | — | ✅ |
+| poly_roots null-c | rc=-1 | rc=-1 | — | ✅ |
+| poly_roots null-out | rc=-1 | rc=-1 | — | ✅ |
+| poly_roots null-nr | rc=-1 | rc=-1 | — | ✅ |
+| poly_roots degree=0 | rc=-2 | rc=-2 | — | ✅ |
+| poly_roots tol=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| poly_eval degree=8 | 10,000 | 6,884 µs | 688 ns |
+| poly_eval degree=3 | 10,000 | 4,075 µs | 407 ns |
+| poly_roots degree=3 tol=1e-4 | 100 | 2,035 µs | 20,350 ns |
+
+### Precision vs reference
+
+| Function | Input | Expected | Computed | Error |
+|----------|-------|----------|----------|-------|
+| poly_eval x²+1 | x=3 | 10.0 | 10.0000000 | 0.00e+00 |
+| poly_eval Horner | x=5 | 69.0 | 69.0000000 | 0.00e+00 |
+| poly_roots quad residual | f(r0) | 0.0 | 1.91e-06 | 1.91e-06 |
+| poly_roots quad residual | f(r1) | 0.0 | 2.38e-06 | 2.38e-06 |
+
+*Quadratic root residuals of ~2e-06 are within float32 precision for iterative root finding. Not a bug.*
+
+**RESULTS: 28 PASS / 0 FAIL / 28 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_poly_eval_quadratic_at_3 | ✅ |
+| test_poly_eval_cubic_at_2 | ✅ |
+| test_poly_eval_at_zero | ✅ |
+| test_poly_eval_at_one | ✅ |
+| test_poly_eval_degree_0 | ✅ |
+| test_poly_eval_horner_consistency | ✅ |
+| test_poly_eval_null_coeffs | ✅ |
+| test_poly_eval_null_result | ✅ |
+| test_poly_roots_linear | ✅ |
+| test_poly_roots_quadratic_two_reals | ✅ |
+| test_poly_roots_quadratic_root_values | ✅ |
+| test_poly_roots_cubic_residuals | ✅ |
+| test_poly_roots_single_real_found | ✅ |
+| test_poly_roots_null | ✅ |
+| test_poly_roots_degree_zero_rejected | ✅ |
+| test_poly_roots_tol_nonpositive | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| poly_eval degree=8 | 100,000 | 885 µs | 8 ns |
+| poly_eval degree=3 | 100,000 | 293 µs | 2 ns |
+| poly_roots degree=3 tol=1e-4 | 1,000 | 159 µs | 159 ns |
+
+**RESULTS: 16 PASS / 0 FAIL / 16 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_poly_eval_quadratic_at_3 | ✅ |
+| test_poly_eval_cubic_at_2 | ✅ |
+| test_poly_eval_at_zero | ✅ |
+| test_poly_eval_at_one | ✅ |
+| test_poly_eval_degree_0 | ✅ |
+| test_poly_eval_horner_consistency | ✅ |
+| test_poly_eval_null_coeffs | ✅ |
+| test_poly_eval_null_result | ✅ |
+| test_poly_roots_linear | ✅ |
+| test_poly_roots_quadratic_two_reals | ✅ |
+| test_poly_roots_quadratic_root_values | ✅ |
+| test_poly_roots_cubic_residuals | ✅ |
+| test_poly_roots_single_real_found | ✅ |
+| test_poly_roots_null | ✅ |
+| test_poly_roots_degree_zero_rejected | ✅ |
+| test_poly_roots_tol_nonpositive | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| poly_eval degree=8 | 100,000 | 795 µs | 7 ns |
+| poly_eval degree=3 | 100,000 | 350 µs | 3 ns |
+| poly_roots degree=3 tol=1e-4 | 1,000 | 205 µs | 205 ns |
+
+**RESULTS: 16 PASS / 0 FAIL / 16 TOTAL**

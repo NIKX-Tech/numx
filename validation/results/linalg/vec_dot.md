@@ -59,5 +59,89 @@
 
 ---
 
-## ESP32-S3
-**Status:** ⚠️ Pending
+## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
+
+### Test cases
+
+| Test case | Expected | Computed | Error | Pass |
+|-----------|----------|----------|-------|------|
+| [1,2,3]·[4,5,6] = 32 | 32.0 | 32.0000000 | 0.00e+00 | ✅ |
+| orthogonal = 0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| commutative a·b = b·a | equal | confirmed | — | ✅ |
+| self [3,4]·[3,4] = 25 | 25.0 | 25.0000000 | 0.00e+00 | ✅ |
+| n=1: 7×3 = 21 | 21.0 | 21.0000000 | 0.00e+00 | ✅ |
+| zero vector = 0 | 0.0 | 0.0000000 | 0.00e+00 | ✅ |
+| null-a | rc=-1 | rc=-1 | — | ✅ |
+| null-b | rc=-1 | rc=-1 | — | ✅ |
+| null-out | rc=-1 | rc=-1 | — | ✅ |
+| n=0 | rc=-2 | rc=-2 | — | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_dot n=64 | 10,000 | 54,560 µs | 5,456 ns |
+
+**RESULTS: 11 PASS / 0 FAIL / 11 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_vec_dot_known | ✅ |
+| test_vec_dot_orthogonal | ✅ |
+| test_vec_dot_commutative | ✅ |
+| test_vec_dot_self_equals_sq_norm | ✅ |
+| test_vec_dot_single_element | ✅ |
+| test_vec_dot_zero_vector | ✅ |
+| test_vec_dot_null_a | ✅ |
+| test_vec_dot_null_b | ✅ |
+| test_vec_dot_null_result | ✅ |
+| test_vec_dot_zero_n | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_dot n=64 | 100,000 | 9,127 µs | 91 ns |
+
+**RESULTS: 10 PASS / 0 FAIL / 10 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
+
+> Build note: Some Unity assertions use float32 tolerances even when built with
+> NUMX_USE_DOUBLE. Affected tests still pass because the errors are well within
+> float32 tolerance, but the assertion threshold does not tighten to double precision.
+> This is a test harness configuration issue, not a library bug.
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_vec_dot_known | ✅ |
+| test_vec_dot_orthogonal | ✅ |
+| test_vec_dot_commutative | ✅ |
+| test_vec_dot_self_equals_sq_norm | ✅ |
+| test_vec_dot_single_element | ✅ |
+| test_vec_dot_zero_vector | ✅ |
+| test_vec_dot_null_a | ✅ |
+| test_vec_dot_null_b | ✅ |
+| test_vec_dot_null_result | ✅ |
+| test_vec_dot_zero_n | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| vec_dot n=64 | 100,000 | 9,441 µs | 94 ns |
+
+**RESULTS: 10 PASS / 0 FAIL / 10 TOTAL**
