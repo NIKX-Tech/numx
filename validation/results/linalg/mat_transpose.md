@@ -35,4 +35,66 @@ Expected Sᵀ (in-place): [1,3,2,4]
 | T(T(S)) = S | identity | confirmed | — | ✅ |
 | null ptr | rc=-1 | rc=-1 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_transpose 8x8 | 10,000 | 73,511 µs | 7,351 ns |
+| mat_transpose_sq 8x8 | 10,000 | 35,418 µs | 3,541 ns |
+
 **RESULTS: 16 PASS / 0 FAIL / 16 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_mat_transpose_2x3 | ✅ |
+| test_mat_transpose_double_is_identity | ✅ |
+| test_mat_transpose_sq_inplace | ✅ |
+| test_mat_transpose_sq_twice_is_identity | ✅ |
+| test_mat_transpose_null | ✅ |
+| test_mat_transpose_sq_null | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_transpose 8x8 | 100,000 | 7,933 µs | 79 ns |
+| mat_transpose_sq 8x8 | 100,000 | 6,083 µs | 60 ns |
+
+**RESULTS: 6 PASS / 0 FAIL / 6 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
+
+> Build note: Some Unity assertions use float32 tolerances even when built with
+> NUMX_USE_DOUBLE. Affected tests still pass because the errors are well within
+> float32 tolerance, but the assertion threshold does not tighten to double precision.
+> This is a test harness configuration issue, not a library bug.
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_mat_transpose_2x3 | ✅ |
+| test_mat_transpose_double_is_identity | ✅ |
+| test_mat_transpose_sq_inplace | ✅ |
+| test_mat_transpose_sq_twice_is_identity | ✅ |
+| test_mat_transpose_null | ✅ |
+| test_mat_transpose_sq_null | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_transpose 8x8 | 100,000 | 8,409 µs | 84 ns |
+| mat_transpose_sq 8x8 | 100,000 | 7,026 µs | 70 ns |
+
+**RESULTS: 6 PASS / 0 FAIL / 6 TOTAL**

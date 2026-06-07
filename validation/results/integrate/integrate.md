@@ -130,6 +130,17 @@
 | gauss bad-npts=16 | rc=-2 | rc=-2 | — | ✅ |
 | gauss a>b | rc=-2 | rc=-2 | — | ✅ |
 
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| integrate_trap n=100 | 5,000 | 122,438 µs | 24,487 ns |
+| integrate_trap n=1000 | 1,000 | 238,439 µs | 238,439 ns |
+| integrate_simpson n=100 | 5,000 | 144,343 µs | 28,868 ns |
+| integrate_gauss npts=2 | 5,000 | 5,333 µs | 1,066 ns |
+| integrate_gauss npts=4 | 5,000 | 8,014 µs | 1,602 ns |
+| integrate_gauss npts=8 | 5,000 | 13,461 µs | 2,692 ns |
+
 ### Precision vs reference
 
 | Function | f | Exact | Computed | Error |
@@ -143,3 +154,102 @@
 *trap x² error of 2.09e-07 is inherent O(h²) trapezoidal truncation, not a bug. Simpson and Gauss methods are exact for polynomials of their respective degrees.*
 
 **RESULTS: 31 PASS / 0 FAIL / 31 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-05 | **Commit:** 4c4c0f0
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_trap_constant_one | ✅ |
+| test_trap_linear | ✅ |
+| test_trap_quadratic | ✅ |
+| test_trap_linearity | ✅ |
+| test_trap_n1 | ✅ |
+| test_trap_null | ✅ |
+| test_trap_a_ge_b | ✅ |
+| test_trap_n_zero | ✅ |
+| test_simpson_constant_one | ✅ |
+| test_simpson_linear_exact | ✅ |
+| test_simpson_quadratic_exact | ✅ |
+| test_simpson_cubic_exact | ✅ |
+| test_simpson_wider_interval | ✅ |
+| test_simpson_odd_n_rejected | ✅ |
+| test_simpson_n_lt_2_rejected | ✅ |
+| test_simpson_null | ✅ |
+| test_gauss2_linear | ✅ |
+| test_gauss4_quadratic_exact | ✅ |
+| test_gauss8_cubic_exact | ✅ |
+| test_gauss8_constant_exact | ✅ |
+| test_gauss_null | ✅ |
+| test_gauss_invalid_npts | ✅ |
+| test_gauss_a_ge_b | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| integrate_trap n=100 | 50,000 | 58,811 µs | 1,176 ns |
+| integrate_trap n=1000 | 10,000 | 122,892 µs | 12,289 ns |
+| integrate_simpson n=100 | 50,000 | 65,975 µs | 1,319 ns |
+| integrate_gauss npts=2 | 50,000 | 449 µs | 8 ns |
+| integrate_gauss npts=4 | 50,000 | 672 µs | 13 ns |
+| integrate_gauss npts=8 | 50,000 | 1,176 µs | 23 ns |
+
+**RESULTS: 23 PASS / 0 FAIL / 23 TOTAL**
+
+---
+
+## Windows x64 — Windows 11 / MSVC 14.51 (VS 2026 Build Tools) / float64
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-06 | **Commit:** 1bba399
+
+> **Note:** Gauss-Legendre nodes/weights stored as float32 literals in `src/integrate.c`; promoted to double they carry ~1e-7 weight error. Gauss tests use `TOL_GAUSS = 1e-6` accordingly.
+
+> Build note: Some Unity assertions use float32 tolerances even when built with
+> NUMX_USE_DOUBLE. Affected tests still pass because the errors are well within
+> float32 tolerance, but the assertion threshold does not tighten to double precision.
+> This is a test harness configuration issue, not a library bug.
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_trap_constant_one | ✅ |
+| test_trap_linear | ✅ |
+| test_trap_quadratic | ✅ |
+| test_trap_linearity | ✅ |
+| test_trap_n1 | ✅ |
+| test_trap_null | ✅ |
+| test_trap_a_ge_b | ✅ |
+| test_trap_n_zero | ✅ |
+| test_simpson_constant_one | ✅ |
+| test_simpson_linear_exact | ✅ |
+| test_simpson_quadratic_exact | ✅ |
+| test_simpson_cubic_exact | ✅ |
+| test_simpson_wider_interval | ✅ |
+| test_simpson_odd_n_rejected | ✅ |
+| test_simpson_n_lt_2_rejected | ✅ |
+| test_simpson_null | ✅ |
+| test_gauss2_linear | ✅ |
+| test_gauss4_quadratic_exact | ✅ |
+| test_gauss8_cubic_exact | ✅ |
+| test_gauss8_constant_exact | ✅ |
+| test_gauss_null | ✅ |
+| test_gauss_invalid_npts | ✅ |
+| test_gauss_a_ge_b | ✅ |
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| integrate_trap n=100 | 50,000 | 32,848 µs | 656 ns |
+| integrate_trap n=1000 | 10,000 | 67,912 µs | 6,791 ns |
+| integrate_simpson n=100 | 50,000 | 35,513 µs | 710 ns |
+| integrate_gauss npts=2 | 50,000 | 271 µs | 5 ns |
+| integrate_gauss npts=4 | 50,000 | 440 µs | 8 ns |
+| integrate_gauss npts=8 | 50,000 | 783 µs | 15 ns |
+
+**RESULTS: 23 PASS / 0 FAIL / 23 TOTAL**
