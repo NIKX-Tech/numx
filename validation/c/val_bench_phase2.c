@@ -1,10 +1,7 @@
 /**
  * val_bench_phase2.c — Phase 2/3 timing benchmarks (autodiff, fft, signal, sketch, cs).
- * Build (from repo root, after cmake build):
- *   gcc -O2 -std=c99 -I include -o /tmp/val_bench_phase2 \
- *       validation/c/val_bench_phase2.c build_linux/libnumx.a -lm
- * Run:
- *   /tmp/val_bench_phase2
+ * Build:  cmake --build build --target numx_val_bench_phase2
+ * Run:    ./build/numx_val_bench_phase2
  */
 
 #define _POSIX_C_SOURCE 199309L

@@ -6,7 +6,7 @@ Covers: `window_rect` · `window_hann` · `window_hamming` · `window_blackman` 
 ---
 
 ## x86-64 — Ubuntu 22.04 / Intel i7-13700H / gcc 11.4.0 / float32
-**Validator:** Amir Ab Khoshk | **Date:** 2026-06-07 | **Commit:** b75d904
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-07 | **Commit:** d81b386
 
 ### Test cases
 
