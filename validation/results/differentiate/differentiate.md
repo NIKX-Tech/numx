@@ -222,3 +222,28 @@ Identical values to x86-64 — confirms float32 cancellation is deterministic ac
 | diff_richardson h=1e-3 | 100,000 | 558 µs | 5 ns |
 
 **RESULTS: 19 PASS / 0 FAIL / 19 TOTAL**
+
+---
+
+## ARM64 — macOS 26.2 / Apple M1 Pro / Apple clang 17.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** 1380ab1
+
+### Test cases (f(x)=x³ at x=2, exact f′=12.0, h=1e-4)
+
+| Function | Expected | Computed | Error | Pass |
+|----------|----------|----------|-------|------|
+| forward | 12.0 | 11.98768616 | 1.23e-02 | ✅ NOTE: float32 limit |
+| central | 12.0 | 11.99483871 | 5.16e-03 | ✅ NOTE: float32 limit |
+| richardson | 12.0 | 12.00437546 | 4.38e-03 | ✅ NOTE: float32 limit |
+
+Identical values to x86-64 and ARM64 M4 Pro — IEEE 754 float32 cancellation is deterministic across all ARM64 variants.
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| diff_forward | 100,000 | 360 µs | 3 ns |
+| diff_central | 100,000 | 370 µs | 3 ns |
+| diff_richardson | 100,000 | 404 µs | 4 ns |

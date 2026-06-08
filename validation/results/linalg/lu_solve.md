@@ -162,3 +162,34 @@
 | lu_solve 4x4 (factored) | 100,000 | 4,310 µs | 43 ns |
 
 **RESULTS: 8 PASS / 0 FAIL / 8 TOTAL**
+
+---
+
+## ARM64 — macOS 26.2 / Apple M1 Pro / Apple clang 17.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** 1380ab1
+
+### Test cases (A·x = b, 4×4 system)
+
+| Component | Expected | Computed | Error | Pass |
+|-----------|----------|----------|-------|------|
+| x[0] | 1.0 | 1.00000000 | 0.00e+00 | ✅ |
+| x[1] | 0.0 | 0.00000000 | 0.00e+00 | ✅ |
+| x[2] | -1.0 | -1.00000000 | 0.00e+00 | ✅ |
+| x[3] | 1.0 | 1.00000000 | 0.00e+00 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| lu_decompose 4×4 (combined with lu_solve) | 100,000 | 8,359 µs | 83 ns |
+
+### Precision vs numpy reference
+
+| Component | numpy | numx | Error |
+|-----------|-------|------|-------|
+| x[0] | 1.0 | 1.00000000 | 0.00e+00 |
+| x[1] | 0.0 | 0.00000000 | 0.00e+00 |
+| x[2] | -1.0 | -1.00000000 | 0.00e+00 |
+| x[3] | 1.0 | 1.00000000 | 0.00e+00 |
