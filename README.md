@@ -66,9 +66,9 @@ All results are device-run, per-formula values with measured error margins — n
 | ARM64 — Apple M4 Pro / macOS | Apple clang -O2 / float32 | 13 / 13 | 300 / 300 ✅ |
 | Windows x64 — MSVC 14.51 (VS 2026 Build Tools) | MSVC /O2 / float32 | 13 / 13 | 295 / 295 ✅ |
 | Windows x64 — MSVC 14.51 (VS 2026 Build Tools) | MSVC /O2 / float64 | 13 / 13 | 294 / 294 ✅ |
-| ESP32-S3 — Xtensa LX7 / ESP-IDF v5.5.2 | xtensa-esp32s3-elf-gcc -O2 / float32 | 8 / 13 | 308 / 308 ✅ |
+| ESP32-S3 — Xtensa LX7 / ESP-IDF v5.5.2 | xtensa-esp32s3-elf-gcc -O2 / float32 | 13 / 13 | 548 / 550 ✅ |
 
-Phase 1 ESP32-S3 validation (linalg, stats, roots, integrate, differentiate, interpolate, poly, ode) is complete. Phase 2 validation (autodiff, fft, signal, sketch, compressed_sensing) on ESP32-S3 is pending.
+> ESP32-S3: 2 sketch test cases fail due to `rand()` seed portability across libc implementations — the RSVD algorithm is correct; the test fixture is not portable. See FLAG S-01 in [`validation/results/sketch/sketch.md`](validation/results/sketch/sketch.md).
 
 ---
 
