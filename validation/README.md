@@ -91,11 +91,16 @@ validation/
 | ARM64 (macOS 26.2 / Apple clang)   | 300   | 0        | 2026-05-29 |
 | Windows x64 (float32 / MSVC 14.51) | 295   | 0        | 2026-06-05 |
 | Windows x64 (float64 / MSVC 14.51) | 294   | 0        | 2026-06-06 |
-| ESP32-S3 (ESP-IDF 5.5.2 / LX7)    | 308   | 0        | 2026-05-29 |
+| ESP32-S3 (ESP-IDF 5.5.2 / LX7)    | 550   | 2        | 2026-05-29 |
 
 > **float64 rows** used the `NUMX_USE_DOUBLE` build flag. Some Unity assertions
 > retain float32-level tolerances; affected tests still pass. See individual
 > result files for per-module detail.
+>
+> **ESP32-S3 2 failures** are in `numx_sketch_rsvd` (FLAG S-01): `rand()` seed portability
+> across libc implementations causes a degenerate random projection in one rank-2 test case.
+> The algorithm is correct — rank-1 and seed=0 cases pass with 0.00 error. See
+> `validation/results/sketch/sketch.md` for full analysis.
 
 ---
 
