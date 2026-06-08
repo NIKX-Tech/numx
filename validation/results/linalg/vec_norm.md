@@ -148,3 +148,33 @@
 | vec_norm L1 n=64 | 100,000 | 10,408 µs | 104 ns |
 
 **RESULTS: 8 PASS / 0 FAIL / 8 TOTAL**
+
+---
+
+## ARM64 — macOS 26.2 / Apple M1 Pro / Apple clang 17.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** 1380ab1
+
+### Test cases
+
+| Input | Norm | Expected | Computed | Error | Pass |
+|-------|------|----------|----------|-------|------|
+| [3,4] | L2 | 5.0 | 5.00000000 | 0.00e+00 | ✅ |
+| [3,4] | L1 | 7.0 | 7.00000000 | 0.00e+00 | ✅ |
+| [3,4] | Linf | 4.0 | 4.00000000 | 0.00e+00 | ✅ |
+| [1,2,3,4,5] | L2 | sqrt(55)=7.41619849 | 7.41619873 | 4.77e-07 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Variant | N | Total | Per call |
+|---------|---|-------|----------|
+| L2 n=2 | 100,000 | 767 µs | 7 ns |
+
+### Precision vs numpy reference
+
+| Input | Norm | numpy | numx | Error |
+|-------|------|-------|------|-------|
+| [3,4] | L2 | 5.0 | 5.00000000 | 0.00e+00 |
+| [3,4] | L1 | 7.0 | 7.00000000 | 0.00e+00 |
+| [3,4] | Linf | 4.0 | 4.00000000 | 0.00e+00 |

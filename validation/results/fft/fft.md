@@ -274,3 +274,46 @@ Covers: `fft_f32` · `ifft_f32` · `fft_q15` · `fft_magnitude`
 | fft_magnitude N=256 | 100,000 | 3,139,824 µs | 31,398 ns |
 
 **RESULTS: 18 PASS / 0 FAIL / 18 TOTAL**
+
+---
+
+## ARM64 — macOS 26.2 / Apple M1 Pro / Apple clang 17.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** 1380ab1
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_fft_dc_n4 | ✅ |
+| test_fft_single_tone_n4 | ✅ |
+| test_fft_dc_n2 | ✅ |
+| test_fft_n1_passthrough | ✅ |
+| test_fft_delta_at_0 | ✅ |
+| test_fft_null_returns_error | ✅ |
+| test_fft_n_not_power_of_two | ✅ |
+| test_fft_n_exceeds_max | ✅ |
+| test_ifft_roundtrip | ✅ |
+| test_ifft_dc_spectrum | ✅ |
+| test_ifft_null_returns_error | ✅ |
+| test_fft_q15_dc_n4 | ✅ |
+| test_fft_q15_null_returns_error | ✅ |
+| test_fft_q15_n_not_power_of_two | ✅ |
+| test_fft_magnitude_dc | ✅ |
+| test_fft_magnitude_complex_bin | ✅ |
+| test_fft_magnitude_null_returns_error | ✅ |
+| test_fft_magnitude_n1_invalid | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| fft_f32 N=64 | 10,000 | 25,478 µs | 2,547 ns |
+| fft_f32 N=256 | 5,000 | 67,538 µs | 13,507 ns |
+| fft_f32 N=512 | 1,000 | 30,423 µs | 30,423 ns |
+| ifft_f32 N=256 | 5,000 | 67,353 µs | 13,470 ns |
+| fft_q15 N=256 | 5,000 | 64,906 µs | 12,981 ns |
+| fft_magnitude N=256 | 100,000 | 1,954,211 µs | 19,542 ns |
+
+**RESULTS: 18 PASS / 0 FAIL / 18 TOTAL**
