@@ -44,20 +44,46 @@ Covers: `fft_f32` · `ifft_f32` · `fft_q15` · `fft_magnitude`
 
 ---
 
-## ARM64 — macOS / Apple M4 Pro / Apple clang / float32
-**Validator:** — | **Date:** — | **Commit:** —
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** d81b386
 
 ### Test cases
 
-| Function | Input / scenario | Expected | Computed | Error | Pass |
-|----------|-----------------|----------|----------|-------|------|
-| *(awaiting results)* | | | | | |
+| Test | Result |
+|------|--------|
+| test_fft_dc_n4 | ✅ |
+| test_fft_single_tone_n4 | ✅ |
+| test_fft_dc_n2 | ✅ |
+| test_fft_n1_passthrough | ✅ |
+| test_fft_delta_at_0 | ✅ |
+| test_fft_null_returns_error | ✅ |
+| test_fft_n_not_power_of_two | ✅ |
+| test_fft_n_exceeds_max | ✅ |
+| test_ifft_roundtrip | ✅ |
+| test_ifft_dc_spectrum | ✅ |
+| test_ifft_null_returns_error | ✅ |
+| test_fft_q15_dc_n4 | ✅ |
+| test_fft_q15_null_returns_error | ✅ |
+| test_fft_q15_n_not_power_of_two | ✅ |
+| test_fft_magnitude_dc | ✅ |
+| test_fft_magnitude_complex_bin | ✅ |
+| test_fft_magnitude_null_returns_error | ✅ |
+| test_fft_magnitude_n1_invalid | ✅ |
+
+*300 / 300 Unity tests PASS*
 
 ### Performance
 
 | Function | N | Total | Per call |
 |----------|---|-------|----------|
-| *(awaiting results)* | | | |
+| fft_f32 N=64 | 10,000 | 117,208 µs | 11,720 ns |
+| fft_f32 N=256 | 5,000 | 308,169 µs | 61,633 ns |
+| fft_f32 N=512 | 1,000 | 135,266 µs | 135,266 ns |
+| ifft_f32 N=256 | 5,000 | 319,544 µs | 63,908 ns |
+| fft_q15 N=256 | 5,000 | 315,945 µs | 63,189 ns |
+| fft_magnitude N=256 | 100,000 | 2,981,845 µs | 29,818 ns |
+
+**RESULTS: 18 PASS / 0 FAIL / 18 TOTAL**
 
 ---
 
