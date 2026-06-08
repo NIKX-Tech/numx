@@ -1,9 +1,9 @@
-# numx Validation — Phase 1
+# numx Validation — Phase 1 & 2
 
-**numx commit:** d81b386 (x86 / ESP32-S3) / 0248577 (Apple Silicon)
-**Validators:** Amir Ab Khoshk (x86, ESP32-S3, Windows), Erfan Jazeb Nikoo (Apple Silicon)
+**numx commit:** d81b386 (x86-64 / ESP32-S3) / 0248577 (Apple Silicon) / 4c4c0f0 (Windows float32) / 1bba399 (Windows float64)
+**Validators:** Amir Ab Khoshk (x86-64, ESP32-S3, Windows), Erfan Jazeb Nikoo (Apple Silicon)
 **Validation start:** 2026-05-25
-**Status:** x86 complete ✅ | Apple Silicon complete ✅ | ESP32-S3 complete ✅ | Windows complete ✅
+**Status:** x86-64 complete ✅ | Apple Silicon complete ✅ | ESP32-S3 complete ✅ | Windows complete ✅
 
 ---
 
@@ -16,7 +16,7 @@ validation/
 │   ├── host_linux_x86_64.md   ← x86 host profile
 │   ├── mac_mini_m4_pro.md     ← Apple Silicon profile (macOS 26.2 / arm64)
 │   ├── windows_msvc.md        ← Windows x64 profile (MSVC 14.51 / VS 2026 Build Tools)
-│   └── esp32_devkit_v1.md     ← ESP32-S3 profile (details pending; see note in file)
+│   └── esp32_devkit_v1.md     ← ESP32-S3 profile (Phase 1 & 2 complete)
 ├── results/
 │   ├── linalg/
 │   │   ├── vec_dot.md
@@ -38,8 +38,21 @@ validation/
 │   │   └── interpolate.md     (linear, spline_*, chebyshev)
 │   ├── poly/
 │   │   └── poly.md            (poly_eval, poly_roots)
-│   └── ode/
-│       └── ode.md             (rk4, rk45)
+│   ├── ode/
+│   │   └── ode.md             (rk4, rk45)
+│   ├── signal/
+│   │   └── signal.md          (windows, FIR, IIR, convolve, correlate, peaks, EMA)
+│   ├── fft/
+│   │   └── fft.md             (fft_f32, fft_q15, ifft_f32, magnitude)
+│   ├── autodiff/
+│   │   └── autodiff.md        (forward-mode dual numbers, reverse-mode static tape)
+│   ├── compressed_sensing/
+│   │   └── compressed_sensing.md  (OMP, ISTA)
+│   └── sketch/
+│       └── sketch.md          (randomized SVD — Halko-Martinsson-Tropp)
+├── c/
+│   ├── val_runner.c           ← Phase 1 timing benchmark runner
+│   └── val_bench_phase2.c     ← Phase 2 timing benchmark runner
 └── python/
     └── reference_phase1.py    ← numpy reference script
 ```
@@ -125,7 +138,7 @@ validation/
 
 - **Symptom:** Median is 178× slower than mean for same n.
 - **Root cause:** Copy-to-stack + quickselect every call. By design (no in-place modification).
-- **ESP32 estimate:** ~25–80 µs/call — may be too slow for RT loops. Flag for review.
+- **ESP32 measured:** 1,109,766 ns (~1.1 ms/call at n=128) — too slow for RT loops. Use only in offline/batch contexts on ESP32.
 
 ### ⚠️ F-04 — integrate_trap n=100: error 2.50e-05 vs 1e-5 threshold
 
@@ -135,13 +148,12 @@ validation/
 
 ---
 
-## ESP32-S3 — Phase 1 complete ✅
+## ESP32-S3 — Phase 1 & 2 complete ✅
 
-243/243 Unity tests passed on ESP32-S3 (ESP-IDF v5.5.2 / Xtensa LX7 / float32). Per-function timing and precision results are in each module's result file under `validation/results/`.
+548/550 tests passed on ESP32-S3 (ESP-IDF v5.5.2 / Xtensa LX7 / float32) across all 13 modules. The 2 failures are FLAG S-01 (`numx_sketch_rsvd` rank-2 test — `rand()` seed portability issue, not an algorithm bug). Per-function timing and precision results are in each module's result file under `validation/results/`.
 
-**Remaining / future items:**
+**Remaining items:**
 
 1. Verify stack headroom for `numx_mat_det` at n>4 under real workloads (flagged in hardware profile).
 2. Differentiation precision (F-01) is a float32 limitation — document in API; no fix needed on ESP32.
-3. Phase 2 validation on ESP32-S3 (autodiff, fft, signal, sketch, compressed_sensing) — pending.
-4. Update `validation/hardware/esp32_devkit_v1.md` with per-function timing table once Phase 2 is done.
+3. Fix sketch rank-2 test to use a portable RNG seed or platform-independent random projection (S-01).
