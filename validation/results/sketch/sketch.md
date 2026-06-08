@@ -149,14 +149,16 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 | rank2 S[1] (diag(4,2,0,0)) | 2.0 | 0.0000000 | 2.00e+00 | ❌ FLAG S-01 |
 | seed=0 S[0] (diag(3,1)) | 3.0 | 3.0000000 | 0.00e+00 | ✅ |
 
-> **FLAG S-01 — RSVD rank-2 degenerate projection (root cause under investigation):**
+> **FLAG S-01 — RSVD rank-2 degenerate projection (Xtensa LX7 — under investigation):**
 > The rank-2 test produces S[0]=0, S[1]=0 instead of S[0]=4, S[1]=2 on ESP32-S3.
-> Re-run on 2026-06-09 with seeds updated to `1u` (rank-1) and `1u` (rank-2) via the S-01
-> test fix — failure persists unchanged. The implementation uses an internal xorshift32 PRNG
-> (not libc `rand()`), so seed portability across libc implementations is not the root cause.
-> rank-1 (seed=1u, 3×3) and seed=0 (2×2) both recover exact singular values; only the 4×4
-> rank-2 case fails. Suspected cause: numerical degeneration in the MGS or Jacobi EVD step
-> when k_ext = min(m,n) = 4 on Xtensa LX7 single-precision FPU. Under investigation.
+> Re-run on 2026-06-09 with seeds updated to `1u` — failure persists unchanged.
+> The implementation uses an internal xorshift32 PRNG (not libc `rand()`), so libc
+> seed portability is not the root cause. x86-64 gcc, ARM64 Apple clang (M4 Pro and
+> M1 Pro), and MSVC x64 all pass the same test; the failure is isolated to Xtensa LX7.
+> rank-1 (3×3) and seed=0 (2×2) recover exact singular values on ESP32-S3; only the
+> 4×4 k_ext=min(m,n)=4 case fails. Suspected cause: numerical degeneration in MGS
+> orthogonalisation or Jacobi EVD when all k_ext columns of Y fall in a rank-2
+> subspace and the residual columns underflow to zero on single-precision Xtensa FPU.
 
 **RESULTS: 16 PASS / 2 FAIL / 18 TOTAL**
 
