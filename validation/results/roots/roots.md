@@ -232,3 +232,36 @@
 | root_brent x^3-x tol=1e-5 | 10,000 | 1,159 µs | 115 ns |
 
 **RESULTS: 25 PASS / 0 FAIL / 25 TOTAL**
+
+---
+
+## ARM64 — macOS 26.2 / Apple M1 Pro / Apple clang 17.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** 1380ab1
+
+### Test cases
+
+| Function | Expected | Computed | Error | Pass |
+|----------|----------|----------|-------|------|
+| bisect x²-2 on [1,2] | sqrt(2)=1.41421354 | 1.41421413 | 5.96e-07 | ✅ |
+| newton x²-2 x0=1.5 | sqrt(2)=1.41421354 | 1.41421354 | 0.00e+00 | ✅ |
+| brent x²-2 on [1,2] | sqrt(2)=1.41421354 | 1.41421354 | 0.00e+00 | ✅ |
+| brent x³-x-2 on [1,2] | 1.52137971 | 1.52137971 | 0.00e+00 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | tol | N | Total | Per call |
+|----------|-----|---|-------|----------|
+| root_bisect x²-2 | 1e-6 | 10,000 | 1,083 µs | 108 ns |
+| root_newton x²-2 | 1e-6 | 10,000 | 93 µs | 9 ns |
+| root_brent x²-2 | 1e-6 | 10,000 | 706 µs | 70 ns |
+
+### Precision vs reference (double)
+
+| Function | double ref | numx (float32) | Error |
+|----------|-----------|----------------|-------|
+| bisect x²-2 | 1.41421356 | 1.41421413 | 5.96e-07 |
+| newton x²-2 | 1.41421356 | 1.41421354 | 0.00e+00 |
+| brent x²-2 | 1.41421356 | 1.41421354 | 0.00e+00 |
+| brent x³-x-2 | 1.52137971 | 1.52137971 | 0.00e+00 |

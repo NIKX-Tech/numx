@@ -146,3 +146,29 @@
 | mat_mul 8x8 | 10,000 | 7,878 µs | 787 ns |
 
 **RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**
+
+---
+
+## ARM64 — macOS 26.2 / Apple M1 Pro / Apple clang 17.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** 1380ab1
+
+### Test cases
+
+| Case | Expected | Computed | Pass |
+|------|----------|----------|------|
+| 2×2 A@B | [19,22,43,50] | [19.000000, 22.000000, 43.000000, 50.000000] | ✅ |
+| 2×3 @ 3×2 | [58,64,139,154] | [58.000000, 64.000000, 139.000000, 154.000000] | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Size | N | Total | Per call |
+|------|---|-------|----------|
+| 2×2 | 100,000 | 660 µs | 6 ns |
+
+### Precision vs numpy reference
+
+| Case | numpy | numx | Error |
+|------|-------|------|-------|
+| 2×2 all elements | exact integers | exact match | 0.00e+00 |
