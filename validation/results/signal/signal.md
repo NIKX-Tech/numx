@@ -52,20 +52,55 @@ Covers: `window_rect` · `window_hann` · `window_hamming` · `window_blackman` 
 
 ---
 
-## ARM64 — macOS / Apple M4 Pro / Apple clang / float32
-**Validator:** — | **Date:** — | **Commit:** —
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** d81b386
 
 ### Test cases
 
-| Function | Input / scenario | Expected | Computed | Error | Pass |
-|----------|-----------------|----------|----------|-------|------|
-| *(awaiting results)* | | | | | |
+| Test | Result |
+|------|--------|
+| test_window_rect_all_ones | ✅ |
+| test_window_rect_n1 | ✅ |
+| test_window_hann_endpoints_zero | ✅ |
+| test_window_hann_midpoint_one | ✅ |
+| test_window_hann_n1_returns_one | ✅ |
+| test_window_hamming_endpoints | ✅ |
+| test_window_hamming_midpoint_one | ✅ |
+| test_window_blackman_endpoints_zero | ✅ |
+| test_window_blackman_midpoint_one | ✅ |
+| test_convolve_box | ✅ |
+| test_convolve_unit_impulse | ✅ |
+| test_convolve_null_returns_error | ✅ |
+| test_correlate_autocorr_peak_at_lag0 | ✅ |
+| test_correlate_output_length | ✅ |
+| test_fir_identity_tap | ✅ |
+| test_fir_moving_average | ✅ |
+| test_fir_null_returns_error | ✅ |
+| test_iir_biquad_identity | ✅ |
+| test_iir_biquad_scale | ✅ |
+| test_iir_biquad_null_returns_error | ✅ |
+| test_peaks_two_peaks | ✅ |
+| test_peaks_monotone_no_peaks | ✅ |
+| test_peaks_short_signal_no_peaks | ✅ |
+| test_peaks_buffer_too_small | ✅ |
+| test_ema_alpha1_copies_input | ✅ |
+| test_ema_alpha0_stays_at_first | ✅ |
+| test_ema_known_sequence | ✅ |
+| test_ema_invalid_alpha_returns_error | ✅ |
+
+*300 / 300 Unity tests PASS*
 
 ### Performance
 
 | Function | N | Total | Per call |
 |----------|---|-------|----------|
-| *(awaiting results)* | | | |
+| signal_window_hann n=512 | 100,000 | 1,385,067 µs | 13,850 ns |
+| signal_convolve xn=256 hn=32 | 10,000 | 79,979 µs | 7,997 ns |
+| signal_fir xn=256 ntaps=32 | 10,000 | 87,555 µs | 8,755 ns |
+| signal_iir_biquad n=256 | 50,000 | 60,056 µs | 1,201 ns |
+| signal_ema n=256 alpha=0.1 | 50,000 | 19,235 µs | 384 ns |
+
+**RESULTS: 28 PASS / 0 FAIL / 28 TOTAL**
 
 ---
 
