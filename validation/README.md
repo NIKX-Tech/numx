@@ -1,9 +1,9 @@
 # numx Validation — Phase 1 & 2
 
-**numx commit:** d81b386 (x86-64 / ESP32-S3) / 0248577 (Apple Silicon) / 4c4c0f0 (Windows float32) / 1bba399 (Windows float64)
+**numx commit:** d81b386 (x86-64 / ESP32-S3) / 0248577 (M4 Pro) / 1380ab1 (M1 Pro) / 4c4c0f0 (Windows float32) / 1bba399 (Windows float64)
 **Validators:** Amir Ab Khoshk (x86-64, ESP32-S3, Windows), Erfan Jazeb Nikoo (Apple Silicon)
 **Validation start:** 2026-05-25
-**Status:** x86-64 complete ✅ | Apple Silicon complete ✅ | ESP32-S3 complete ✅ | Windows complete ✅
+**Status:** x86-64 complete ✅ | Apple Silicon (M4 Pro + M1 Pro) complete ✅ | ESP32-S3 complete ✅ | Windows complete ✅
 
 ---
 
@@ -14,7 +14,8 @@ validation/
 ├── README.md                  ← this file
 ├── hardware/
 │   ├── host_linux_x86_64.md   ← x86 host profile
-│   ├── mac_mini_m4_pro.md     ← Apple Silicon profile (macOS 26.2 / arm64)
+│   ├── mac_mini_m4_pro.md     ← Apple M4 Pro profile (macOS 26.2 / arm64)
+│   ├── mac_m1_pro.md          ← Apple M1 Pro profile (macOS 26.2 / arm64)
 │   ├── windows_msvc.md        ← Windows x64 profile (MSVC 14.51 / VS 2026 Build Tools)
 │   └── esp32_devkit_v1.md     ← ESP32-S3 profile (Phase 1 & 2 complete)
 ├── results/
@@ -98,13 +99,14 @@ validation/
 
 ## Unity test summary
 
-| Platform                           | Tests | Failures | Date       |
-|------------------------------------|-------|----------|------------|
-| x86-64 (Ubuntu 22.04 / gcc)        | 300   | 0        | 2026-05-25 |
-| ARM64 (macOS 26.2 / Apple clang)   | 300   | 0        | 2026-06-08 |
-| Windows x64 (float32 / MSVC 14.51) | 295   | 0        | 2026-06-05 |
-| Windows x64 (float64 / MSVC 14.51) | 294   | 0        | 2026-06-06 |
-| ESP32-S3 (ESP-IDF 5.5.2 / LX7)    | 550   | 2        | 2026-05-29 |
+| Platform                                                  | Tests | Failures | Date       |
+|-----------------------------------------------------------|-------|----------|------------|
+| x86-64 (Ubuntu 22.04 / gcc)                               | 300   | 0        | 2026-05-25 |
+| ARM64 (macOS 26.2 / Apple clang 21.0.0 / M4 Pro)         | 300   | 0        | 2026-06-08 |
+| ARM64 (macOS 26.2 / Apple clang 17.0.0 / M1 Pro)         | 300   | 0        | 2026-06-08 |
+| Windows x64 (float32 / MSVC 14.51)                        | 295   | 0        | 2026-06-05 |
+| Windows x64 (float64 / MSVC 14.51)                        | 294   | 0        | 2026-06-06 |
+| ESP32-S3 (ESP-IDF 5.5.2 / LX7)                           | 550   | 2        | 2026-05-29 |
 
 > **float64 rows** used the `NUMX_USE_DOUBLE` build flag. Some Unity assertions
 > retain float32-level tolerances; affected tests still pass. See individual

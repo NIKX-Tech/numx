@@ -80,6 +80,43 @@ Covers: `numx_cs_spectral_norm` · `numx_cs_omp` (Orthogonal Matching Pursuit) �
 
 ---
 
+## ARM64 — macOS 26.2 / Apple M1 Pro / Apple clang 17.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** 1380ab1
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_spectral_norm_identity | ✅ |
+| test_spectral_norm_scaled_identity | ✅ |
+| test_spectral_norm_tall_matrix | ✅ |
+| test_spectral_norm_null_returns_error | ✅ |
+| test_spectral_norm_invalid_arg | ✅ |
+| test_omp_identity_1sparse | ✅ |
+| test_omp_identity_2sparse | ✅ |
+| test_omp_overdetermined_1sparse | ✅ |
+| test_omp_null_returns_error | ✅ |
+| test_omp_invalid_arg_returns_error | ✅ |
+| test_ista_identity_shrinkage | ✅ |
+| test_ista_zero_lambda_recovery | ✅ |
+| test_ista_large_lambda_zeros | ✅ |
+| test_ista_null_returns_error | ✅ |
+| test_ista_invalid_step_returns_error | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| cs_spectral_norm 16×32 iter=32 | 100 | 2,191 µs | 21,910 ns |
+| cs_omp 16×32 k=4 | 100 | 117 µs | 1,170 ns |
+| cs_ista 16×32 lam=0.1 iter=500 | 100 | 16,765 µs | 167,650 ns |
+
+**RESULTS: 15 PASS / 0 FAIL / 15 TOTAL**
+
+---
+
 ## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
 **Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
 

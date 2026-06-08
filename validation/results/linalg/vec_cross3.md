@@ -141,3 +141,31 @@
 | vec_cross3 | 100,000 | 507 µs | 5 ns |
 
 **RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**
+
+---
+
+## ARM64 — macOS 26.2 / Apple M1 Pro / Apple clang 17.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** 1380ab1
+
+### Test cases
+
+| Input | Expected | Computed | Pass |
+|-------|----------|----------|------|
+| [1,0,0]×[0,1,0] | [0,0,1] | [0.000000, 0.000000, 1.000000] | ✅ |
+| [1,2,3]×[4,5,6] | [-3,6,-3] | [-3.000000, 6.000000, -3.000000] | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| N | Total | Per call |
+|---|-------|----------|
+| 100,000 | 131 µs | 1 ns |
+
+### Precision vs numpy reference
+
+| Input | component | numpy | numx | Error |
+|-------|-----------|-------|------|-------|
+| [1,2,3]×[4,5,6] | [0] | -3.0 | -3.0 | 0.00e+00 |
+| [1,2,3]×[4,5,6] | [1] | 6.0 | 6.0 | 0.00e+00 |
+| [1,2,3]×[4,5,6] | [2] | -3.0 | -3.0 | 0.00e+00 |
