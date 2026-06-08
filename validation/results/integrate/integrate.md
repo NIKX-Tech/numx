@@ -253,3 +253,38 @@
 | integrate_gauss npts=8 | 50,000 | 783 µs | 15 ns |
 
 **RESULTS: 23 PASS / 0 FAIL / 23 TOTAL**
+
+---
+
+## ARM64 — macOS 26.2 / Apple M1 Pro / Apple clang 17.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** 1380ab1
+
+### Test cases
+
+| Function | Expected | Computed | Error | Pass |
+|----------|----------|----------|-------|------|
+| trap n=100 | 1.2500250 | 1.2500250340 | 0.00e+00 | ✅ NOTE: O(h²) |
+| trap n=1000 | 1.2500003 | 1.25000095 | 5.96e-07 | ✅ |
+| simpson n=100 | 1.25 | 1.25000012 | 1.19e-07 | ✅ |
+| gauss npts=2 | 1.25 | 1.25000000 | 0.00e+00 | ✅ |
+| gauss npts=4 | 1.25 | 1.25000000 | 0.00e+00 | ✅ |
+| gauss npts=8 | 1.25 | 1.25000000 | 0.00e+00 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance (f(x)=x³+1 on [0,1])
+
+| Function | n | N | Total | Per call |
+|----------|---|---|-------|----------|
+| integrate_trap | 100 | 50,000 | 5,595 µs | 111 ns |
+| integrate_simpson | 100 | 50,000 | 5,113 µs | 102 ns |
+| integrate_gauss npts=2 | — | 50,000 | 217 µs | 4 ns |
+
+### Precision vs numpy reference
+
+| Function | numpy | numx | Error |
+|----------|-------|------|-------|
+| trap n=100 | 1.2500250 | 1.2500250 | 0.00e+00 |
+| trap n=1000 | 1.2500003 | 1.25000095 | 5.96e-07 |
+| simpson n=100 | 1.2500000 | 1.25000012 | 1.19e-07 |
+| gauss npts=2,4,8 | 1.2500000 | 1.25000000 | 0.00e+00 |

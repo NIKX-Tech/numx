@@ -145,3 +145,30 @@
 | vec_dot n=64 | 100,000 | 9,441 µs | 94 ns |
 
 **RESULTS: 10 PASS / 0 FAIL / 10 TOTAL**
+
+---
+
+## ARM64 — macOS 26.2 / Apple M1 Pro / Apple clang 17.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** 1380ab1
+
+### Test cases
+
+| Input | Expected | Computed | Error | Pass |
+|-------|----------|----------|-------|------|
+| [1,2,3,4]·[5,6,7,8] | 70.0 | 70.00000000 | 0.00e+00 | ✅ |
+| [1,0,0]·[0,1,0] (orthogonal) | 0.0 | 0.00000000 | 0.00e+00 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| N | Total | Per call |
+|---|-------|----------|
+| 100,000 | 299 µs | 2 ns |
+
+### Precision vs numpy reference
+
+| Input | numpy (float32) | numx | Error |
+|-------|----------------|------|-------|
+| [1,2,3,4]·[5,6,7,8] | 70.0 | 70.00000000 | 0.00e+00 |
+| [1,0,0]·[0,1,0] | 0.0 | 0.00000000 | 0.00e+00 |

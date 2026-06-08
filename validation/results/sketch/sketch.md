@@ -62,6 +62,33 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 
 ---
 
+## ARM64 — macOS 26.2 / Apple M1 Pro / Apple clang 17.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** 1380ab1
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_rsvd_rank1_reconstruction | ✅ |
+| test_rsvd_diagonal_rank2 | ✅ |
+| test_rsvd_tall_matrix | ✅ |
+| test_rsvd_null_returns_error | ✅ |
+| test_rsvd_invalid_arg_returns_error | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| sketch_rsvd 16×16 rank=4 os=4 | 100 | 37,542 µs | 375,420 ns |
+| sketch_rsvd 32×32 rank=8 os=4 | 100 | 95,309 µs | 953,090 ns |
+| sketch_rsvd 64×64 rank=8 os=4 | 100 | 110,159 µs | 1,101,590 ns |
+
+**RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**
+
+---
+
 ## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
 **Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
 

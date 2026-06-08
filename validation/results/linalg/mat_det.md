@@ -141,3 +141,33 @@
 | mat_det 4x4 | 100,000 | 6,224 µs | 62 ns |
 
 **RESULTS: 7 PASS / 0 FAIL / 7 TOTAL**
+
+---
+
+## ARM64 — macOS 26.2 / Apple M1 Pro / Apple clang 17.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** 1380ab1
+
+### Test cases
+
+| n | Expected | Computed | Error | Pass |
+|---|----------|----------|-------|------|
+| 1×1 [[5]] | 5.0 | 5.00000000 | 0.00e+00 | ✅ |
+| 2×2 [[1,2],[3,4]] | -2.0 | -2.00000000 | 0.00e+00 | ✅ |
+| 3×3 textbook | 4.0 | 4.00000000 | 0.00e+00 | ✅ |
+| 4×4 symmetric | 20.0 | 20.00000000 | 0.00e+00 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Size | N | Total | Per call |
+|------|---|-------|----------|
+| 4×4 | 100,000 | 524 µs | 5 ns |
+
+### Precision vs numpy reference
+
+| n | numpy | numx | Error |
+|---|-------|------|-------|
+| 2 | -2.0 | -2.00000000 | 0.00e+00 |
+| 3 | 4.0 | 4.00000000 | 0.00e+00 |
+| 4 | 20.0 | 20.00000000 | 0.00e+00 |
