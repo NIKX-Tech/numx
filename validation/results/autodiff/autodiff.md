@@ -110,14 +110,59 @@ Covers: **forward-mode** (`numx_dual_t` — const, var, add, sub, mul, div, neg,
 
 ---
 
-## ARM64 — macOS / Apple M4 Pro / Apple clang / float32
-**Validator:** — | **Date:** — | **Commit:** —
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** d81b386
 
 ### Test cases
 
-| Mode | Expression | Expected | Computed | Pass |
-|------|-----------|----------|----------|------|
-| *(awaiting results)* | | | | |
+| Test | Result |
+|------|--------|
+| test_dual_const | ✅ |
+| test_dual_var | ✅ |
+| test_dual_add | ✅ |
+| test_dual_sub | ✅ |
+| test_dual_mul | ✅ |
+| test_dual_div | ✅ |
+| test_dual_neg | ✅ |
+| test_dual_sin | ✅ |
+| test_dual_cos | ✅ |
+| test_dual_exp | ✅ |
+| test_dual_log | ✅ |
+| test_dual_sqrt | ✅ |
+| test_dual_chain_quadratic | ✅ |
+| test_dual_div_by_zero | ✅ |
+| test_dual_log_nonpositive | ✅ |
+| test_dual_sqrt_negative | ✅ |
+| test_ad_init | ✅ |
+| test_ad_var | ✅ |
+| test_ad_add_backward | ✅ |
+| test_ad_sub_backward | ✅ |
+| test_ad_mul_backward | ✅ |
+| test_ad_div_backward | ✅ |
+| test_ad_neg_backward | ✅ |
+| test_ad_sin_backward | ✅ |
+| test_ad_cos_backward | ✅ |
+| test_ad_exp_backward | ✅ |
+| test_ad_log_backward | ✅ |
+| test_ad_sqrt_backward | ✅ |
+| test_ad_quadratic | ✅ |
+| test_ad_null_returns_error | ✅ |
+| test_ad_invalid_idx_returns_error | ✅ |
+| test_ad_div_by_zero_returns_error | ✅ |
+| test_ad_log_nonpositive_returns_error | ✅ |
+| test_ad_sqrt_negative_returns_error | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Operation | N | Total | Per call |
+|-----------|---|-------|----------|
+| dual fwd: mul-chain depth=10 | 100,000 | 8,632 µs | 86 ns |
+| tape: rev grad x²+y² | 10,000 | 21,134 µs | 2,113 ns |
+| tape: rev grad x²+y²+z² (3 vars) | 10,000 | 22,236 µs | 2,223 ns |
+
+**RESULTS: 34 PASS / 0 FAIL / 34 TOTAL**
 
 ---
 

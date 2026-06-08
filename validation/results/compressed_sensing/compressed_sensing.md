@@ -43,14 +43,40 @@ Covers: `numx_cs_spectral_norm` · `numx_cs_omp` (Orthogonal Matching Pursuit) �
 
 ---
 
-## ARM64 — macOS / Apple M4 Pro / Apple clang / float32
-**Validator:** — | **Date:** — | **Commit:** —
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** d81b386
 
 ### Test cases
 
-| Function | Scenario | Expected | Computed | Pass |
-|----------|---------|----------|----------|------|
-| *(awaiting results)* | | | | |
+| Test | Result |
+|------|--------|
+| test_spectral_norm_identity | ✅ |
+| test_spectral_norm_scaled_identity | ✅ |
+| test_spectral_norm_tall_matrix | ✅ |
+| test_spectral_norm_null_returns_error | ✅ |
+| test_spectral_norm_invalid_arg | ✅ |
+| test_omp_identity_1sparse | ✅ |
+| test_omp_identity_2sparse | ✅ |
+| test_omp_overdetermined_1sparse | ✅ |
+| test_omp_null_returns_error | ✅ |
+| test_omp_invalid_arg_returns_error | ✅ |
+| test_ista_identity_shrinkage | ✅ |
+| test_ista_zero_lambda_recovery | ✅ |
+| test_ista_large_lambda_zeros | ✅ |
+| test_ista_null_returns_error | ✅ |
+| test_ista_invalid_step_returns_error | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| cs_spectral_norm 16×32 iter=32 | 100 | 4,681 µs | 46,810 ns |
+| cs_omp 16×32 k=4 | 100 | 261 µs | 2,610 ns |
+| cs_ista 16×32 lam=0.1 iter=500 | 100 | 57,834 µs | 578,340 ns |
+
+**RESULTS: 15 PASS / 0 FAIL / 15 TOTAL**
 
 ---
 

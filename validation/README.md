@@ -101,7 +101,7 @@ validation/
 | Platform                           | Tests | Failures | Date       |
 |------------------------------------|-------|----------|------------|
 | x86-64 (Ubuntu 22.04 / gcc)        | 300   | 0        | 2026-05-25 |
-| ARM64 (macOS 26.2 / Apple clang)   | 300   | 0        | 2026-05-29 |
+| ARM64 (macOS 26.2 / Apple clang)   | 300   | 0        | 2026-06-08 |
 | Windows x64 (float32 / MSVC 14.51) | 295   | 0        | 2026-06-05 |
 | Windows x64 (float64 / MSVC 14.51) | 294   | 0        | 2026-06-06 |
 | ESP32-S3 (ESP-IDF 5.5.2 / LX7)    | 550   | 2        | 2026-05-29 |

@@ -35,14 +35,30 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 
 ---
 
-## ARM64 — macOS / Apple M4 Pro / Apple clang / float32
-**Validator:** — | **Date:** — | **Commit:** —
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** d81b386
 
 ### Test cases
 
-| A | rank | σ expected | σ computed | Error | Pass |
-|---|------|-----------|-----------|-------|------|
-| *(awaiting results)* | | | | | |
+| Test | Result |
+|------|--------|
+| test_rsvd_rank1_reconstruction | ✅ |
+| test_rsvd_diagonal_rank2 | ✅ |
+| test_rsvd_tall_matrix | ✅ |
+| test_rsvd_null_returns_error | ✅ |
+| test_rsvd_invalid_arg_returns_error | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| sketch_rsvd 16×16 rank=4 os=4 | 100 | 45,036 µs | 450,360 ns |
+| sketch_rsvd 32×32 rank=8 os=4 | 100 | 113,795 µs | 1,137,950 ns |
+| sketch_rsvd 64×64 rank=8 os=4 | 100 | 138,754 µs | 1,387,540 ns |
+
+**RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**
 
 ---
 
