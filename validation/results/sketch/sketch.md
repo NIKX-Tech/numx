@@ -95,7 +95,7 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 > **Stack note:** `numx_sketch_rsvd` uses ~14 KB of internal local variables
 > (bounded by `NUMX_MAX_SKETCH_M` / `NUMX_MAX_SKETCH_N` / `NUMX_MAX_SKETCH_RANK`).
 
-### Test cases — rsvd_rank1
+### Test cases — rsvd_rank1 (A=diag(2,0,0) 3×3, rank=1, oversample=2, seed=1)
 
 | Test | Expected | Computed | Error | Pass |
 |------|----------|----------|-------|------|
@@ -103,7 +103,7 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 | rsvd rank1 S[0]>0 | >0 | confirmed | — | ✅ |
 | rsvd rank1 S[0]≈2 | 2.0 | 2.0000000 | 0.00e+00 | ✅ |
 
-### Test cases — rsvd_rank2
+### Test cases — rsvd_rank2 (A=diag(4,2,0,0) 4×4, rank=2, oversample=2, seed=1)
 
 | Test | Expected | Computed | Error | Pass |
 |------|----------|----------|-------|------|
@@ -113,7 +113,7 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 | rsvd rank2 S[0]≈4 | 4.0 | 0.0000000 | 4.00e+00 | ❌ |
 | rsvd rank2 S[1]≈2 | 2.0 | 0.0000000 | 2.00e+00 | ❌ |
 
-### Test cases — rsvd_seed0
+### Test cases — rsvd_seed0 (A=diag(3,1) 2×2, rank=1, oversample=1, seed=0→1)
 
 | Test | Expected | Computed | Error | Pass |
 |------|----------|----------|-------|------|
