@@ -63,7 +63,8 @@ All results are device-run, per-formula values with measured error margins — n
 | Platform | Toolchain | Modules | Tests |
 |---|---|---|---|
 | x86-64 — Intel i7-13700H / Ubuntu 22.04 | gcc 11.4.0 -O2 / float32 | 13 / 13 | 300 / 300 ✅ |
-| ARM64 — Apple M4 Pro / macOS | Apple clang -O2 / float32 | 13 / 13 | 300 / 300 ✅ |
+| ARM64 — Apple M4 Pro / macOS 26.2 | Apple clang 21.0.0 -O2 / float32 | 13 / 13 | 300 / 300 ✅ |
+| ARM64 — Apple M1 Pro / macOS 26.2 | Apple clang 17.0.0 -O2 / float32 | 13 / 13 | 300 / 300 ✅ |
 | Windows x64 — MSVC 14.51 (VS 2026 Build Tools) | MSVC /O2 / float32 | 13 / 13 | 295 / 295 ✅ |
 | Windows x64 — MSVC 14.51 (VS 2026 Build Tools) | MSVC /O2 / float64 | 13 / 13 | 294 / 294 ✅ |
 | ESP32-S3 — Xtensa LX7 / ESP-IDF v5.5.2 | xtensa-esp32s3-elf-gcc -O2 / float32 | 13 / 13 | 548 / 550 ✅ |
