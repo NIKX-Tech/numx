@@ -55,5 +55,6 @@ dkms.conf
 
 # CMake build output
 build/
+build_*/
 cmake-build-*
-/tests
+tests/
