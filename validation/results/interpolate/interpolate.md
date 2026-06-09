@@ -291,3 +291,16 @@
 | spline x=1.5 | 2.23214293 | 2.23214293 | 0.00e+00 |
 | spline x=2.5 | 6.23214293 | 6.23214293 | 0.00e+00 |
 | chebyshev n=8 x=1.5 | 2.25 | 2.25000024 | 2.38e-07 |
+
+---
+
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32 (Updated)
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-09 | **Commit:** 2fc85d0
+
+### Test cases
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+*interpolate was not included in M4 Pro benchmark suite for this run.*

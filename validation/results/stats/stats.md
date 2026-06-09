@@ -292,3 +292,42 @@
 | variance pop | 4.0 | 4.00000000 | 0.00e+00 |
 | variance samp | 4.5714286 | 4.57142878 | 0.00e+00 |
 | median | 4.5 | 4.50000000 | 0.00e+00 |
+
+---
+
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32 (Updated)
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-09 | **Commit:** 2fc85d0
+
+### Test cases — dataset [2, 4, 4, 4, 5, 5, 7, 9]
+
+| Function | Expected | Computed | Error | Pass |
+|----------|----------|----------|-------|------|
+| mean | 5.0 | 5.00000000 | 0.00e+00 | ✅ |
+| variance (population) | 4.0 | 4.00000000 | 0.00e+00 | ✅ |
+| variance (sample) | 4.571429 | 4.57142878 | 0.00e+00 | ✅ |
+| median | 4.5 | 4.50000000 | 0.00e+00 | ✅ |
+| percentile p0 | 2.0 | 2.00000000 | 0.00e+00 | ✅ |
+| percentile p25 | 4.0 | 4.00000000 | 0.00e+00 | ✅ |
+| percentile p50 | 5.0 | 5.00000000 | 0.00e+00 | ✅ |
+| percentile p75 | 7.0 | 7.00000000 | 0.00e+00 | ✅ |
+| percentile p100 | 9.0 | 9.00000000 | 0.00e+00 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance (n=8 validation dataset)
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| stats_mean n=8 | 100,000 | 298 µs | 2 ns |
+| stats_variance (pop) n=8 | 100,000 | 1,170 µs | 11 ns |
+| stats_median n=8 | 100,000 | 6,791 µs | 67 ns |
+| stats_percentile p50 n=8 | 100,000 | 3,232 µs | 32 ns |
+
+### Precision vs numpy reference
+
+| Function | numpy | numx | Error |
+|----------|-------|------|-------|
+| mean | 5.0 | 5.00000000 | 0.00e+00 |
+| variance pop | 4.0 | 4.00000000 | 0.00e+00 |
+| variance samp | 4.5714286 | 4.57142878 | 0.00e+00 |
+| median | 4.5 | 4.50000000 | 0.00e+00 |

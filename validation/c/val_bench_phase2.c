@@ -343,7 +343,7 @@ static void bench_cs(void)
 int main(void)
 {
     printf("numx Phase 2/3 timing benchmark\n");
-    printf("Platform: x86-64 / Ubuntu / gcc / float32\n");
+    printf("Platform: ARM64 / macOS 26.2 / Apple clang 21.0.0 / float32\n");
     printf("=================================================\n");
     bench_autodiff();
     bench_fft();

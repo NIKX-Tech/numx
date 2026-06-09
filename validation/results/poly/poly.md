@@ -250,3 +250,16 @@
 | 1.0 | 0.0 | 0.00000000 | 0.00e+00 |
 | 2.5 | -0.375 | -0.37500000 | 0.00e+00 |
 | p8(1.5) | 12.44140625 | 12.44140625 | 0.00e+00 |
+
+---
+
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32 (Updated)
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-09 | **Commit:** 2fc85d0
+
+### Test cases
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+*poly was not included in M4 Pro benchmark suite for this run.*
