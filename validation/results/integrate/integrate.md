@@ -81,6 +81,19 @@
 
 ---
 
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32 (Updated)
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-09 | **Commit:** 2fc85d0
+
+### Test cases
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+*integrate was not included in M4 Pro benchmark suite for this run.*
+
+---
+
 ## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
 **Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
 
@@ -288,3 +301,16 @@
 | trap n=1000 | 1.2500003 | 1.25000095 | 5.96e-07 |
 | simpson n=100 | 1.2500000 | 1.25000012 | 1.19e-07 |
 | gauss npts=2,4,8 | 1.2500000 | 1.25000000 | 0.00e+00 |
+
+---
+
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32 (Updated)
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-09 | **Commit:** 2fc85d0
+
+### Test cases
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+*integrate was not included in M4 Pro benchmark suite for this run.*

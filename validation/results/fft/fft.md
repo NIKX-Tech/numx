@@ -45,7 +45,7 @@ Covers: `fft_f32` · `ifft_f32` · `fft_q15` · `fft_magnitude`
 ---
 
 ## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32
-**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** d81b386
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-09 | **Commit:** 2fc85d0
 
 ### Test cases
 
@@ -76,12 +76,12 @@ Covers: `fft_f32` · `ifft_f32` · `fft_q15` · `fft_magnitude`
 
 | Function | N | Total | Per call |
 |----------|---|-------|----------|
-| fft_f32 N=64 | 10,000 | 117,208 µs | 11,720 ns |
-| fft_f32 N=256 | 5,000 | 308,169 µs | 61,633 ns |
-| fft_f32 N=512 | 1,000 | 135,266 µs | 135,266 ns |
-| ifft_f32 N=256 | 5,000 | 319,544 µs | 63,908 ns |
-| fft_q15 N=256 | 5,000 | 315,945 µs | 63,189 ns |
-| fft_magnitude N=256 | 100,000 | 2,981,845 µs | 29,818 ns |
+| fft_f32 N=64 | 10,000 | 27,679 µs | 2,767 ns |
+| fft_f32 N=256 | 5,000 | 52,147 µs | 10,429 ns |
+| fft_f32 N=512 | 1,000 | 23,218 µs | 23,218 ns |
+| ifft_f32 N=256 | 5,000 | 50,674 µs | 10,134 ns |
+| fft_q15 N=256 | 5,000 | 51,630 µs | 10,326 ns |
+| fft_magnitude N=256 | 100,000 | 1,634,921 µs | 16,349 ns |
 
 **RESULTS: 18 PASS / 0 FAIL / 18 TOTAL**
 

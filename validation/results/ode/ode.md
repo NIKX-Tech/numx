@@ -258,3 +258,16 @@
 | rk4 v(1.0) harmonic | -0.841470984808 | -0.84147084 | 1.19e-07 |
 | rk4 energy | 0.5 | 0.4999999106 | 8.94e-08 |
 | rk45 y(1.0) | 0.367879441171 | 0.36787939 | 5.96e-08 |
+
+---
+
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32 (Updated)
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-09 | **Commit:** 2fc85d0
+
+### Test cases
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+*ode was not included in M4 Pro benchmark suite for this run.*

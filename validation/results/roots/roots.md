@@ -265,3 +265,16 @@
 | newton x²-2 | 1.41421356 | 1.41421354 | 0.00e+00 |
 | brent x²-2 | 1.41421356 | 1.41421354 | 0.00e+00 |
 | brent x³-x-2 | 1.52137971 | 1.52137971 | 0.00e+00 |
+
+---
+
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32 (Updated)
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-09 | **Commit:** 2fc85d0
+
+### Test cases
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+*roots was not included in M4 Pro benchmark suite for this run.*

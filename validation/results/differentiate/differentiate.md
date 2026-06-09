@@ -247,3 +247,16 @@ Identical values to x86-64 and ARM64 M4 Pro — IEEE 754 float32 cancellation is
 | diff_forward | 100,000 | 360 µs | 3 ns |
 | diff_central | 100,000 | 370 µs | 3 ns |
 | diff_richardson | 100,000 | 404 µs | 4 ns |
+
+---
+
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32 (Updated)
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-09 | **Commit:** 2fc85d0
+
+### Test cases
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+*differentiate was not included in M4 Pro benchmark suite for this run.*

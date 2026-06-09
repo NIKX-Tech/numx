@@ -172,3 +172,29 @@
 | Case | numpy | numx | Error |
 |------|-------|------|-------|
 | 2×2 all elements | exact integers | exact match | 0.00e+00 |
+
+---
+
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32 (Updated)
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-09 | **Commit:** 2fc85d0
+
+### Test cases
+
+| Case | Expected | Computed | Pass |
+|------|----------|----------|------|
+| 2×2 A@B | [19,22,43,50] | [19.000000, 22.000000, 43.000000, 50.000000] | ✅ |
+| 2×3 @ 3×2 | [58,64,139,154] | [58.000000, 64.000000, 139.000000, 154.000000] | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Size | N | Total | Per call |
+|------|---|-------|----------|
+| 2×2 | 100,000 | 937 µs | 9 ns |
+
+### Precision vs numpy reference
+
+| Case | numpy | numx | Error |
+|------|-------|------|-------|
+| 2×2 all elements | exact integers | exact match | 0.00e+00 |
