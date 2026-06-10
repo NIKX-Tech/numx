@@ -2,24 +2,21 @@
 
 [![CI](https://img.shields.io/github/actions/workflow/status/NIKX-Tech/numx/ci.yml?branch=main&style=flat-square&label=build)](https://github.com/NIKX-Tech/numx/actions/workflows/ci.yml) [![License](https://img.shields.io/github/license/NIKX-Tech/numx?style=flat-square&color=blue)](https://opensource.org/licenses/MIT) [![C Standard](https://img.shields.io/badge/standard-C99-00599C?style=flat-square&logo=c&logoColor=white)](https://github.com/NIKX-Tech/numx) [![Repo Size](https://img.shields.io/github/repo-size/NIKX-Tech/numx?style=flat-square)](https://github.com/NIKX-Tech/numx) [![GitHub Stars](https://img.shields.io/github/stars/NIKX-Tech/numx?style=flat-square&color=yellow)](https://github.com/NIKX-Tech/numx/stargazers) [![Platform: ESP32](https://img.shields.io/badge/platform-ESP32-E7352C?style=flat-square&logo=espressif&logoColor=white)](https://github.com/NIKX-Tech/numx) [![Platform: ARM](https://img.shields.io/badge/platform-ARM%20Cortex--M-0091BD?style=flat-square&logo=arm&logoColor=white)](https://github.com/NIKX-Tech/numx)
 
+[![CodeQL](https://img.shields.io/github/actions/workflow/status/NIKX-Tech/numx/codeql.yml?branch=main&label=codeql&style=flat-square)](https://github.com/NIKX-Tech/numx/actions/workflows/codeql.yml)
+[![Latest Release](https://img.shields.io/github/v/release/NIKX-Tech/numx?style=flat-square)](https://github.com/NIKX-Tech/numx/releases)
+[![Dependabot](https://img.shields.io/badge/dependabot-enabled-025e8a?logo=dependabot&style=flat-square)](https://github.com/NIKX-Tech/numx/blob/main/.github/dependabot.yml)
+[![Website](https://img.shields.io/badge/website-numx.dev-4F46E5?style=flat-square&logo=google-chrome&logoColor=white)](https://numx.dev)
+
 <!--
-Uncomment each badge when the prerequisite is met:
+Uncomment when ready:
   [![OpenSSF Scorecard](...)](...)       → add .github/workflows/scorecard.yml
-  [![CodeQL](...)](...)                  → add .github/workflows/codeql.yml
-  [![Latest Release](...)](...)          → publish first GitHub release
-  [![Dependabot](...)](...)              → add .github/dependabot.yml
   [![Sponsor GitHub](...)](...)          → activate GitHub Sponsors for NIKX-Tech
   [![Sponsor Open Collective](...)](...)  → create Open Collective project page
-  [![Website](...)](...)                 → launch numx.dev
   [![Discord](...)](...)                 → create Discord server
 
 [![OpenSSF Scorecard](https://img.shields.io/ossf-scorecard/github.com/NIKX-Tech/numx?label=openssf%20scorecard&style=flat-square)](https://securityscorecards.dev/projects/github.com/NIKX-Tech/numx)
-[![CodeQL](https://img.shields.io/github/actions/workflow/status/NIKX-Tech/numx/codeql.yml?branch=main&label=codeql&style=flat-square)](https://github.com/NIKX-Tech/numx/actions/workflows/codeql.yml)
-[![Latest Release](https://img.shields.io/github/v/release/NIKX-Tech/numx?style=flat-square)](https://github.com/NIKX-Tech/numx/releases)
-[![Dependabot](https://img.shields.io/badge/dependabot-enabled-025e8a?logo=dependabot&style=flat-square)](https://github.com/NIKX-Tech/numx/blob/dev/.github/dependabot.yml)
 [![Sponsor GitHub](https://img.shields.io/badge/sponsor-GitHub-EA4AAA?style=flat-square&logo=github-sponsors)](https://github.com/sponsors/NIKX-Tech)
 [![Sponsor Open Collective](https://img.shields.io/badge/sponsor-Open%20Collective-00A0E0?style=flat-square&logo=opencollective)](https://opencollective.com/nikx-technologies/projects/numx)
-[![Website](https://img.shields.io/badge/website-numx.dev-4F46E5?style=flat-square&logo=google-chrome&logoColor=white)](https://numx.dev)
 [![Discord](https://img.shields.io/badge/discord-join%20chat-5865F2?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/NIKX)
 -->
 
@@ -74,6 +71,20 @@ All results are device-run, per-formula values with measured error margins — n
 ---
 
 ## Quick start
+
+**Option A — FetchContent (recommended)**
+
+```cmake
+include(FetchContent)
+FetchContent_Declare(numx
+  GIT_REPOSITORY https://github.com/NIKX-Tech/numx.git
+  GIT_TAG        v0.1.0
+)
+FetchContent_MakeAvailable(numx)
+target_link_libraries(my_target PRIVATE numx::numx)
+```
+
+**Option B — clone and build locally**
 
 ```bash
 git clone https://github.com/NIKX-Tech/numx.git

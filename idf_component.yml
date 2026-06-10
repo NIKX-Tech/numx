@@ -1,0 +1,39 @@
+## IDF Component Manager manifest
+## Register at https://components.espressif.com
+
+cmake_minimum_required: "3.16"
+
+version: "0.1.0"
+description: >
+  Scientific-grade numerical computing for ESP32 (and all embedded targets).
+  Pure C99, zero dynamic allocation, zero external dependencies. Provides
+  linear algebra, signal processing, FFT, ODE solvers, automatic
+  differentiation, compressed sensing, and randomized SVD.
+
+url: "https://numx.dev"
+repository: "https://github.com/NIKX-Tech/numx"
+
+targets:
+  - esp32
+  - esp32s2
+  - esp32s3
+  - esp32c3
+  - esp32c6
+  - esp32h2
+
+license: "MIT"
+
+tags:
+  - numerical
+  - math
+  - signal-processing
+  - fft
+  - linear-algebra
+  - ode
+  - autodiff
+  - compressed-sensing
+  - c99
+  - embedded
+
+dependencies:
+  idf: ">=5.0"

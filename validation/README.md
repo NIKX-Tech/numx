@@ -1,6 +1,6 @@
 # numx Validation — Phase 1 & 2
 
-**numx commit:** d81b386 (x86-64 / ESP32-S3) / 2fc85d0 (M4 Pro) / 1380ab1 (M1 Pro) / 4c4c0f0 (Windows float32) / 1bba399 (Windows float64)
+**numx commit:** d81b386 (x86-64 / ESP32-S3) / 0248577 (M4 Pro) / 1380ab1 (M1 Pro) / 4c4c0f0 (Windows float32) / 1bba399 (Windows float64)
 **Validators:** Amir Ab Khoshk (x86-64, ESP32-S3, Windows), Erfan Jazeb Nikoo (Apple Silicon)
 **Validation start:** 2026-05-25
 **Status:** x86-64 complete ✅ | Apple Silicon (M4 Pro + M1 Pro) complete ✅ | ESP32-S3 complete ✅ | Windows complete ✅

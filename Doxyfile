@@ -1,0 +1,72 @@
+# Doxyfile for numx
+# Run: doxygen Doxyfile
+# Output: docs/api/html/index.html
+
+DOXYFILE_ENCODING      = UTF-8
+PROJECT_NAME           = "numx"
+PROJECT_NUMBER         = 0.1.0
+PROJECT_BRIEF          = "Scientific numerical computing for embedded systems — pure C99, zero allocation"
+PROJECT_LOGO           =
+OUTPUT_DIRECTORY       = docs/api
+
+# ── Input ──────────────────────────────────────────────────────────────
+INPUT                  = include/numx src README.md
+FILE_PATTERNS          = *.h *.c *.md
+RECURSIVE              = NO
+USE_MDFILE_AS_MAINPAGE = README.md
+EXCLUDE_PATTERNS       = */build/* */archive/*
+
+# ── Extraction ─────────────────────────────────────────────────────────
+EXTRACT_ALL            = NO
+EXTRACT_STATIC         = YES
+HIDE_UNDOC_MEMBERS     = YES
+HIDE_UNDOC_CLASSES     = YES
+SHOW_INCLUDE_FILES     = YES
+SHOW_USED_FILES        = NO
+
+# ── Output formats ─────────────────────────────────────────────────────
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+HTML_FILE_EXTENSION    = .html
+GENERATE_LATEX         = NO
+GENERATE_MAN           = NO
+GENERATE_XML           = NO
+
+# ── HTML appearance ────────────────────────────────────────────────────
+HTML_COLORSTYLE        = LIGHT
+HTML_DYNAMIC_SECTIONS  = YES
+GENERATE_TREEVIEW      = YES
+TREEVIEW_WIDTH         = 250
+ENUM_VALUES_PER_LINE   = 1
+SEARCHENGINE           = YES
+
+# ── Preprocessing ──────────────────────────────────────────────────────
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = YES
+PREDEFINED             = NUMX_MAX_VEC_SIZE=256 \
+                         NUMX_MAX_MAT_ROWS=32 \
+                         NUMX_MAX_MAT_COLS=32 \
+                         NUMX_MAX_FFT_SIZE=512 \
+                         NUMX_MAX_AD_TAPE_LEN=4096 \
+                         NUMX_MAX_CS_MEASUREMENTS=256 \
+                         NUMX_MAX_CS_SIGNAL_DIM=256 \
+                         NUMX_MAX_CS_SPARSITY=32
+
+# ── Diagrams ───────────────────────────────────────────────────────────
+HAVE_DOT               = NO
+CLASS_DIAGRAMS         = YES
+
+# ── Warnings ───────────────────────────────────────────────────────────
+QUIET                  = YES
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_DOC_ERROR      = YES
+WARN_NO_PARAMDOC       = YES
+
+# ── Alphabetical index ─────────────────────────────────────────────────
+ALPHABETICAL_INDEX     = YES
+COLS_IN_ALPHA_INDEX    = 3
+
+# ── Source browsing ────────────────────────────────────────────────────
+SOURCE_BROWSER         = NO
+INLINE_SOURCES         = NO

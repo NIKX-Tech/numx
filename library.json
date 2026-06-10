@@ -1,0 +1,29 @@
+{
+  "name": "numx",
+  "version": "0.1.0",
+  "description": "Scientific-grade numerical computing for embedded systems. Zero dependencies, zero dynamic allocation, pure C99. Linear algebra, signal processing, FFT, ODE solvers, automatic differentiation, compressed sensing, and more.",
+  "keywords": [
+    "numerical", "math", "linear-algebra", "signal-processing", "fft",
+    "ode", "autodiff", "compressed-sensing", "embedded", "c99", "esp32", "arm"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NIKX-Tech/numx.git"
+  },
+  "authors": [
+    {
+      "name": "NIKX Technologies B.V.",
+      "url": "https://nikx.one",
+      "maintainer": true
+    }
+  ],
+  "license": "MIT",
+  "homepage": "https://numx.dev",
+  "platforms": ["espressif32", "atmelavr", "ststm32", "nordicnrf52", "native"],
+  "frameworks": ["arduino", "espidf", "cmsis", "*"],
+  "build": {
+    "srcDir": "src",
+    "includeDir": "include"
+  },
+  "examples": "examples"
+}
