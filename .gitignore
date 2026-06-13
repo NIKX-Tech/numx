@@ -56,6 +56,3 @@ dkms.conf
 # CMake build output
 build/
 cmake-build-*
-
-# Doxygen generated output
-docs/api/

@@ -433,3 +433,58 @@ Covers: **forward-mode** (`numx_dual_t` — const, var, add, sub, mul, div, neg,
 | tape: init+x,x^2,sin+bwd | 10,000 | 58,258 µs | 5,825 ns |
 
 **RESULTS: 28 PASS / 0 FAIL / 28 TOTAL**
+
+---
+
+## ARM64 — Raspbian GNU/Linux 13 / Raspberry Pi 4 Model B / gcc 14.2.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-13 | **Commit:** 14147a3
+
+### Forward-mode tests
+
+| Test | Result |
+|------|--------|
+| test_dual_const | ✅ |
+| test_dual_var | ✅ |
+| test_dual_add | ✅ |
+| test_dual_sub | ✅ |
+| test_dual_mul | ✅ |
+| test_dual_div | ✅ |
+| test_dual_neg | ✅ |
+| test_dual_sin | ✅ |
+| test_dual_cos | ✅ |
+| test_dual_exp | ✅ |
+| test_dual_log | ✅ |
+| test_dual_sqrt | ✅ |
+| test_dual_chain_quadratic | ✅ |
+| test_dual_div_by_zero | ✅ |
+| test_dual_log_nonpositive | ✅ |
+| test_dual_sqrt_negative | ✅ |
+
+### Reverse-mode tests
+
+| Test | Result |
+|------|--------|
+| test_ad_init | ✅ |
+| test_ad_var | ✅ |
+| test_ad_add_backward | ✅ |
+| test_ad_mul_backward | ✅ |
+| test_ad_div_backward | ✅ |
+| test_ad_sin_backward | ✅ |
+| test_ad_quadratic | ✅ |
+| test_ad_null_returns_error | ✅ |
+| test_ad_invalid_idx_returns_error | ✅ |
+| test_ad_div_by_zero_returns_error | ✅ |
+| test_ad_log_nonpositive_returns_error | ✅ |
+| test_ad_sqrt_negative_returns_error | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| dual fwd mul-chain depth=10 | 100,000 | 10,237 µs | 102 ns |
+| tape rev grad x²+y² | 10,000 | 57,504 µs | 5,750 ns |
+| tape rev grad x²+y²+z² | 10,000 | 58,448 µs | 5,844 ns |
+
+**RESULTS: 28 PASS / 0 FAIL / 28 TOTAL**

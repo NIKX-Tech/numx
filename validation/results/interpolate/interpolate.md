@@ -304,3 +304,39 @@
 ### Performance
 
 *interpolate was not included in M4 Pro benchmark suite for this run.*
+
+---
+
+## ARM64 — Raspbian GNU/Linux 13 / Raspberry Pi 4 Model B / gcc 14.2.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-13 | **Commit:** 14147a3
+
+### Test cases (nodes: xs=[0,1,2,3,4], ys=[0,1,4,9,16])
+
+| Function | Input | Expected | Computed | Error | Pass |
+|----------|-------|----------|----------|-------|------|
+| linear | x=1.5 | 2.5 | 2.50000000 | 0.00e+00 | ✅ |
+| linear | x=2.5 | 6.5 | 6.50000000 | 0.00e+00 | ✅ |
+| spline_cubic | x=1.5 | 2.23214293 | 2.23214293 | 0.00e+00 | ✅ |
+| spline_cubic | x=2.5 | 6.23214293 | 6.23214293 | 0.00e+00 | ✅ |
+| chebyshev n=8 | x=1.5 | 2.25 | 2.25000024 | 2.38e-07 | ✅ |
+| chebyshev n=16 | x=1.5 | 2.25 | 2.25000000 | 0.00e+00 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | n | N | Total | Per call |
+|----------|---|---|-------|----------|
+| interp_linear | 5 | 50,000 | 1,267 µs | 25 ns |
+| interp_spline_cubic (one-shot) | 5 | 50,000 | 6,141 µs | 122 ns |
+| interp_spline_eval (pre-built) | 5 | 50,000 | 1,634 µs | 32 ns |
+| interp_chebyshev n=8 | 8 | 50,000 | 46,184 µs | 923 ns |
+
+### Precision vs numpy reference
+
+| Function | ref | numx | Error |
+|----------|-----|------|-------|
+| linear x=1.5 | 2.5 | 2.50000000 | 0.00e+00 |
+| spline x=1.5 | 2.23214293 | 2.23214293 | 0.00e+00 |
+| spline x=2.5 | 6.23214293 | 6.23214293 | 0.00e+00 |
+| chebyshev n=8 x=1.5 | 2.25 | 2.25000024 | 2.38e-07 |

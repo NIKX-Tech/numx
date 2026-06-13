@@ -271,3 +271,39 @@
 ### Performance
 
 *ode was not included in M4 Pro benchmark suite for this run.*
+
+---
+
+## ARM64 — Raspbian GNU/Linux 13 / Raspberry Pi 4 Model B / gcc 14.2.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-13 | **Commit:** 14147a3
+
+### Test cases
+
+| Function | Problem | Expected | Computed | Error | Pass |
+|----------|---------|----------|----------|-------|------|
+| rk4 | decay y(1.0) → e^-1 | 0.36787945 | 0.36787960 | 1.49e-07 | ✅ |
+| rk4 | harmonic x(1.0) → cos(1) | 0.54030234 | 0.54030234 | 0.00e+00 | ✅ |
+| rk4 | harmonic v(1.0) → -sin(1) | -0.84147096 | -0.84147084 | 1.19e-07 | ✅ |
+| rk4 | energy at t=1 | 0.5 | 0.4999999106 | 8.94e-08 | ✅ |
+| rk45 | decay y(1.0) tol=1e-4 | 0.36787945 | 0.36787939 | 5.96e-08 | ✅ |
+| rk45 | harmonic x(1.0) | 0.54030234 | 0.54030228 | 5.96e-08 | ✅ |
+| rk45 | harmonic energy | 0.5 | 0.5000000596 | 5.96e-08 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| rk4 decay (n=1, 100 steps) | 10,000 | 80,072 µs | 8,007 ns |
+| rk45 decay tol=1e-4 | 10,000 | 13,379 µs | 1,337 ns |
+
+### Precision vs reference (double)
+
+| Function | exact (double) | numx (float32) | Error |
+|----------|---------------|----------------|-------|
+| rk4 y(1.0) decay | 0.367879441171 | 0.36787960 | 1.49e-07 |
+| rk4 x(1.0) harmonic | 0.540302305868 | 0.54030234 | 0.00e+00 |
+| rk4 v(1.0) harmonic | -0.841470984808 | -0.84147084 | 1.19e-07 |
+| rk4 energy | 0.5 | 0.4999999106 | 8.94e-08 |
+| rk45 y(1.0) | 0.367879441171 | 0.36787939 | 5.96e-08 |

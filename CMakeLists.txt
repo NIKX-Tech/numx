@@ -37,48 +37,7 @@ set(NUMX_SOURCES
 )
 
 add_library(numx STATIC ${NUMX_SOURCES})
-add_library(numx::numx ALIAS numx)
-target_include_directories(numx PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-)
-
-# ── Install & CMake package export ────────────────────────────────────
-include(GNUInstallDirs)
-include(CMakePackageConfigHelpers)
-
-install(TARGETS numx
-    EXPORT numxTargets
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
-
-install(DIRECTORY include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
-
-install(EXPORT numxTargets
-    FILE numxTargets.cmake
-    NAMESPACE numx::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/numx
-)
-
-configure_package_config_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/numxConfig.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/numxConfig.cmake
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/numx
-)
-
-write_basic_package_version_file(
-    ${CMAKE_CURRENT_BINARY_DIR}/numxConfigVersion.cmake
-    VERSION ${PROJECT_VERSION}
-    COMPATIBILITY SameMajorVersion
-)
-
-install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/numxConfig.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/numxConfigVersion.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/numx
-)
+target_include_directories(numx PUBLIC include)
 
 # ── Tests ─────────────────────────────────────────────────────────────
 enable_testing()
@@ -129,20 +88,11 @@ add_executable(numx_bench ${BENCH_SOURCES})
 target_include_directories(numx_bench PRIVATE include)
 target_link_libraries(numx_bench PRIVATE numx)
 
-# ── Examples ──────────────────────────────────────────────────────────
-add_subdirectory(examples)
-
 # ── Validation runner ─────────────────────────────────────────────────
 add_executable(numx_val_runner validation/c/val_runner.c)
 target_include_directories(numx_val_runner PRIVATE include)
-target_link_libraries(numx_val_runner PRIVATE numx)
-if(UNIX)
-    target_link_libraries(numx_val_runner PRIVATE m)
-endif()
+target_link_libraries(numx_val_runner PRIVATE numx m)
 
 add_executable(numx_val_bench_phase2 validation/c/val_bench_phase2.c)
 target_include_directories(numx_val_bench_phase2 PRIVATE include)
-target_link_libraries(numx_val_bench_phase2 PRIVATE numx)
-if(UNIX)
-    target_link_libraries(numx_val_bench_phase2 PRIVATE m)
-endif()
+target_link_libraries(numx_val_bench_phase2 PRIVATE numx m)

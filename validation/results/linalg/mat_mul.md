@@ -198,3 +198,29 @@
 | Case | numpy | numx | Error |
 |------|-------|------|-------|
 | 2×2 all elements | exact integers | exact match | 0.00e+00 |
+
+---
+
+## ARM64 — Raspbian GNU/Linux 13 / Raspberry Pi 4 Model B / gcc 14.2.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-13 | **Commit:** 14147a3
+
+### Test cases
+
+| Case | Expected | Computed | Pass |
+|------|----------|----------|------|
+| 2×2 A@B | [19,22,43,50] | [19.000000, 22.000000, 43.000000, 50.000000] | ✅ |
+| 2×3 @ 3×2 | [58,64,139,154] | [58.000000, 64.000000, 139.000000, 154.000000] | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| mat_mul 2×2 | 100,000 | 6,259 µs | 62 ns |
+
+### Precision vs numpy reference
+
+| Case | numpy | numx | Error |
+|------|-------|------|-------|
+| 2×2 all elements | exact integers | exact match | 0.00e+00 |

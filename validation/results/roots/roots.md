@@ -278,3 +278,36 @@
 ### Performance
 
 *roots was not included in M4 Pro benchmark suite for this run.*
+
+---
+
+## ARM64 — Raspbian GNU/Linux 13 / Raspberry Pi 4 Model B / gcc 14.2.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-13 | **Commit:** 14147a3
+
+### Test cases
+
+| Function | Expected | Computed | Error | Pass |
+|----------|----------|----------|-------|------|
+| bisect x²-2 on [1,2] | sqrt(2)=1.41421354 | 1.41421413 | 5.96e-07 | ✅ |
+| newton x²-2 x0=1.5 | sqrt(2)=1.41421354 | 1.41421354 | 0.00e+00 | ✅ |
+| brent x²-2 on [1,2] | sqrt(2)=1.41421354 | 1.41421354 | 0.00e+00 | ✅ |
+| brent x³-x-2 on [1,2] | 1.52137971 | 1.52137971 | 0.00e+00 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | tol | N | Total | Per call |
+|----------|-----|---|-------|----------|
+| root_bisect x²-2 | 1e-6 | 10,000 | 5,022 µs | 502 ns |
+| root_newton x²-2 | 1e-6 | 10,000 | 730 µs | 73 ns |
+| root_brent x²-2 | 1e-6 | 10,000 | 9,499 µs | 949 ns |
+
+### Precision vs reference (double)
+
+| Function | double ref | numx (float32) | Error |
+|----------|-----------|----------------|-------|
+| bisect x²-2 | 1.41421356 | 1.41421413 | 5.96e-07 |
+| newton x²-2 | 1.41421356 | 1.41421354 | 0.00e+00 |
+| brent x²-2 | 1.41421356 | 1.41421354 | 0.00e+00 |
+| brent x³-x-2 | 1.52137971 | 1.52137971 | 0.00e+00 |
