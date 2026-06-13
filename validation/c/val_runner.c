@@ -16,13 +16,18 @@
  * Run:    ./build/numx_val_runner 2>&1 | tee validation_arm64.txt
  */
 
-#define _POSIX_C_SOURCE 199309L
+#ifndef _WIN32
+#  define _POSIX_C_SOURCE 199309L
+#endif
 
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
 #include <string.h>
 #include <stdint.h>
+#ifdef _WIN32
+#  include <windows.h>
+#endif
 
 #include "numx/linalg.h"
 #include "numx/stats.h"
@@ -40,12 +45,22 @@
 static volatile numx_real_t g_sink = 0.0f;
 
 /* ── Nanosecond clock ───────────────────────────────────────────────── */
+#ifdef _WIN32
+static long long now_ns(void)
+{
+    LARGE_INTEGER freq, count;
+    QueryPerformanceFrequency(&freq);
+    QueryPerformanceCounter(&count);
+    return (long long)(count.QuadPart * 1000000000LL / freq.QuadPart);
+}
+#else
 static long long now_ns(void)
 {
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
     return (long long)ts.tv_sec * 1000000000LL + (long long)ts.tv_nsec;
 }
+#endif
 
 /* ── Formatting helpers ─────────────────────────────────────────────── */
 static void banner(const char *title)

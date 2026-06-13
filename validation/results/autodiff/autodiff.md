@@ -167,7 +167,7 @@ Covers: **forward-mode** (`numx_dual_t` — const, var, add, sub, mul, div, neg,
 ---
 
 ## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32
-**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** d81b386
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-09 | **Commit:** 2fc85d0
 
 ### Test cases
 
@@ -214,9 +214,8 @@ Covers: **forward-mode** (`numx_dual_t` — const, var, add, sub, mul, div, neg,
 
 | Operation | N | Total | Per call |
 |-----------|---|-------|----------|
-| dual fwd: mul-chain depth=10 | 100,000 | 8,632 µs | 86 ns |
-| tape: rev grad x²+y² | 10,000 | 21,134 µs | 2,113 ns |
-| tape: rev grad x²+y²+z² (3 vars) | 10,000 | 22,236 µs | 2,223 ns |
+| dual fwd (dual fwd x2) | 100,000 | 1,297 µs | 13 ns |
+| tape: rev grad x²+y² | 10,000 | 11,159 µs | 1,115 ns |
 
 **RESULTS: 34 PASS / 0 FAIL / 34 TOTAL**
 

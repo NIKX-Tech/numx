@@ -261,6 +261,19 @@
 
 ---
 
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32 (Updated)
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-09 | **Commit:** 2fc85d0
+
+### Test cases
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+*ode was not included in M4 Pro benchmark suite for this run.*
+
+---
+
 ## ARM64 — Raspbian GNU/Linux 13 / Raspberry Pi 4 Model B / gcc 14.2.0 / float32
 **Validator:** Amir Ab Khoshk | **Date:** 2026-06-13 | **Commit:** 14147a3
 

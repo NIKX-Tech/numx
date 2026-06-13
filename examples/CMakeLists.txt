@@ -1,0 +1,7 @@
+foreach(ex 01_linalg 02_fft 03_ode 04_autodiff 05_compressed_sensing)
+    add_executable(example_${ex} ${ex}.c)
+    target_link_libraries(example_${ex} PRIVATE numx)
+    if(UNIX)
+        target_link_libraries(example_${ex} PRIVATE m)
+    endif()
+endforeach()

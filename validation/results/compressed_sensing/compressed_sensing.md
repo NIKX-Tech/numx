@@ -44,7 +44,7 @@ Covers: `numx_cs_spectral_norm` · `numx_cs_omp` (Orthogonal Matching Pursuit) �
 ---
 
 ## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32
-**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** d81b386
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-09 | **Commit:** 2fc85d0
 
 ### Test cases
 
@@ -72,9 +72,9 @@ Covers: `numx_cs_spectral_norm` · `numx_cs_omp` (Orthogonal Matching Pursuit) �
 
 | Function | N | Total | Per call |
 |----------|---|-------|----------|
-| cs_spectral_norm 16×32 iter=32 | 100 | 4,681 µs | 46,810 ns |
-| cs_omp 16×32 k=4 | 100 | 261 µs | 2,610 ns |
-| cs_ista 16×32 lam=0.1 iter=500 | 100 | 57,834 µs | 578,340 ns |
+| cs_spectral_norm 16×32 iter=32 | 100 | 1,403 µs | 14,030 ns |
+| cs_omp 16×32 k=4 | 100 | 86 µs | 860 ns |
+| cs_ista 16×32 lam=0.1 iter=500 | 100 | 11,144 µs | 111,440 ns |
 
 **RESULTS: 15 PASS / 0 FAIL / 15 TOTAL**
 

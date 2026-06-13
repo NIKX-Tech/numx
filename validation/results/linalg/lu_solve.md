@@ -196,6 +196,37 @@
 
 ---
 
+## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32 (Updated)
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-09 | **Commit:** 2fc85d0
+
+### Test cases (A·x = b, 4×4 system)
+
+| Component | Expected | Computed | Error | Pass |
+|-----------|----------|----------|-------|------|
+| x[0] | 1.0 | 1.00000000 | 0.00e+00 | ✅ |
+| x[1] | 0.0 | 0.00000000 | 0.00e+00 | ✅ |
+| x[2] | -1.0 | -1.00000000 | 0.00e+00 | ✅ |
+| x[3] | 1.0 | 1.00000000 | 0.00e+00 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| lu_decompose + lu_solve 4×4 (combined) | 100,000 | 14,297 µs | 142 ns |
+
+### Precision vs numpy reference
+
+| Component | numpy | numx | Error |
+|-----------|-------|------|-------|
+| x[0] | 1.0 | 1.00000000 | 0.00e+00 |
+| x[1] | 0.0 | 0.00000000 | 0.00e+00 |
+| x[2] | -1.0 | -1.00000000 | 0.00e+00 |
+| x[3] | 1.0 | 1.00000000 | 0.00e+00 |
+
+---
+
 ## ARM64 — Raspbian GNU/Linux 13 / Raspberry Pi 4 Model B / gcc 14.2.0 / float32
 **Validator:** Amir Ab Khoshk | **Date:** 2026-06-13 | **Commit:** 14147a3
 

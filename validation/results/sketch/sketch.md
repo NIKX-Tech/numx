@@ -36,7 +36,7 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 ---
 
 ## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32
-**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** d81b386
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-09 | **Commit:** 2fc85d0
 
 ### Test cases
 
@@ -54,9 +54,9 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 
 | Function | N | Total | Per call |
 |----------|---|-------|----------|
-| sketch_rsvd 16×16 rank=4 os=4 | 100 | 45,036 µs | 450,360 ns |
-| sketch_rsvd 32×32 rank=8 os=4 | 100 | 113,795 µs | 1,137,950 ns |
-| sketch_rsvd 64×64 rank=8 os=4 | 100 | 138,754 µs | 1,387,540 ns |
+| sketch_rsvd 16×16 rank=4 os=4 | 100 | 24,206 µs | 242,060 ns |
+| sketch_rsvd 32×32 rank=8 os=4 | 100 | 60,679 µs | 606,790 ns |
+| sketch_rsvd 64×64 rank=8 os=4 | 100 | 66,721 µs | 667,210 ns |
 
 **RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**
 
@@ -90,7 +90,7 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 ---
 
 ## ESP32-S3 — ESP-IDF v5.5.2 / Xtensa LX7 / xtensa-esp32s3-elf-gcc / float32
-**Validator:** Amir Ab Khoshk | **Date:** 2026-05-29 | **Commit:** d81b386
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-09 | **Commit:** d81b386
 
 > **Stack note:** `numx_sketch_rsvd` uses ~14 KB of internal local variables
 > (bounded by `NUMX_MAX_SKETCH_M` / `NUMX_MAX_SKETCH_N` / `NUMX_MAX_SKETCH_RANK`).
@@ -109,6 +109,7 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 |------|----------|----------|-------|------|
 | rsvd rank2 rc | rc=0 | rc=0 | — | ✅ |
 | rsvd rank2 S[0]>S[1] | S[0]>S[1] | confirmed | — | ✅ |
+| rsvd rank2 S[1]>=0 | S[1]>=0 | confirmed | — | ✅ |
 | rsvd rank2 S[0]≈4 | 4.0 | 0.0000000 | 4.00e+00 | ❌ |
 | rsvd rank2 S[1]≈2 | 2.0 | 0.0000000 | 2.00e+00 | ❌ |
 
@@ -148,15 +149,16 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 | rank2 S[1] (diag(4,2,0,0)) | 2.0 | 0.0000000 | 2.00e+00 | ❌ FLAG S-01 |
 | seed=0 S[0] (diag(3,1)) | 3.0 | 3.0000000 | 0.00e+00 | ✅ |
 
-> **FLAG S-01 — RSVD rank-2 degenerate projection (seed portability):**
-> The rank-2 test seeds the RNG with a hardcoded value before calling `numx_sketch_rsvd`.
-> On ESP32-S3 (ESP-IDF v5.5.2), `rand()` generates a different sequence for that seed than
-> glibc `rand()` on x86-64, producing a random projection matrix Ω whose columns lie nearly
-> in the null space of diag(4,2,0,0)'s top-2 singular vectors. The result: S[0]≈ε, S[1]=0
-> instead of S[0]=4, S[1]=2. The ordering invariant S[0]>S[1] still holds (ε > 0). This is
-> **not a float32 precision issue and not an algorithmic bug** — rank-1 (different seed) and
-> seed=0 both recover exact singular values. The RSVD implementation is correct; the test
-> seed is not portable across `rand()` implementations.
+> **FLAG S-01 — RSVD rank-2 degenerate projection (Xtensa LX7 — under investigation):**
+> The rank-2 test produces S[0]=0, S[1]=0 instead of S[0]=4, S[1]=2 on ESP32-S3.
+> Re-run on 2026-06-09 with seeds updated to `1u` — failure persists unchanged.
+> The implementation uses an internal xorshift32 PRNG (not libc `rand()`), so libc
+> seed portability is not the root cause. x86-64 gcc, ARM64 Apple clang (M4 Pro and
+> M1 Pro), and MSVC x64 all pass the same test; the failure is isolated to Xtensa LX7.
+> rank-1 (3×3) and seed=0 (2×2) recover exact singular values on ESP32-S3; only the
+> 4×4 k_ext=min(m,n)=4 case fails. Suspected cause: numerical degeneration in MGS
+> orthogonalisation or Jacobi EVD when all k_ext columns of Y fall in a rank-2
+> subspace and the residual columns underflow to zero on single-precision Xtensa FPU.
 
 **RESULTS: 16 PASS / 2 FAIL / 18 TOTAL**
 

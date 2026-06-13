@@ -53,7 +53,7 @@ Covers: `window_rect` · `window_hann` · `window_hamming` · `window_blackman` 
 ---
 
 ## ARM64 — macOS 26.2 / Apple M4 Pro / Apple clang 21.0.0 / float32
-**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-08 | **Commit:** d81b386
+**Validator:** Erfan Jazeb Nikoo | **Date:** 2026-06-09 | **Commit:** 2fc85d0
 
 ### Test cases
 
@@ -94,11 +94,11 @@ Covers: `window_rect` · `window_hann` · `window_hamming` · `window_blackman` 
 
 | Function | N | Total | Per call |
 |----------|---|-------|----------|
-| signal_window_hann n=512 | 100,000 | 1,385,067 µs | 13,850 ns |
-| signal_convolve xn=256 hn=32 | 10,000 | 79,979 µs | 7,997 ns |
-| signal_fir xn=256 ntaps=32 | 10,000 | 87,555 µs | 8,755 ns |
-| signal_iir_biquad n=256 | 50,000 | 60,056 µs | 1,201 ns |
-| signal_ema n=256 alpha=0.1 | 50,000 | 19,235 µs | 384 ns |
+| signal_window_hann n=512 | 100,000 | 331,971 µs | 3,319 ns |
+| signal_convolve xn=256 hn=32 | 10,000 | 13,436 µs | 1,343 ns |
+| signal_fir xn=256 ntaps=32 | 10,000 | 30,424 µs | 3,042 ns |
+| signal_iir_biquad n=256 | 50,000 | 16,733 µs | 334 ns |
+| signal_ema n=256 alpha=0.1 | 50,000 | 13,784 µs | 275 ns |
 
 **RESULTS: 28 PASS / 0 FAIL / 28 TOTAL**
 

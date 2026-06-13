@@ -4,12 +4,17 @@
  * Run:    ./build/numx_val_bench_phase2
  */
 
-#define _POSIX_C_SOURCE 199309L
+#ifndef _WIN32
+#  define _POSIX_C_SOURCE 199309L
+#endif
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
 #include <string.h>
 #include <stdint.h>
+#ifdef _WIN32
+#  include <windows.h>
+#endif
 
 #include "numx/signal.h"
 #include "numx/fft.h"
@@ -19,12 +24,22 @@
 
 static volatile float g_sink = 0.0f;
 
+#ifdef _WIN32
+static long long now_ns(void)
+{
+    LARGE_INTEGER freq, count;
+    QueryPerformanceFrequency(&freq);
+    QueryPerformanceCounter(&count);
+    return (long long)(count.QuadPart * 1000000000LL / freq.QuadPart);
+}
+#else
 static long long now_ns(void)
 {
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
     return (long long)ts.tv_sec * 1000000000LL + (long long)ts.tv_nsec;
 }
+#endif
 
 static void bench(const char *label, int N, long long total_ns)
 {
@@ -343,7 +358,7 @@ static void bench_cs(void)
 int main(void)
 {
     printf("numx Phase 2/3 timing benchmark\n");
-    printf("Platform: x86-64 / Ubuntu / gcc / float32\n");
+    printf("Platform: ARM64 / macOS 26.2 / Apple clang 21.0.0 / float32\n");
     printf("=================================================\n");
     bench_autodiff();
     bench_fft();
