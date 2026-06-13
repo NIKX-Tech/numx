@@ -292,3 +292,42 @@
 | variance pop | 4.0 | 4.00000000 | 0.00e+00 |
 | variance samp | 4.5714286 | 4.57142878 | 0.00e+00 |
 | median | 4.5 | 4.50000000 | 0.00e+00 |
+
+---
+
+## ARM64 — Raspbian GNU/Linux 13 / Raspberry Pi 4 Model B / gcc 14.2.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-13 | **Commit:** 14147a3
+
+### Test cases — dataset [2, 4, 4, 4, 5, 5, 7, 9]
+
+| Function | Expected | Computed | Error | Pass |
+|----------|----------|----------|-------|------|
+| mean | 5.0 | 5.00000000 | 0.00e+00 | ✅ |
+| variance (population) | 4.0 | 4.00000000 | 0.00e+00 | ✅ |
+| variance (sample) | 4.571429 | 4.57142878 | 0.00e+00 | ✅ |
+| median | 4.5 | 4.50000000 | 0.00e+00 | ✅ |
+| percentile p0 | 2.0 | 2.00000000 | 0.00e+00 | ✅ |
+| percentile p25 | 4.0 | 4.00000000 | 0.00e+00 | ✅ |
+| percentile p50 | 5.0 | 5.00000000 | 0.00e+00 | ✅ |
+| percentile p75 | 7.0 | 7.00000000 | 0.00e+00 | ✅ |
+| percentile p100 | 9.0 | 9.00000000 | 0.00e+00 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance (n=8 validation dataset)
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| stats_mean n=8 | 100,000 | 2,000 µs | 20 ns |
+| stats_variance (pop) n=8 | 100,000 | 10,201 µs | 102 ns |
+| stats_median n=8 | 100,000 | 20,405 µs | 204 ns |
+| stats_percentile p50 n=8 | 100,000 | 12,868 µs | 128 ns |
+
+### Precision vs numpy reference
+
+| Function | numpy | numx | Error |
+|----------|-------|------|-------|
+| mean | 5.0 | 5.00000000 | 0.00e+00 |
+| variance pop | 4.0 | 4.00000000 | 0.00e+00 |
+| variance samp | 4.5714286 | 4.57142878 | 0.00e+00 |
+| median | 4.5 | 4.50000000 | 0.00e+00 |

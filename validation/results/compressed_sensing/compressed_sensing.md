@@ -265,3 +265,40 @@ Covers: `numx_cs_spectral_norm` · `numx_cs_omp` (Orthogonal Matching Pursuit) �
 | cs_ista 16x32 lam=0.1 iter=100 | 100 | 16,109 µs | 161,090 ns |
 
 **RESULTS: 15 PASS / 0 FAIL / 15 TOTAL**
+
+---
+
+## ARM64 — Raspbian GNU/Linux 13 / Raspberry Pi 4 Model B / gcc 14.2.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-13 | **Commit:** 14147a3
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_omp_identity_1sparse | ✅ |
+| test_omp_identity_2sparse | ✅ |
+| test_omp_overdetermined_1sparse | ✅ |
+| test_omp_null_returns_error | ✅ |
+| test_omp_invalid_arg_returns_error | ✅ |
+| test_ista_identity_shrinkage | ✅ |
+| test_ista_zero_lambda_recovery | ✅ |
+| test_ista_large_lambda_zeros | ✅ |
+| test_ista_null_returns_error | ✅ |
+| test_ista_invalid_step_returns_error | ✅ |
+| test_spectral_norm_identity | ✅ |
+| test_spectral_norm_scaled_identity | ✅ |
+| test_spectral_norm_tall_matrix | ✅ |
+| test_spectral_norm_null_returns_error | ✅ |
+| test_spectral_norm_invalid_arg | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| cs_spectral_norm 16×32 iter=32 | 100 | 9,676 µs | 96,769 ns |
+| cs_omp 16×32 k=4 | 100 | 644 µs | 6,443 ns |
+| cs_ista 16×32 lam=0.1 iter=500 | 100 | 117,119 µs | 1,171,190 ns |
+
+**RESULTS: 15 PASS / 0 FAIL / 15 TOTAL**

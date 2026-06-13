@@ -247,3 +247,28 @@ Identical values to x86-64 and ARM64 M4 Pro — IEEE 754 float32 cancellation is
 | diff_forward | 100,000 | 360 µs | 3 ns |
 | diff_central | 100,000 | 370 µs | 3 ns |
 | diff_richardson | 100,000 | 404 µs | 4 ns |
+
+---
+
+## ARM64 — Raspbian GNU/Linux 13 / Raspberry Pi 4 Model B / gcc 14.2.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-13 | **Commit:** 14147a3
+
+### Test cases (f(x)=x³ at x=2, exact f′=12.0, h=1e-4)
+
+| Function | Expected | Computed | Error | Pass |
+|----------|----------|----------|-------|------|
+| forward | 12.0 | 11.98768616 | 1.23e-02 | ✅ NOTE: float32 limit |
+| central | 12.0 | 11.99483871 | 5.16e-03 | ✅ NOTE: float32 limit |
+| richardson | 12.0 | 12.00437546 | 4.38e-03 | ✅ NOTE: float32 limit |
+
+Identical values to x86-64 and ARM64 M4 Pro and M1 Pro — IEEE 754 float32 cancellation is deterministic across all ARM64 variants.
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| diff_forward | 100,000 | 1,245 µs | 12 ns |
+| diff_central | 100,000 | 1,200 µs | 12 ns |
+| diff_richardson | 100,000 | 2,180 µs | 21 ns |
