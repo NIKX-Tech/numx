@@ -427,3 +427,55 @@ Covers: `window_rect` · `window_hann` · `window_hamming` · `window_blackman` 
 | signal_ema n=256 alpha=0.1 | 50,000 | 27,009 µs | 540 ns |
 
 **RESULTS: 28 PASS / 0 FAIL / 28 TOTAL**
+
+---
+
+## ARM64 — Raspbian GNU/Linux 13 / Raspberry Pi 4 Model B / gcc 14.2.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-13 | **Commit:** 14147a3
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_window_rect_all_ones | ✅ |
+| test_window_rect_n1 | ✅ |
+| test_window_hann_endpoints_zero | ✅ |
+| test_window_hann_midpoint_one | ✅ |
+| test_window_hann_n1_returns_one | ✅ |
+| test_window_hamming_endpoints | ✅ |
+| test_window_hamming_midpoint_one | ✅ |
+| test_window_blackman_endpoints_zero | ✅ |
+| test_window_blackman_midpoint_one | ✅ |
+| test_convolve_box | ✅ |
+| test_convolve_unit_impulse | ✅ |
+| test_convolve_null_returns_error | ✅ |
+| test_correlate_autocorr_peak_at_lag0 | ✅ |
+| test_correlate_output_length | ✅ |
+| test_fir_identity_tap | ✅ |
+| test_fir_moving_average | ✅ |
+| test_fir_null_returns_error | ✅ |
+| test_iir_biquad_identity | ✅ |
+| test_iir_biquad_scale | ✅ |
+| test_iir_biquad_null_returns_error | ✅ |
+| test_peaks_two_peaks | ✅ |
+| test_peaks_monotone_no_peaks | ✅ |
+| test_peaks_short_signal_no_peaks | ✅ |
+| test_peaks_buffer_too_small | ✅ |
+| test_ema_alpha1_copies_input | ✅ |
+| test_ema_alpha0_stays_at_first | ✅ |
+| test_ema_known_sequence | ✅ |
+| test_ema_invalid_alpha_returns_error | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| signal_window_hann n=512 | 100,000 | 3,110,695 µs | 31,106 ns |
+| signal_convolve xn=256 hn=32 | 10,000 | 146,464 µs | 14,646 ns |
+| signal_fir xn=256 ntaps=32 | 10,000 | 131,097 µs | 13,109 ns |
+| signal_iir_biquad n=256 | 50,000 | 117,058 µs | 2,341 ns |
+| signal_ema n=256 alpha=0.1 | 50,000 | 67,187 µs | 1,343 ns |
+
+**RESULTS: 28 PASS / 0 FAIL / 28 TOTAL**

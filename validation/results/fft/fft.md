@@ -317,3 +317,46 @@ Covers: `fft_f32` · `ifft_f32` · `fft_q15` · `fft_magnitude`
 | fft_magnitude N=256 | 100,000 | 1,954,211 µs | 19,542 ns |
 
 **RESULTS: 18 PASS / 0 FAIL / 18 TOTAL**
+
+---
+
+## ARM64 — Raspbian GNU/Linux 13 / Raspberry Pi 4 Model B / gcc 14.2.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-13 | **Commit:** 14147a3
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_fft_dc_n4 | ✅ |
+| test_fft_single_tone_n4 | ✅ |
+| test_fft_dc_n2 | ✅ |
+| test_fft_n1_passthrough | ✅ |
+| test_fft_delta_at_0 | ✅ |
+| test_fft_null_returns_error | ✅ |
+| test_fft_n_not_power_of_two | ✅ |
+| test_fft_n_exceeds_max | ✅ |
+| test_ifft_roundtrip | ✅ |
+| test_ifft_dc_spectrum | ✅ |
+| test_ifft_null_returns_error | ✅ |
+| test_fft_q15_dc_n4 | ✅ |
+| test_fft_q15_null_returns_error | ✅ |
+| test_fft_q15_n_not_power_of_two | ✅ |
+| test_fft_magnitude_dc | ✅ |
+| test_fft_magnitude_complex_bin | ✅ |
+| test_fft_magnitude_null_returns_error | ✅ |
+| test_fft_magnitude_n1_invalid | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| fft_f32 N=64 | 10,000 | 179,342 µs | 17,934 ns |
+| fft_f32 N=256 | 5,000 | 481,800 µs | 96,360 ns |
+| fft_f32 N=512 | 1,000 | 217,255 µs | 217,255 ns |
+| ifft_f32 N=256 | 5,000 | 486,722 µs | 97,344 ns |
+| fft_q15 N=256 | 5,000 | 456,644 µs | 91,328 ns |
+| fft_magnitude N=256 | 100,000 | 9,889,134 µs | 98,891 ns |
+
+**RESULTS: 18 PASS / 0 FAIL / 18 TOTAL**
