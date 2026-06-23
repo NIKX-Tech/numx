@@ -65,7 +65,6 @@ Initial public release.
 
 ## [Unreleased]
 
-
 ### Added
 
 **Hardware validation**
