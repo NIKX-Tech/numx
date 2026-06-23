@@ -140,17 +140,19 @@ int main(void) {
 
 Per-call averages measured on physical hardware. Full tables: [`validation/results/`](validation/results/). Platform-specific benchmark runners: [`benchmarks/bench_runner.c`](benchmarks/bench_runner.c) (Linux/macOS), [`benchmarks/bench_win.c`](benchmarks/bench_win.c) (Windows), [`benchmarks/esp32/`](benchmarks/esp32/) (ESP32 Phase 1 & 2).
 
-| Function | x86-64 (gcc -O2) | ESP32-S3 (240 MHz) |
-|---|---|---|
-| `numx_vec_dot` n=64 | 15 ns | 5.5 µs |
-| `numx_mat_mul` 4×4 | 26 ns | 11 µs |
-| `numx_lu_decompose` 4×4 | 29 ns | 10 µs |
-| `numx_integrate_gauss` npts=8 | 11 ns | 2.7 µs |
-| `numx_root_brent` tol=1e-6 | 103 ns | 20 µs |
-| `numx_ode_rk45` tol=1e-4 | 239 ns | 40 µs |
-| `numx_stats_median` n=128 | 6.6 µs | 1.1 ms |
-| `numx_fft_f32` N=64 | 3.6 µs | 2.6 ms |
-| `numx_autodiff` fwd chain-10 | 20 ns | 358 ns |
+| Function | x86-64 (gcc -O2) | RPi 4B / ARM64 (gcc -O2) | ESP32-S3 (240 MHz) |
+|---|---|---|---|
+| `numx_vec_dot` n=64 | 15 ns | 15 ns ¹ | 5.5 µs |
+| `numx_mat_mul` 4×4 | 26 ns | 62 ns ¹ | 11 µs |
+| `numx_lu_decompose` 4×4 | 29 ns | 300 ns | 10 µs |
+| `numx_integrate_gauss` npts=8 | 11 ns | 22 ns ¹ | 2.7 µs |
+| `numx_root_brent` tol=1e-6 | 103 ns | 949 ns | 20 µs |
+| `numx_ode_rk45` tol=1e-4 | 239 ns | 1,337 ns | 40 µs |
+| `numx_stats_median` n=128 | 6.6 µs | 204 ns ¹ | 1.1 ms |
+| `numx_fft_f32` N=64 | 3.6 µs | 17.9 µs | 2.6 ms |
+| `numx_autodiff` fwd chain-10 | 20 ns | 102 ns | 358 ns |
+
+> ¹ RPi benchmark used smaller inputs (n=4, 2×2, npts=2, n=8 respectively) — see [`validation/hardware/raspberry_pi.md`](validation/hardware/raspberry_pi.md) for exact parameters.
 
 ---
 

@@ -68,7 +68,7 @@ Initial public release.
 ### Added
 
 **Hardware validation**
-- ARM64 Raspberry Pi 4B / Raspbian GNU/Linux 13 / gcc 14.2.0 / float32 — 300/300 tests ✅
+- ARM64 Raspberry Pi 4B / Raspbian GNU/Linux 13 / gcc 14.2.0 / float32 — 300/300 tests ✅, Phase 1 & 2 benchmarks captured (see [`validation/hardware/raspberry_pi.md`](validation/hardware/raspberry_pi.md))
 
 **Benchmarks**
 - `benchmarks/bench_win.c` — Windows benchmark suite using QueryPerformanceCounter; covers all 13 modules (Phase 1 & 2)
