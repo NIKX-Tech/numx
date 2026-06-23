@@ -125,6 +125,10 @@ set(BENCH_SOURCES
     # benchmarks/bench_compressed_sensing.c
 )
 
+if(WIN32)
+    list(APPEND BENCH_SOURCES benchmarks/bench_win.c)
+endif()
+
 add_executable(numx_bench ${BENCH_SOURCES})
 target_include_directories(numx_bench PRIVATE include)
 target_link_libraries(numx_bench PRIVATE numx)
