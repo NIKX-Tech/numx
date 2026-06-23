@@ -331,7 +331,7 @@ int main(void)
     static numx_real_t sig_out[128], sig_fir_out[64], sig_iir_out[128];
     static numx_real_t sig_ema_out[128];
     static numx_real_t sig_x128[128];
-    static numx_idx_t  sig_peaks[32];
+    static numx_size_t sig_peaks[32];
     static numx_size_t sig_npeaks;
     numx_real_t sig_biquad_b[3] = {(numx_real_t)1,(numx_real_t)0,(numx_real_t)0};
     numx_real_t sig_biquad_a[2] = {(numx_real_t)0,(numx_real_t)0};
