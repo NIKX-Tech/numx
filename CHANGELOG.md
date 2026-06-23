@@ -65,6 +65,21 @@ Initial public release.
 
 ## [Unreleased]
 
+### Added
+
+**Hardware validation**
+- ARM64 Raspberry Pi 4B / Raspbian GNU/Linux 13 / gcc 14.2.0 / float32 — 300/300 tests ✅
+
+**Benchmarks**
+- `benchmarks/bench_win.c` — Windows benchmark suite using QueryPerformanceCounter; covers all 13 modules (Phase 1 & 2)
+- `benchmarks/esp32/` — ESP32 benchmark suite (Phase 1 & 2): `bench_phase1.c`, `bench_phase2.c`, `bench_common.h`
+
+**Test infrastructure**
+- `tests/x86/` — standalone float32 Unity test build with own `CMakeLists.txt`; decoupled from top-level tree
+- `tests/x64/` — standalone float64 Unity test build with own `CMakeLists.txt`; decoupled from top-level tree
+- `tests/esp32_tests/` — custom test framework for ESP32 (IDF component); per-module test files
+
+### Planned
 - NTT (Number Theoretic Transform) — constant-time over Z_3329 for CRYSTALS-Kyber/Dilithium (planned for v0.2.0)
 
 ---

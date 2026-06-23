@@ -263,3 +263,39 @@
 ### Performance
 
 *poly was not included in M4 Pro benchmark suite for this run.*
+
+---
+
+## ARM64 — Raspbian GNU/Linux 13 / Raspberry Pi 4 Model B / gcc 14.2.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-13 | **Commit:** 14147a3
+
+### Test cases
+
+| Function | Input | Expected | Computed | Error | Pass |
+|----------|-------|----------|----------|-------|------|
+| poly_eval | x=1 | 0.0 | 0.00000000 | 0.00e+00 | ✅ |
+| poly_eval | x=2 | 0.0 | 0.00000000 | 0.00e+00 | ✅ |
+| poly_eval | x=3 | 0.0 | 0.00000000 | 0.00e+00 | ✅ |
+| poly_eval | x=2.5 | -0.375 | -0.37500000 | 0.00e+00 | ✅ |
+| poly_eval | x=0 | -6.0 | -6.00000000 | 0.00e+00 | ✅ |
+| poly_eval degree-8 | x=1.5 | 12.44140625 | 12.44140625 | 0.00e+00 | ✅ |
+| poly_roots | [1,2,3] | r[0]=1.0 | 0.99999976 | 2.38e-07 | ✅ |
+| poly_roots | [1,2,3] | r[1]=2.0 | 2.00000119 | 1.19e-06 | ✅ |
+| poly_roots | [1,2,3] | r[2]=3.0 | 2.99999881 | 1.19e-06 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | degree | N | Total | Per call |
+|----------|--------|---|-------|----------|
+| poly_eval | 3 | 100,000 | 1,223 µs | 12 ns |
+| poly_roots | 3 | 1,000 | 443 µs | 443 ns |
+
+### Precision vs numpy reference
+
+| x | numpy | numx | Error |
+|---|-------|------|-------|
+| 1.0 | 0.0 | 0.00000000 | 0.00e+00 |
+| 2.5 | -0.375 | -0.37500000 | 0.00e+00 |
+| p8(1.5) | 12.44140625 | 12.44140625 | 0.00e+00 |

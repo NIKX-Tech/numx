@@ -314,3 +314,38 @@
 ### Performance
 
 *integrate was not included in M4 Pro benchmark suite for this run.*
+
+---
+
+## ARM64 — Raspbian GNU/Linux 13 / Raspberry Pi 4 Model B / gcc 14.2.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-13 | **Commit:** 14147a3
+
+### Test cases
+
+| Function | Expected | Computed | Error | Pass |
+|----------|----------|----------|-------|------|
+| trap n=100 | 1.2500250 | 1.2500250340 | 0.00e+00 | ✅ NOTE: O(h²) |
+| trap n=1000 | 1.2500003 | 1.25000095 | 5.96e-07 | ✅ |
+| simpson n=100 | 1.25 | 1.25000012 | 1.19e-07 | ✅ |
+| gauss npts=2 | 1.25 | 1.25000000 | 0.00e+00 | ✅ |
+| gauss npts=4 | 1.25 | 1.25000000 | 0.00e+00 | ✅ |
+| gauss npts=8 | 1.25 | 1.25000000 | 0.00e+00 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance (f(x)=x³+1 on [0,1])
+
+| Function | n | N | Total | Per call |
+|----------|---|---|-------|----------|
+| integrate_trap | 100 | 50,000 | 30,177 µs | 603 ns |
+| integrate_simpson | 100 | 50,000 | 34,308 µs | 686 ns |
+| integrate_gauss npts=2 | — | 50,000 | 1,141 µs | 22 ns |
+
+### Precision vs numpy reference
+
+| Function | numpy | numx | Error |
+|----------|-------|------|-------|
+| trap n=100 | 1.2500250 | 1.2500250 | 0.00e+00 |
+| trap n=1000 | 1.2500003 | 1.25000095 | 5.96e-07 |
+| simpson n=100 | 1.2500000 | 1.25000012 | 1.19e-07 |
+| gauss npts=2,4,8 | 1.2500000 | 1.25000000 | 0.00e+00 |

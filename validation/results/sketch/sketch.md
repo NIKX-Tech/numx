@@ -210,3 +210,31 @@ Covers: `numx_sketch_rsvd` — Halko-Martinsson-Tropp randomized SVD
 | sketch_rsvd 16x16 rank=4 os=4 | 100 | 49,092 µs | 490,920 ns |
 
 **RESULTS: 5 PASS / 0 FAIL / 5 TOTAL**
+
+---
+
+## ARM64 — Raspbian GNU/Linux 13 / Raspberry Pi 4 Model B / gcc 14.2.0 / float32
+**Validator:** Amir Ab Khoshk | **Date:** 2026-06-13 | **Commit:** 14147a3
+
+### Test cases
+
+| Test | Result |
+|------|--------|
+| test_rsvd_rank1_reconstruction | ✅ |
+| test_rsvd_diagonal_rank2 | ✅ |
+| test_rsvd_tall_matrix | ✅ |
+| test_rsvd_null_returns_error | ✅ |
+| test_rsvd_invalid_arg_returns_error | ✅ |
+| test_rsvd_seed0 | ✅ |
+
+*300 / 300 Unity tests PASS*
+
+### Performance
+
+| Function | N | Total | Per call |
+|----------|---|-------|----------|
+| sketch_rsvd 16×16 rank=4 os=4 | 100 | 93,225 µs | 932,255 ns |
+| sketch_rsvd 32×32 rank=8 os=4 | 100 | 238,418 µs | 2,384,185 ns |
+| sketch_rsvd 64×64 rank=8 os=4 | 100 | 299,294 µs | 2,992,946 ns |
+
+**RESULTS: 6 PASS / 0 FAIL / 6 TOTAL**

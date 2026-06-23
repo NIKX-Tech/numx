@@ -1,6 +1,6 @@
 # numx
 
-[![CI](https://img.shields.io/github/actions/workflow/status/NIKX-Tech/numx/ci.yml?branch=main&style=flat-square&label=build)](https://github.com/NIKX-Tech/numx/actions/workflows/ci.yml) [![License](https://img.shields.io/github/license/NIKX-Tech/numx?style=flat-square&color=blue)](https://opensource.org/licenses/MIT) [![C Standard](https://img.shields.io/badge/standard-C99-00599C?style=flat-square&logo=c&logoColor=white)](https://github.com/NIKX-Tech/numx) [![Repo Size](https://img.shields.io/github/repo-size/NIKX-Tech/numx?style=flat-square)](https://github.com/NIKX-Tech/numx) [![GitHub Stars](https://img.shields.io/github/stars/NIKX-Tech/numx?style=flat-square&color=yellow)](https://github.com/NIKX-Tech/numx/stargazers) [![Platform: ESP32](https://img.shields.io/badge/platform-ESP32-E7352C?style=flat-square&logo=espressif&logoColor=white)](https://github.com/NIKX-Tech/numx) [![Platform: ARM](https://img.shields.io/badge/platform-ARM%20Cortex--M-0091BD?style=flat-square&logo=arm&logoColor=white)](https://github.com/NIKX-Tech/numx)
+[![CI](https://img.shields.io/github/actions/workflow/status/NIKX-Tech/numx/ci.yml?branch=main&style=flat-square&label=build)](https://github.com/NIKX-Tech/numx/actions/workflows/ci.yml) [![License](https://img.shields.io/github/license/NIKX-Tech/numx?style=flat-square&color=blue)](https://opensource.org/licenses/MIT) [![C Standard](https://img.shields.io/badge/standard-C99-00599C?style=flat-square&logo=c&logoColor=white)](https://github.com/NIKX-Tech/numx) [![Repo Size](https://img.shields.io/github/repo-size/NIKX-Tech/numx?style=flat-square)](https://github.com/NIKX-Tech/numx) [![GitHub Stars](https://img.shields.io/github/stars/NIKX-Tech/numx?style=flat-square&color=yellow)](https://github.com/NIKX-Tech/numx/stargazers) [![Platform: ESP32](https://img.shields.io/badge/platform-ESP32-E7352C?style=flat-square&logo=espressif&logoColor=white)](https://github.com/NIKX-Tech/numx) [![Platform: ARM Cortex-M/A](https://img.shields.io/badge/platform-ARM%20Cortex--M%2FA-0091BD?style=flat-square&logo=arm&logoColor=white)](https://github.com/NIKX-Tech/numx)
 
 [![CodeQL](https://img.shields.io/github/actions/workflow/status/NIKX-Tech/numx/codeql.yml?branch=main&label=codeql&style=flat-square)](https://github.com/NIKX-Tech/numx/actions/workflows/codeql.yml)
 [![Latest Release](https://img.shields.io/github/v/release/NIKX-Tech/numx?style=flat-square)](https://github.com/NIKX-Tech/numx/releases)
@@ -65,6 +65,7 @@ All results are device-run, per-formula values with measured error margins — n
 | Windows x64 — MSVC 14.51 (VS 2026 Build Tools) | MSVC /O2 / float32 | 13 / 13 | 295 / 295 ✅ |
 | Windows x64 — MSVC 14.51 (VS 2026 Build Tools) | MSVC /O2 / float64 | 13 / 13 | 294 / 294 ✅ |
 | ESP32-S3 — Xtensa LX7 / ESP-IDF v5.5.2 | xtensa-esp32s3-elf-gcc -O2 / float32 | 13 / 13 | 548 / 550 ✅ |
+| ARM64 — Raspberry Pi 4B / Raspbian GNU/Linux 13 | gcc 14.2.0 -O2 / float32 | 13 / 13 | 300 / 300 ✅ |
 
 > ESP32-S3: 2 sketch test cases fail due to `rand()` seed portability across libc implementations — the RSVD algorithm is correct; the test fixture is not portable. See FLAG S-01 in [`validation/results/sketch/sketch.md`](validation/results/sketch/sketch.md).
 
@@ -99,6 +100,20 @@ Switch to double precision:
 cmake -B build -DCMAKE_BUILD_TYPE=Release -DNUMX_USE_DOUBLE=1
 ```
 
+**Option C — standalone platform test builds**
+
+Self-contained CMake projects for per-platform float32/float64 validation:
+
+```bash
+# float32 Unity tests (x86)
+cmake -S tests/x86 -B tests/x86/build && cmake --build tests/x86/build
+
+# float64 Unity tests (x64)
+cmake -S tests/x64 -B tests/x64/build && cmake --build tests/x64/build
+```
+
+For ESP32: see [`tests/esp32_tests/CMakeLists.txt`](tests/esp32_tests/CMakeLists.txt) (IDF component).
+
 ---
 
 ## Usage example
@@ -123,7 +138,7 @@ int main(void) {
 
 ## Benchmarks
 
-Per-call averages measured on physical hardware. Full tables: [`validation/results/`](validation/results/).
+Per-call averages measured on physical hardware. Full tables: [`validation/results/`](validation/results/). Platform-specific benchmark runners: [`benchmarks/bench_runner.c`](benchmarks/bench_runner.c) (Linux/macOS), [`benchmarks/bench_win.c`](benchmarks/bench_win.c) (Windows), [`benchmarks/esp32/`](benchmarks/esp32/) (ESP32 Phase 1 & 2).
 
 | Function | x86-64 (gcc -O2) | ESP32-S3 (240 MHz) |
 |---|---|---|

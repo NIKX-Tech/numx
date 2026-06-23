@@ -114,16 +114,20 @@ add_test(NAME numx_tests COMMAND numx_tests)
 
 # ── Benchmarks ────────────────────────────────────────────────────────
 # Add each new bench_<module>.c file here as it is implemented.
-set(BENCH_SOURCES
-    benchmarks/bench_runner.c
-    # Phase 1 benchmarks (add as implemented):
-    # benchmarks/bench_linalg.c
-    # Phase 2 benchmarks:
-    # benchmarks/bench_fft.c
-    # Phase 3 benchmarks:
-    # benchmarks/bench_autodiff.c
-    # benchmarks/bench_compressed_sensing.c
-)
+if(WIN32)
+    set(BENCH_SOURCES benchmarks/bench_win.c)
+else()
+    set(BENCH_SOURCES
+        benchmarks/bench_runner.c
+        # Phase 1 benchmarks (add as implemented):
+        # benchmarks/bench_linalg.c
+        # Phase 2 benchmarks:
+        # benchmarks/bench_fft.c
+        # Phase 3 benchmarks:
+        # benchmarks/bench_autodiff.c
+        # benchmarks/bench_compressed_sensing.c
+    )
+endif()
 
 add_executable(numx_bench ${BENCH_SOURCES})
 target_include_directories(numx_bench PRIVATE include)
