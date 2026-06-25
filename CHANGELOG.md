@@ -79,8 +79,8 @@ Initial public release.
 - `tests/x64/` — standalone float64 Unity test build with own `CMakeLists.txt`; decoupled from top-level tree
 - `tests/esp32_tests/` — custom test framework for ESP32 (IDF component); per-module test files
 
-### Planned
-- NTT (Number Theoretic Transform) — constant-time over Z_3329 for CRYSTALS-Kyber/Dilithium (planned for v0.2.0)
+**NTT (post-quantum)**
+- `ntt` — negacyclic NTT over Z_3329[x]/(x^256+1) with Kyber/Dilithium parameters; forward NTT, inverse NTT (with normalization), pointwise multiplication (basemul), full polynomial multiplication, and Barrett coefficient reduction; constant-time data path; seven Cooley-Tukey / Gentleman-Sande butterfly stages; precomputed twiddle tables; zero heap allocation; 20 unit tests
 
 ---
 

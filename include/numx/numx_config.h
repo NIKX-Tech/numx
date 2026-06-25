@@ -100,7 +100,11 @@
 /* ── NTT (post-quantum) ────────────────────────────────────────────── */
 
 #ifndef NUMX_NTT_N
-#define NUMX_NTT_N 256 /* CRYSTALS-Kyber/Dilithium ring dim */
+#define NUMX_NTT_N 256  /* CRYSTALS-Kyber/Dilithium ring dim */
+#endif
+
+#ifndef NUMX_NTT_Q
+#define NUMX_NTT_Q 3329 /* NTT prime modulus (q-1 = 2^8 * 13) */
 #endif
 
 #endif /* NUMX_CONFIG_H */

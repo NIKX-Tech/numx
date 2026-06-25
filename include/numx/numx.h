@@ -32,7 +32,7 @@
 #include "autodiff.h"
 #include "compressed_sensing.h"
 #include "sketch.h"
-/* #include "ntt.h"                */
+#include "ntt.h"
 
 /* ── Library-wide version symbols ──────────────────────────────────── */
 

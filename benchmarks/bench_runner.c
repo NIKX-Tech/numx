@@ -3,7 +3,7 @@
  * @brief numx master benchmark runner.
  *
  * Calls each module's benchmark suite in order. Add a numx_bench_<module>()
- * declaration and call as each Phase 1–3 module is implemented.
+ * declaration and call as each Phase 1-3 module is implemented.
  *
  * Each bench_<module>.c must expose:
  *   void numx_bench_<module>(void);
@@ -23,6 +23,7 @@
 /* Phase 3 suite declarations:                                        */
 /* void numx_bench_autodiff(void);           */
 /* void numx_bench_compressed_sensing(void); */
+void numx_bench_ntt(void);
 
 int main(void)
 {
@@ -42,7 +43,7 @@ int main(void)
     /* Phase 3: */
     /* numx_bench_autodiff();           */
     /* numx_bench_compressed_sensing(); */
+    numx_bench_ntt();
 
-    printf("\n(no benchmarks registered yet - add modules to reach Phase 1)\n");
     return 0;
 }

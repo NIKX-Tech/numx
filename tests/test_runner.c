@@ -31,7 +31,7 @@ void numx_test_fft(void);
 void numx_test_autodiff(void);
 void numx_test_compressed_sensing(void);
 void numx_test_sketch(void);
-/* void numx_test_ntt(void);                */
+void numx_test_ntt(void);
 
 void setUp(void) {}
 void tearDown(void) {}
@@ -58,7 +58,7 @@ int main(void)
     numx_test_autodiff();
     numx_test_compressed_sensing();
     numx_test_sketch();
-    /* numx_test_ntt();                */
+    numx_test_ntt();
 
     return UNITY_END();
 }

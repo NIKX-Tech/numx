@@ -49,7 +49,7 @@ Every function is reentrant, allocation-free, and returns a typed status code. T
 | [**autodiff**](docs/algorithms/autodiff.md) | forward-mode (dual numbers), reverse-mode (static tape) | ✅ complete |
 | [**compressed_sensing**](docs/algorithms/compressed_sensing.md) | OMP, ISTA | ✅ complete |
 | [**sketch**](docs/algorithms/sketch.md) | randomized SVD (Halko-Martinsson-Tropp) | ✅ complete |
-| **ntt** | Number Theoretic Transform (constant-time, Kyber/Dilithium params) | 🔧 planned |
+| [**ntt**](docs/algorithms/ntt.md) | Number Theoretic Transform (constant-time, Kyber/Dilithium params) | ✅ complete |
 
 ---
 
@@ -151,8 +151,13 @@ Per-call averages measured on physical hardware. Full tables: [`validation/resul
 | `numx_stats_median` n=128 | 6.6 µs | 204 ns ¹ | 1.1 ms |
 | `numx_fft_f32` N=64 | 3.6 µs | 17.9 µs | 2.6 ms |
 | `numx_autodiff` fwd chain-10 | 20 ns | 102 ns | 358 ns |
+| `numx_ntt_forward` n=256 | -- | 937 ns ² | -- |
+| `numx_ntt_inverse` n=256 | -- | 601 ns ² | -- |
+| `numx_ntt_polymul` n=256 | -- | 2.7 µs ² | -- |
+| `numx_ntt_poly_add` n=256 | -- | 41 ns ² | -- |
 
 > ¹ RPi benchmark used smaller inputs (n=4, 2×2, npts=2, n=8 respectively) — see [`validation/hardware/raspberry_pi.md`](validation/hardware/raspberry_pi.md) for exact parameters.
+> ² NTT benchmarks measured on ARM64 Apple M4 Pro / macOS / Apple clang -O2 (Release).
 
 ---
 
