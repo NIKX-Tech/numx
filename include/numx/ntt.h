@@ -126,4 +126,44 @@ numx_status_t numx_ntt_polymul(
  */
 numx_status_t numx_ntt_reduce(numx_q15_t *f);
 
+/**
+ * @brief Coefficient-wise addition of two polynomials modulo q = 3329.
+ *
+ * Computes out[i] = (a[i] + b[i]) mod 3329 for each of the NUMX_NTT_N
+ * coefficients. Works in both polynomial and NTT domain because the NTT
+ * is linear. Inputs must be in [0, q-1]; output is in [0, q-1].
+ *
+ * @param[in]  a    First polynomial. Must not be NULL.
+ * @param[in]  b    Second polynomial. Must not be NULL.
+ * @param[out] out  Result polynomial. Must not be NULL. May alias a or b.
+ *
+ * @return NUMX_OK on success.
+ *         NUMX_ERR_NULL_PTR if a, b, or out is NULL.
+ */
+numx_status_t numx_ntt_poly_add(
+    const numx_q15_t *a,
+    const numx_q15_t *b,
+    numx_q15_t       *out
+);
+
+/**
+ * @brief Coefficient-wise subtraction of two polynomials modulo q = 3329.
+ *
+ * Computes out[i] = (a[i] - b[i]) mod 3329 for each of the NUMX_NTT_N
+ * coefficients. Works in both polynomial and NTT domain. Inputs must be
+ * in [0, q-1]; output is in [0, q-1].
+ *
+ * @param[in]  a    Minuend polynomial. Must not be NULL.
+ * @param[in]  b    Subtrahend polynomial. Must not be NULL.
+ * @param[out] out  Result polynomial. Must not be NULL. May alias a or b.
+ *
+ * @return NUMX_OK on success.
+ *         NUMX_ERR_NULL_PTR if a, b, or out is NULL.
+ */
+numx_status_t numx_ntt_poly_sub(
+    const numx_q15_t *a,
+    const numx_q15_t *b,
+    numx_q15_t       *out
+);
+
 #endif /* NUMX_NTT_H */
