@@ -257,3 +257,41 @@ numx_status_t numx_ntt_reduce(numx_q15_t *f)
 
     return NUMX_OK;
 }
+
+/* ── Polynomial addition ───────────────────────────────────────────── */
+
+numx_status_t numx_ntt_poly_add(
+    const numx_q15_t *a,
+    const numx_q15_t *b,
+    numx_q15_t       *out
+)
+{
+    numx_size_t i;
+
+    if (!a || !b || !out)
+        return NUMX_ERR_NULL_PTR;
+
+    for (i = 0; i < (numx_size_t)NTT_N; i++)
+        out[i] = priv_barrett((int32_t)a[i] + b[i]);
+
+    return NUMX_OK;
+}
+
+/* ── Polynomial subtraction ────────────────────────────────────────── */
+
+numx_status_t numx_ntt_poly_sub(
+    const numx_q15_t *a,
+    const numx_q15_t *b,
+    numx_q15_t       *out
+)
+{
+    numx_size_t i;
+
+    if (!a || !b || !out)
+        return NUMX_ERR_NULL_PTR;
+
+    for (i = 0; i < (numx_size_t)NTT_N; i++)
+        out[i] = priv_barrett((int32_t)a[i] - b[i] + NTT_Q);
+
+    return NUMX_OK;
+}

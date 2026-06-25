@@ -126,6 +126,7 @@ else()
         # Phase 3 benchmarks:
         # benchmarks/bench_autodiff.c
         # benchmarks/bench_compressed_sensing.c
+        benchmarks/bench_ntt.c
     )
 endif()
 

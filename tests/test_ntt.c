@@ -163,6 +163,48 @@ void test_ntt_inverse_null(void)
  *  Pointwise multiplication
  * ════════════════════════════════════════════════════════════════════ */
 
+/* L1 */
+void test_ntt_pointwise_mul_identity(void)
+{
+    /* NTT(delta) * NTT(f) after INTT should equal f. */
+    numx_q15_t delta[256] = {0};
+    numx_q15_t f[256]     = {0};
+    numx_q15_t f_ntt[256];
+    numx_q15_t out[256];
+    int i;
+
+    delta[0] = 1;
+    f[0] = 7; f[1] = 3; f[50] = 100; f[255] = 1;
+
+    for (i = 0; i < 256; i++) f_ntt[i] = f[i];
+
+    numx_ntt_forward(delta);
+    numx_ntt_forward(f_ntt);
+    TEST_ASSERT_EQUAL(NUMX_OK, numx_ntt_pointwise_mul(delta, f_ntt, out));
+    numx_ntt_inverse(out);
+    for (i = 0; i < 256; i++)
+        TEST_ASSERT_EQUAL_INT16_MESSAGE(f[i], out[i], "pointwise_mul identity failed");
+}
+
+void test_ntt_pointwise_mul_known(void)
+{
+    /* (1+x) * (1+x) = 1 + 2x + x^2 via NTT pointwise. */
+    numx_q15_t a[256] = {0};
+    numx_q15_t b[256] = {0};
+    numx_q15_t out[256];
+
+    a[0] = 1; a[1] = 1;
+    b[0] = 1; b[1] = 1;
+    numx_ntt_forward(a);
+    numx_ntt_forward(b);
+    TEST_ASSERT_EQUAL(NUMX_OK, numx_ntt_pointwise_mul(a, b, out));
+    numx_ntt_inverse(out);
+    TEST_ASSERT_EQUAL_INT16(1, out[0]);
+    TEST_ASSERT_EQUAL_INT16(2, out[1]);
+    TEST_ASSERT_EQUAL_INT16(1, out[2]);
+    TEST_ASSERT_EQUAL_INT16(0, out[3]);
+}
+
 /* L4 */
 void test_ntt_pointwise_mul_null(void)
 {
@@ -338,6 +380,103 @@ void test_ntt_reduce_null(void)
 }
 
 /* ════════════════════════════════════════════════════════════════════
+ *  Polynomial addition / subtraction
+ * ════════════════════════════════════════════════════════════════════ */
+
+/* L1 */
+void test_ntt_poly_add_basic(void)
+{
+    /* (1 + 2x) + (3 + x) = 4 + 3x */
+    numx_q15_t a[256] = {0};
+    numx_q15_t b[256] = {0};
+    numx_q15_t out[256];
+
+    a[0] = 1; a[1] = 2;
+    b[0] = 3; b[1] = 1;
+    TEST_ASSERT_EQUAL(NUMX_OK, numx_ntt_poly_add(a, b, out));
+    TEST_ASSERT_EQUAL_INT16(4, out[0]);
+    TEST_ASSERT_EQUAL_INT16(3, out[1]);
+    TEST_ASSERT_EQUAL_INT16(0, out[2]);
+}
+
+void test_ntt_poly_add_wrap(void)
+{
+    /* (q-1) + 1 = 0 mod q */
+    numx_q15_t a[256] = {0};
+    numx_q15_t b[256] = {0};
+    numx_q15_t out[256];
+
+    a[0] = NTT_Q - 1;
+    b[0] = 1;
+    TEST_ASSERT_EQUAL(NUMX_OK, numx_ntt_poly_add(a, b, out));
+    TEST_ASSERT_EQUAL_INT16(0, out[0]);
+}
+
+/* L4 */
+void test_ntt_poly_add_null(void)
+{
+    numx_q15_t a[256] = {0}, b[256] = {0}, out[256];
+    TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_ntt_poly_add(NULL, b, out));
+    TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_ntt_poly_add(a, NULL, out));
+    TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_ntt_poly_add(a, b, NULL));
+}
+
+/* L1 */
+void test_ntt_poly_sub_basic(void)
+{
+    /* (5 + 3x) - (2 + x) = 3 + 2x */
+    numx_q15_t a[256] = {0};
+    numx_q15_t b[256] = {0};
+    numx_q15_t out[256];
+
+    a[0] = 5; a[1] = 3;
+    b[0] = 2; b[1] = 1;
+    TEST_ASSERT_EQUAL(NUMX_OK, numx_ntt_poly_sub(a, b, out));
+    TEST_ASSERT_EQUAL_INT16(3, out[0]);
+    TEST_ASSERT_EQUAL_INT16(2, out[1]);
+    TEST_ASSERT_EQUAL_INT16(0, out[2]);
+}
+
+void test_ntt_poly_sub_wrap(void)
+{
+    /* 0 - 1 = q-1 mod q */
+    numx_q15_t a[256] = {0};
+    numx_q15_t b[256] = {0};
+    numx_q15_t out[256];
+
+    a[0] = 0;
+    b[0] = 1;
+    TEST_ASSERT_EQUAL(NUMX_OK, numx_ntt_poly_sub(a, b, out));
+    TEST_ASSERT_EQUAL_INT16(NTT_Q - 1, out[0]);
+}
+
+void test_ntt_poly_add_sub_inverse(void)
+{
+    /* (a + b) - b = a */
+    numx_q15_t a[256] = {0};
+    numx_q15_t b[256] = {0};
+    numx_q15_t sum[256], result[256];
+    int i;
+
+    a[0] = 100; a[1] = 200; a[100] = 3000; a[255] = 1;
+    b[0] = 999; b[1] =  42; b[100] =  500; b[200] = 7;
+
+    TEST_ASSERT_EQUAL(NUMX_OK, numx_ntt_poly_add(a, b, sum));
+    TEST_ASSERT_EQUAL(NUMX_OK, numx_ntt_poly_sub(sum, b, result));
+    for (i = 0; i < 256; i++)
+        TEST_ASSERT_EQUAL_INT16_MESSAGE(a[i], result[i], "(a+b)-b != a");
+}
+
+/* L4 */
+void test_ntt_poly_sub_null(void)
+{
+    numx_q15_t a[256] = {0}, b[256] = {0}, out[256];
+    TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_ntt_poly_sub(NULL, b, out));
+    TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_ntt_poly_sub(a, NULL, out));
+    TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_ntt_poly_sub(a, b, NULL));
+}
+
+/* ════════════════════════════════════════════════════════════════════
  *  Suite entry point
  * ════════════════════════════════════════════════════════════════════ */
 
@@ -356,6 +495,8 @@ void numx_test_ntt(void)
     RUN_TEST(test_ntt_inverse_null);
 
     /* Pointwise multiplication */
+    RUN_TEST(test_ntt_pointwise_mul_identity);
+    RUN_TEST(test_ntt_pointwise_mul_known);
     RUN_TEST(test_ntt_pointwise_mul_null);
 
     /* Polynomial multiplication */
@@ -372,4 +513,13 @@ void numx_test_ntt(void)
     RUN_TEST(test_ntt_reduce_noop_in_range);
     RUN_TEST(test_ntt_reduce_boundary);
     RUN_TEST(test_ntt_reduce_null);
+
+    /* Polynomial addition / subtraction */
+    RUN_TEST(test_ntt_poly_add_basic);
+    RUN_TEST(test_ntt_poly_add_wrap);
+    RUN_TEST(test_ntt_poly_add_null);
+    RUN_TEST(test_ntt_poly_sub_basic);
+    RUN_TEST(test_ntt_poly_sub_wrap);
+    RUN_TEST(test_ntt_poly_add_sub_inverse);
+    RUN_TEST(test_ntt_poly_sub_null);
 }
