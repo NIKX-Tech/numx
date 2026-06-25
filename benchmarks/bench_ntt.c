@@ -7,6 +7,7 @@
  * Uses POSIX clock_gettime(CLOCK_MONOTONIC) for sub-microsecond resolution.
  */
 
+#define _POSIX_C_SOURCE 199309L
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
