@@ -84,6 +84,18 @@ indices as the corresponding forward stage (FORWARD order within each stage, not
 reversed), because the group structure in the Gentleman-Sande form only undoes the
 forward Cooley-Tukey correctly when paired this way.
 
+### Polynomial addition and subtraction
+
+Addition and subtraction of polynomials (or their NTT representations) are coefficient-wise operations mod $q$:
+
+$$\text{poly\_add}: \quad h[k] = (a[k] + b[k]) \bmod q$$
+
+$$\text{poly\_sub}: \quad h[k] = (a[k] - b[k] + q) \bmod q$$
+
+Because the NTT is a linear map over $\mathbb{Z}_q$, these operations are valid in both the polynomial domain and the NTT domain without any conversion. The $+q$ term in subtraction prevents negative intermediate values before the modular reduction.
+
+Both functions apply Barrett reduction to keep outputs in $[0, q-1]$.
+
 ### Pointwise multiplication (basemul)
 
 Once both polynomials are in NTT domain, their product is computed in O(n) time via
@@ -112,6 +124,8 @@ integer (available as `uint64_t` in C99).
 | `numx_ntt_inverse` | $O(n \log n)$ + normalization | in-place |
 | `numx_ntt_pointwise_mul` | $O(n)$ = 128 degree-2 ring muls | in-place |
 | `numx_ntt_polymul` | $O(n \log n)$ | 512 bytes (two temp polynomials) |
+| `numx_ntt_poly_add` | $O(n)$ | in-place |
+| `numx_ntt_poly_sub` | $O(n)$ | in-place |
 | `numx_ntt_reduce` | $O(n)$ | in-place |
 
 Fixed input size: n = 256 (NUMX_NTT_N). No dynamic allocation.
@@ -136,6 +150,10 @@ $f \bmod (x^2 - c_i)$ for $i = 0, \ldots, 127$. Coefficients in $[0, q-1]$.
   products in the ring). Forward NTT a fixed operand once; reuse the NTT form.
 - **`numx_ntt_polymul`**: one-shot polynomial multiplication; handles the full
   forward-pointwise-inverse pipeline with stack-only temporaries.
+- **`numx_ntt_poly_add` / `numx_ntt_poly_sub`**: add or subtract two polynomials
+  (or two NTT-domain arrays) coefficient-wise mod q. Both are valid in either domain
+  because the NTT is a linear map. Use these to accumulate results in Kyber/Dilithium
+  matrix-vector products before calling `numx_ntt_inverse` once at the end.
 - **`numx_ntt_reduce`**: after external coefficient additions (e.g., adding two
   polynomials manually), reduce all coefficients back to $[0, q-1]$ before NTT.
 
@@ -193,4 +211,23 @@ numx_ntt_inverse(out); /* result in polynomial domain */
 numx_ntt_forward(c);   /* reuse NTT(a) for second product */
 numx_ntt_pointwise_mul(a, c, out);
 numx_ntt_inverse(out);
+
+/* poly_add / poly_sub — works in polynomial domain or NTT domain */
+numx_q15_t p[256] = {0}, q_poly[256] = {0}, sum[256], diff[256];
+p[0] = 1; p[1] = 2;       /* p(x) = 1 + 2x */
+q_poly[0] = 3; q_poly[1] = 1; /* q(x) = 3 + x  */
+
+numx_ntt_poly_add(p, q_poly, sum);
+/* sum[0] = 4, sum[1] = 3 */
+
+numx_ntt_poly_sub(p, q_poly, diff);
+/* diff[0] = 3325 (= -2 mod 3329), diff[1] = 1 */
+
+/* Kyber matrix-vector accumulation pattern: sum of products in NTT domain */
+numx_q15_t acc[256] = {0};
+numx_q15_t tmp[256];
+/* for each row element: NTT(a_i) * NTT(s_i), accumulate */
+numx_ntt_pointwise_mul(a, b, tmp);
+numx_ntt_poly_add(acc, tmp, acc);   /* acc += a*b in NTT domain */
+numx_ntt_inverse(acc);              /* single INTT at the end */
 ```
