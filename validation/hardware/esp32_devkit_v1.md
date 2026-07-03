@@ -7,6 +7,11 @@
 > **Status: Phase 1 complete ✅ — 243/243 Unity tests passed (2026-05-29).**
 > Per-function timing results are recorded in each module's result file under `validation/results/`.
 > Per-function timing summary table below will be filled in during Phase 2 validation.
+>
+> **NTT (Post-Quantum): 29/29 tests passed (2026-07-03), commit `daf5b9c`, validated by
+> Amir Ab Khoshk.** Built via a standalone example project (`examples/esp32_ntt_test/`),
+> not the `tests/esp32_tests/` harness used above — see
+> [`validation/results/ntt/ntt.md`](../results/ntt/ntt.md) for full detail and caveats.
 
 **Profile date:** 2026-05-25
 **numx commit:** d81b386

@@ -1,6 +1,6 @@
 # Number Theoretic Transform
 
-**Module:** `numx/ntt.h` | **Category:** Post-Quantum Cryptography | **Phase:** P3.12
+**Module:** `numx/ntt.h` | **Category:** Post-Quantum Cryptography | **Phase:** P3.04
 
 ---
 

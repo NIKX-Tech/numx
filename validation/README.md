@@ -50,8 +50,10 @@ validation/
 │   │   └── autodiff.md        (forward-mode dual numbers, reverse-mode static tape)
 │   ├── compressed_sensing/
 │   │   └── compressed_sensing.md  (OMP, ISTA)
-│   └── sketch/
-│       └── sketch.md          (randomized SVD — Halko-Martinsson-Tropp)
+│   ├── sketch/
+│   │   └── sketch.md          (randomized SVD — Halko-Martinsson-Tropp)
+│   └── ntt/
+│       └── ntt.md             (NTT forward/inverse, pointwise_mul, polymul, poly_add/sub, reduce)
 ├── c/
 │   ├── val_runner.c           ← Phase 1 timing benchmark runner
 │   └── val_bench_phase2.c     ← Phase 2 timing benchmark runner

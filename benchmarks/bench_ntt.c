@@ -27,11 +27,11 @@ static void bprint(const char *label, int64_t ns_total, int n)
     int64_t ns_per = ns_total / n;
     if (ns_per >= 1000)
         printf("  %-38s | %6d | %8.1f us | %7lld ns\n",
-               label, n, (double)ns_total / 1000.0 / n,
+               label, n, (double)ns_total / 1000.0,
                (long long)ns_per);
     else
         printf("  %-38s | %6d | %8.3f us | %7lld ns\n",
-               label, n, (double)ns_total / 1000.0 / n,
+               label, n, (double)ns_total / 1000.0,
                (long long)ns_per);
 }
 

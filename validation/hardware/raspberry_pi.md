@@ -43,8 +43,12 @@
 |------------------|-------|----------|------------|
 | Phase 1 (linalg, stats, roots, integrate, differentiate, interpolate, poly, ode) | 300 | 0 | 2026-06-13 |
 | Phase 2 (signal, fft, autodiff, compressed_sensing, sketch) | included in 300 | 0 | 2026-06-13 |
+| Phase 3 (ntt) | 29 | 0 | 2026-07-03 |
 
-**300 / 300 Unity tests PASS** on Raspberry Pi 4 / aarch64 / gcc 14.2.0 / float32.
+**300 / 300 Unity tests PASS** on Raspberry Pi 4 / aarch64 / gcc 14.2.0 / float32 (2026-06-13).
+**329 / 329 Unity tests PASS** (29 new NTT tests) as of 2026-07-03, commit `daf5b9c`. Validator:
+Amir Ab Khoshk. Full per-test breakdown in
+[`validation/results/ntt/ntt.md`](../results/ntt/ntt.md).
 
 ## Performance summary
 
@@ -97,3 +101,8 @@
 | cs_spectral_norm 16×32 iter=32    | 100     | 9,676      | 96,769        |
 | cs_omp 16×32 k=4                  | 100     | 644        | 6,443         |
 | cs_ista 16×32 lam=0.1 iter=500    | 100     | 117,119    | 1,171,190     |
+| numx_ntt_forward n=256 (2026-07-03) | 10,000  | 265,890    | 26,589        |
+| numx_ntt_inverse n=256 (2026-07-03) | 10,000  | 219,660    | 21,966        |
+| numx_ntt_polymul n=256 (2026-07-03) | 10,000  | 813,320    | 81,332        |
+| numx_ntt_poly_add n=256 (2026-07-03)| 10,000  | 24,100     | 2,410         |
+| numx_ntt_poly_sub n=256 (2026-07-03)| 10,000  | 27,370     | 2,737         |

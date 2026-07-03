@@ -80,7 +80,7 @@ Initial public release.
 - `tests/esp32_tests/` — custom test framework for ESP32 (IDF component); per-module test files
 
 **NTT (post-quantum)**
-- `ntt` — negacyclic NTT over Z_3329[x]/(x^256+1) with Kyber/Dilithium parameters; forward NTT, inverse NTT (with normalization), pointwise multiplication (basemul), full polynomial multiplication, and Barrett coefficient reduction; constant-time data path; seven Cooley-Tukey / Gentleman-Sande butterfly stages; precomputed twiddle tables; zero heap allocation; 20 unit tests
+- `ntt` — negacyclic NTT over Z_3329[x]/(x^256+1) with Kyber/Dilithium parameters; forward NTT, inverse NTT (with normalization), pointwise multiplication (basemul), full polynomial multiplication, and Barrett coefficient reduction; constant-time data path; seven Cooley-Tukey / Gentleman-Sande butterfly stages; precomputed twiddle tables; zero heap allocation; 29 unit tests
 
 ---
 

@@ -1,7 +1,7 @@
 # Hardware Profile: Mac mini (Apple M4 Pro)
 
-**Profile date:** 2026-06-09 (last validated)
-**numx commit:** 2fc85d0
+**Profile date:** 2026-06-09 (last validated) / 2026-07-03 (NTT addendum)
+**numx commit:** 2fc85d0 (base) / c397429 (NTT)
 **Validator:** Erfan Jazeb Nikoo
 
 ## System
@@ -77,5 +77,13 @@ cmake --build build --parallel
 | spectral_norm (16×32, iter=32) | 100 | 1,403 | 14,030 |
 | omp (16×32, k=4) | 100 | 86 | 860 |
 | ista (16×32, λ=0.1, iter=500) | 100 | 11,144 | 111,440 |
+| **NTT** (added 2026-07-03) | | | |
+| numx_ntt_forward n=256 | 10,000 | 11,171 | 1,117 |
+| numx_ntt_inverse n=256 | 10,000 | 6,607 | 660 |
+| numx_ntt_polymul n=256 | 10,000 | 29,145 | 2,914 |
+| numx_ntt_poly_add n=256 | 10,000 | 485 | 48 |
+| numx_ntt_poly_sub n=256 | 10,000 | 545 | 54 |
 
-**All tests:** 300 / 300 PASS on 2026-06-09 with commit 2fc85d0
+**All tests:** 300 / 300 PASS on 2026-06-09 with commit 2fc85d0; **329 / 329 PASS** (29 new NTT tests)
+on 2026-07-03 with commit c397429. Full per-test breakdown in
+[`validation/results/ntt/ntt.md`](../results/ntt/ntt.md).

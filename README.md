@@ -151,13 +151,13 @@ Per-call averages measured on physical hardware. Full tables: [`validation/resul
 | `numx_stats_median` n=128 | 6.6 µs | 204 ns ¹ | 1.1 ms |
 | `numx_fft_f32` N=64 | 3.6 µs | 17.9 µs | 2.6 ms |
 | `numx_autodiff` fwd chain-10 | 20 ns | 102 ns | 358 ns |
-| `numx_ntt_forward` n=256 | -- | 937 ns ² | -- |
-| `numx_ntt_inverse` n=256 | -- | 601 ns ² | -- |
-| `numx_ntt_polymul` n=256 | -- | 2.7 µs ² | -- |
-| `numx_ntt_poly_add` n=256 | -- | 41 ns ² | -- |
+| `numx_ntt_forward` n=256 | 1.9 µs ² | 26.6 µs | 767 µs |
+| `numx_ntt_inverse` n=256 | 1.1 µs ² | 22.0 µs | 673 µs |
+| `numx_ntt_polymul` n=256 | 5.3 µs ² | 81.3 µs | 2.4 ms |
+| `numx_ntt_poly_add` n=256 | 121 ns ² | 2.4 µs | 72.3 µs |
 
 > ¹ RPi benchmark used smaller inputs (n=4, 2×2, npts=2, n=8 respectively) — see [`validation/hardware/raspberry_pi.md`](validation/hardware/raspberry_pi.md) for exact parameters.
-> ² NTT benchmarks measured on ARM64 Apple M4 Pro / macOS / Apple clang -O2 (Release).
+> ² NTT x86-64 column measured on WSL2 Ubuntu 24.04 / gcc 13.3.0 (not the native Ubuntu 22.04 / gcc 11.4 host used for the other rows) — see [`validation/results/ntt/ntt.md`](validation/results/ntt/ntt.md). NTT operates on fixed-point `numx_q15_t`, unaffected by the float32/float64 build flag.
 
 ---
 
