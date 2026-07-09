@@ -4,6 +4,16 @@
 
 ---
 
+> ⚠️ **Not fully constant-time. Do not use for production handling of secret key
+> material without independent review.** The transform stages (butterfly network,
+> table lookups) are data-independent, but the Barrett-reduction canonicalization
+> step uses a conditional branch that is not guaranteed constant-time on
+> branch-predicting CPUs. See [Barrett reduction](#barrett-reduction) below for the
+> full explanation. This is a numerical implementation of the NTT, not an audited
+> cryptographic primitive.
+
+---
+
 ## What it solves
 
 Multiplies polynomials in the ring Z_3329[x]/(x^256 + 1) in O(n log n) time using
