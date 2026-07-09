@@ -96,6 +96,20 @@ Before opening a PR:
 
 ---
 
+## On AI-assisted development
+
+numx is built with Claude Code as a tool, used under direction and reviewed at every
+step, not run unsupervised. Concretely: implementation scaffolding, multi-platform
+validation runs, sanitizer testing, and documentation are commonly done with AI
+assistance. Architecture decisions (zero allocation, no external dependencies, module
+boundaries), the underlying math, and validation methodology are human-directed, and
+every change is reviewed before it ships, including catching AI's own mistakes along
+the way. If you're evaluating this project and that changes your assessment of it,
+that's a reasonable reaction to have, this note exists so you don't have to go dig for
+the answer.
+
+The prompt pattern below is the actual template used when adding a new module.
+
 ## Prompt pattern for Claude Code
 
 When implementing a new algorithm, use this exact prompt:
