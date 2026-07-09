@@ -402,3 +402,56 @@ numx_status_t numx_lu_solve(
     }
     return NUMX_OK;
 }
+
+/* ── Cholesky decomposition ──────────────────────────────────────────────── */
+
+
+
+numx_status_t numx_cholesky_decompose(
+    const numx_real_t *A,
+    numx_size_t n,
+    numx_real_t *L) 
+{
+    // 1. Null pointer defensive checks
+    if (!A || !L) {
+        return NUMX_ERR_NULL_PTR;
+    }
+
+    // 2. Bound validation checks matching NUMX constraints
+    if (n == 0 || n > NUMX_MAX_MAT_ROWS) {
+        return NUMX_ERR_INVALID_ARG;
+    }
+
+    // 3. Initialize output matrix L to zero
+    for (numx_size_t i = 0; i < n * n; i++) {
+        L[i] = 0.0f;
+    }
+
+    // 4. Compute Cholesky factorization (Row-major layout)
+    for (numx_size_t i = 0; i < n; i++) {
+        for (numx_size_t j = 0; j <= i; j++) {
+            numx_real_t sum = 0.0f;
+
+            // Dot product of components computed so far
+            for (numx_size_t k = 0; k < j; k++) {
+                sum += L[i * n + k] * L[j * n + k];
+            }
+
+            if (i == j) {
+                // Diagonal elements evaluation
+                numx_real_t val = A[i * n + i] - sum;
+                
+                // Matrix must be positive-definite
+                if (val <= 0.0f) {
+                    return NUMX_ERR_SINGULAR; 
+                }
+                L[i * n + j] = priv_sqrt(val);
+            } else {
+                // Lower triangular elements evaluation (i > j)
+                L[i * n + j] = (A[i * n + j] - sum) / L[j * n + j];
+            }
+        }
+    }
+
+    return NUMX_OK;
+}

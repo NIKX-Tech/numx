@@ -504,6 +504,103 @@ void test_lu_solve_null_x(void)
     TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_lu_solve(LU, pivot, 2, b, NULL));
 }
 
+
+
+
+/* ════════════════════════════════════════════════════════════════════ 
+ * numx_cholesky_decompose
+ * ════════════════════════════════════════════════════════════════════ */
+
+/* L1 */
+void test_cholesky_decompose_3x3_success(void)
+{
+    numx_size_t n = 3;
+    /* Symmetric positive-definite textbook matrix */
+    const numx_real_t A[9] = {
+         4.0f,  12.0f, -16.0f,
+        12.0f,  37.0f, -43.0f,
+       -16.0f, -43.0f,  98.0f
+    };
+    numx_real_t L[9];
+
+    TEST_ASSERT_EQUAL(NUMX_OK, numx_cholesky_decompose(A, n, L));
+
+    /* Expected lower triangular factor matrix results:
+     * [  2.0,  0.0,  0.0 ]
+     * [  6.0,  1.0,  0.0 ]
+     * [ -8.0,  5.0,  3.0 ] */
+    TEST_ASSERT_FLOAT_WITHIN(TOL_LU, 2.0f, L[0*3 + 0]);
+    TEST_ASSERT_FLOAT_WITHIN(TOL_LU, 0.0f, L[0*3 + 1]);
+    TEST_ASSERT_FLOAT_WITHIN(TOL_LU, 0.0f, L[0*3 + 2]);
+    
+    TEST_ASSERT_FLOAT_WITHIN(TOL_LU, 6.0f, L[1*3 + 0]);
+    TEST_ASSERT_FLOAT_WITHIN(TOL_LU, 1.0f, L[1*3 + 1]);
+    TEST_ASSERT_FLOAT_WITHIN(TOL_LU, 0.0f, L[1*3 + 2]);
+    
+    TEST_ASSERT_FLOAT_WITHIN(TOL_LU, -8.0f, L[2*3 + 0]);
+    TEST_ASSERT_FLOAT_WITHIN(TOL_LU, 5.0f, L[2*3 + 1]);
+    TEST_ASSERT_FLOAT_WITHIN(TOL_LU, 3.0f, L[2*3 + 2]);
+}
+
+/* L2 */
+void test_cholesky_decompose_residual_reconstruction(void)
+{
+    /* Verify that L * L^T reconstructs the original A matrix */
+    numx_size_t n = 3;
+    const numx_real_t A[9] = {
+         4.0f,  12.0f, -16.0f,
+        12.0f,  37.0f, -43.0f,
+       -16.0f, -43.0f,  98.0f
+    };
+    numx_real_t L[9], LT[9], LLT[9];
+
+    numx_cholesky_decompose(A, n, L);
+    numx_mat_transpose(L, n, n, LT);
+    numx_mat_mul(L, n, n, LT, n, n, LLT);
+
+    for (numx_size_t i = 0; i < n * n; i++) {
+        TEST_ASSERT_FLOAT_WITHIN(TOL_LU, A[i], LLT[i]);
+    }
+}
+
+/* L3 */
+void test_cholesky_decompose_non_spd_fail(void)
+{
+    numx_size_t n = 3;
+    /* Not positive-definite (zeros on diagonal element space) */
+    const numx_real_t A[9] = {
+        0.0f, 1.0f, 2.0f,
+        1.0f, 5.0f, 6.0f,
+        2.0f, 6.0f, 9.0f
+    };
+    numx_real_t L[9];
+
+    TEST_ASSERT_EQUAL(NUMX_ERR_SINGULAR, numx_cholesky_decompose(A, n, L));
+}
+
+/* L4 */
+void test_cholesky_decompose_null_A(void)
+{
+    numx_real_t L[4];
+    TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_cholesky_decompose(NULL, 2, L));
+}
+
+void test_cholesky_decompose_null_L(void)
+{
+    numx_real_t A[4] = {4.0f, 0.0f, 0.0f, 4.0f};
+    TEST_ASSERT_EQUAL(NUMX_ERR_NULL_PTR, numx_cholesky_decompose(A, 2, NULL));
+}
+
+void test_cholesky_decompose_invalid_dim(void)
+{
+    numx_real_t L[4];
+    numx_real_t A[4] = {4.0f, 0.0f, 0.0f, 4.0f};
+    TEST_ASSERT_EQUAL(NUMX_ERR_INVALID_ARG, numx_cholesky_decompose(A, 0, L));
+}
+
+
+
+
 /* ════════════════════════════════════════════════════════════════════
  *  Suite entry point — called by tests/test_runner.c
  * ════════════════════════════════════════════════════════════════════ */
@@ -572,4 +669,12 @@ void numx_test_linalg(void)
     RUN_TEST(test_lu_decompose_null_LU);
     RUN_TEST(test_lu_solve_null_LU);
     RUN_TEST(test_lu_solve_null_x);
+
+    /* cholesky_decompose */
+    RUN_TEST(test_cholesky_decompose_3x3_success);
+    RUN_TEST(test_cholesky_decompose_residual_reconstruction);
+    RUN_TEST(test_cholesky_decompose_non_spd_fail);
+    RUN_TEST(test_cholesky_decompose_null_A);
+    RUN_TEST(test_cholesky_decompose_null_L);
+    RUN_TEST(test_cholesky_decompose_invalid_dim);
 }
