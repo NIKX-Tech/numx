@@ -36,7 +36,7 @@ Every function is reentrant, allocation-free, and returns a typed status code. T
 
 | Module | Functions | Status |
 |---|---|---|
-| [**linalg**](docs/algorithms/linalg.md) | dot, norm, cross, mat_mul, transpose, det, LU | ✅ complete |
+| [**linalg**](docs/algorithms/linalg.md) | dot, norm, cross, mat_mul, transpose, det, LU, Cholesky | ✅ complete |
 | [**stats**](docs/algorithms/stats.md) | mean, variance, median, percentile | ✅ complete |
 | [**roots**](docs/algorithms/roots.md) | bisect, newton, brent | ✅ complete |
 | [**integrate**](docs/algorithms/integrate.md) | trap, simpson, gauss | ✅ complete |
@@ -171,7 +171,8 @@ Per-call averages measured on physical hardware. Full tables: [`validation/resul
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the rules, templates, and the exact
-prompt pattern to use with Claude Code when adding a new algorithm.
+prompt pattern to use with Claude Code when adding a new algorithm. See
+[CONTRIBUTORS.md](CONTRIBUTORS.md) for the people who have contributed to numx.
 
 ---
 

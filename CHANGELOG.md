@@ -7,6 +7,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) — versioning:
 
 ## [Unreleased]
 
+### Added
+- `numx_cholesky_decompose` — Cholesky-Banachiewicz factorization ($A = LL^T$) for
+  symmetric positive-definite matrices in the `linalg` module. Contributed by
+  Erfan Esmaeili ([#51](https://github.com/NIKX-Tech/numx/pull/51)). Validated on
+  ARM64/Apple M4 Pro (float32 and float64, ASan/UBSan clean); full platform sweep
+  pending.
+
 ---
 
 ## [1.0.0] — 2026-07-03
