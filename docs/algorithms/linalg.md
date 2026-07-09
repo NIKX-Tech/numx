@@ -50,6 +50,16 @@ $$\det(A) = (-1)^s \prod_{i=0}^{n-1} u_{ii}$$
 
 where $s$ is the number of transpositions in the permutation $P$, computed via cycle decomposition. For $n \leq 3$, direct closed-form formulas are used instead of LU.
 
+### Cholesky decomposition
+
+For a symmetric positive-definite $A \in \mathbb{R}^{n \times n}$, factorises $A = LL^T$ where $L$ is lower-triangular. Using the Cholesky–Banachiewicz recurrence, computed row by row:
+
+$$L_{ii} = \sqrt{A_{ii} - \sum_{k=0}^{i-1} L_{ik}^2}, \qquad L_{ij} = \frac{1}{L_{jj}}\left(A_{ij} - \sum_{k=0}^{j-1} L_{ik}L_{jk}\right) \quad (j < i)$$
+
+$L$ is returned as a full $n \times n$ array with the strict upper triangle zeroed. If any diagonal term $A_{ii} - \sum L_{ik}^2$ is non-positive, $A$ is not positive-definite and the function returns `NUMX_ERR_SINGULAR` instead of taking the square root of a non-positive number.
+
+Cholesky needs roughly half the multiplications of LU decomposition for the same $n$, since it exploits symmetry, but it only applies to symmetric positive-definite matrices (covariance matrices, Gram matrices, normal equations $A^TA$).
+
 ---
 
 ## Complexity
@@ -63,6 +73,7 @@ where $s$ is the number of transpositions in the permutation $P$, computed via c
 | `numx_mat_det` ($n > 3$) | $O(n^3)$ | ~4 KB (LU buffer 32×32×4 B) |
 | `numx_lu_decompose` | $O(n^3)$ | ~4 KB |
 | `numx_lu_solve` | $O(n^2)$ | ~128 B |
+| `numx_cholesky_decompose` | $O(n^3/3)$ | negligible (in-place on caller buffer) |
 
 ---
 
@@ -82,11 +93,13 @@ The internal `priv_sqrt` (Newton–Raphson, 64 iterations) achieves $\leq 2$ ULP
 - `numx_lu_decompose` + `numx_lu_solve`: Kalman filter update step, least-squares on small systems ($n \leq 16$).
 - `numx_mat_mul`: rotation composition, covariance propagation.
 - `numx_mat_det`: pre-check matrix conditioning.
+- `numx_cholesky_decompose`: covariance/Gram matrices known to be symmetric positive-definite (Kalman filter process/measurement noise, normal equations for least-squares) — faster than LU and its failure mode (`NUMX_ERR_SINGULAR`) doubles as a positive-definiteness check.
 
 ## When NOT to use
 
 - $n > 16$ on Cortex-M0 without FPU — reduce `NUMX_MAX_MAT_ROWS` in `numx_config.h`.
 - Near-singular systems — the solver returns `NUMX_ERR_SINGULAR` but residual may still be large.
+- `numx_cholesky_decompose` on a matrix that is not symmetric — the function only reads the lower triangle and assumes symmetry; it will not detect an asymmetric input and will silently factor the wrong matrix. Use `numx_lu_decompose` for general (non-symmetric) matrices instead.
 
 ---
 

@@ -257,6 +257,28 @@ static void val_linalg(void)
         timing("lu_decompose 4×4", N, dt);
     }
     end_sub();
+
+    /* ── cholesky_decompose ──────────────────────────────────────── */
+    sub("numx_cholesky_decompose");
+    {
+        /* textbook SPD example: A = L*L^T, L = [2,0,0; 6,1,0; -8,5,3] */
+        numx_real_t A[] = {4,12,-16, 12,37,-43, -16,-43,98};
+        numx_real_t L[9];
+        numx_cholesky_decompose(A, 3, L);
+        chk("L[0][0] = 2.0",  (float)L[0], 2.0f);
+        chk("L[1][0] = 6.0",  (float)L[3], 6.0f);
+        chk("L[1][1] = 1.0",  (float)L[4], 1.0f);
+        chk("L[2][0] = -8.0", (float)L[6], -8.0f);
+        chk("L[2][1] = 5.0",  (float)L[7], 5.0f);
+        chk("L[2][2] = 3.0",  (float)L[8], 3.0f);
+
+        N = 100000;
+        t0 = now_ns();
+        for (int i = 0; i < N; i++) { numx_cholesky_decompose(A, 3, L); g_sink = L[0]; }
+        dt = now_ns() - t0;
+        timing("cholesky_decompose 3×3", N, dt);
+    }
+    end_sub();
 }
 
 /* ════════════════════════════════════════════════════════════════════ */
