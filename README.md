@@ -171,7 +171,8 @@ Per-call averages measured on physical hardware. Full tables: [`validation/resul
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the rules, templates, and the exact
-prompt pattern to use with Claude Code when adding a new algorithm.
+prompt pattern to use with Claude Code when adding a new algorithm. See
+[CONTRIBUTORS.md](CONTRIBUTORS.md) for the people who have contributed to numx.
 
 ---
 
