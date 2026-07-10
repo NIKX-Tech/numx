@@ -24,7 +24,7 @@ static int g_fail = 0;
 } while (0)
 
 #define CHK_STATUS(exp, got, label) CHK((exp) == (got), label)
-#define CHK_I16(exp, got, label)    CHK((int16_t)(exp) == (int16_t)(got), label)
+#define CHK_I16(exp, got, label) CHK((int16_t)(exp) == (int16_t)(got), label)
 
 /* ── Helpers (mirrors tests/test_ntt.c) ───────────────────────────── */
 
@@ -34,16 +34,19 @@ static void poly_mul_ref(const numx_q15_t *a, const numx_q15_t *b, numx_q15_t *o
     int i, j;
     for (i = 0; i < 256; i++)
     {
-        if (a[i] == 0) continue;
+        if (a[i] == 0)
+            continue;
         for (j = 0; j < 256; j++)
         {
             int idx = (i + j) % 256;
             int sign = (i + j >= 256) ? -1 : 1;
             acc[idx] = (acc[idx] + (int32_t)sign * a[i] * b[j]) % NTT_Q;
-            if (acc[idx] < 0) acc[idx] += NTT_Q;
+            if (acc[idx] < 0)
+                acc[idx] += NTT_Q;
         }
     }
-    for (i = 0; i < 256; i++) out[i] = (numx_q15_t)acc[i];
+    for (i = 0; i < 256; i++)
+        out[i] = (numx_q15_t)acc[i];
 }
 
 static uint32_t priv_lcg(uint32_t *s)
@@ -128,7 +131,8 @@ static void test_ntt_inverse_roundtrip_full(void)
     int k, i;
     for (k = 0; k < 256; k++)
     {
-        for (i = 0; i < 256; i++) f[i] = 0;
+        for (i = 0; i < 256; i++)
+            f[i] = 0;
         f[k] = 1;
         CHK_STATUS(NUMX_OK, numx_ntt_forward(f), "inv_rt_full fwd status");
         CHK_STATUS(NUMX_OK, numx_ntt_inverse(f), "inv_rt_full inv status");
@@ -147,14 +151,18 @@ static void test_ntt_inverse_null(void)
 static void test_ntt_pointwise_mul_identity(void)
 {
     numx_q15_t delta[256] = {0};
-    numx_q15_t f[256]     = {0};
+    numx_q15_t f[256] = {0};
     numx_q15_t f_ntt[256];
     numx_q15_t out[256];
     int i;
 
     delta[0] = 1;
-    f[0] = 7; f[1] = 3; f[50] = 100; f[255] = 1;
-    for (i = 0; i < 256; i++) f_ntt[i] = f[i];
+    f[0] = 7;
+    f[1] = 3;
+    f[50] = 100;
+    f[255] = 1;
+    for (i = 0; i < 256; i++)
+        f_ntt[i] = f[i];
 
     numx_ntt_forward(delta);
     numx_ntt_forward(f_ntt);
@@ -170,8 +178,10 @@ static void test_ntt_pointwise_mul_known(void)
     numx_q15_t b[256] = {0};
     numx_q15_t out[256];
 
-    a[0] = 1; a[1] = 1;
-    b[0] = 1; b[1] = 1;
+    a[0] = 1;
+    a[1] = 1;
+    b[0] = 1;
+    b[1] = 1;
     numx_ntt_forward(a);
     numx_ntt_forward(b);
     CHK_STATUS(NUMX_OK, numx_ntt_pointwise_mul(a, b, out), "pw_mul_known status");
@@ -195,12 +205,16 @@ static void test_ntt_pointwise_mul_null(void)
 static void test_ntt_polymul_delta_identity(void)
 {
     numx_q15_t delta[256] = {0};
-    numx_q15_t f[256]     = {0};
+    numx_q15_t f[256] = {0};
     numx_q15_t out[256];
     int i;
 
     delta[0] = 1;
-    f[0] = 1; f[1] = 2; f[2] = 3; f[100] = 42; f[255] = 7;
+    f[0] = 1;
+    f[1] = 2;
+    f[2] = 3;
+    f[100] = 42;
+    f[255] = 7;
 
     CHK_STATUS(NUMX_OK, numx_ntt_polymul(delta, f, out), "polymul_delta_identity status");
     for (i = 0; i < 256; i++)
@@ -243,7 +257,7 @@ static void test_ntt_polymul_x255_times_x(void)
     numx_q15_t out[256];
 
     a[255] = 1;
-    b[1]   = 1;
+    b[1] = 1;
     CHK_STATUS(NUMX_OK, numx_ntt_polymul(a, b, out), "polymul_x255_times_x status");
     CHK_I16(NTT_Q - 1, out[0], "polymul_x255_times_x o0");
     CHK_I16(0, out[1], "polymul_x255_times_x o1");
@@ -257,8 +271,12 @@ static void test_ntt_polymul_commutativity(void)
     numx_q15_t ab[256], ba[256];
     int i;
 
-    a[0] = 1; a[1] = 2; a[2] = 3;
-    b[0] = 5; b[1] = 1; b[3] = 7;
+    a[0] = 1;
+    a[1] = 2;
+    a[2] = 3;
+    b[0] = 5;
+    b[1] = 1;
+    b[3] = 7;
 
     CHK_STATUS(NUMX_OK, numx_ntt_polymul(a, b, ab), "polymul_commutativity ab status");
     CHK_STATUS(NUMX_OK, numx_ntt_polymul(b, a, ba), "polymul_commutativity ba status");
@@ -272,8 +290,10 @@ static void test_ntt_polymul_known_linear(void)
     numx_q15_t b[256] = {0};
     numx_q15_t out[256];
 
-    a[0] = 1; a[1] = 1;
-    b[0] = 1; b[1] = 1;
+    a[0] = 1;
+    a[1] = 1;
+    b[0] = 1;
+    b[1] = 1;
     CHK_STATUS(NUMX_OK, numx_ntt_polymul(a, b, out), "polymul_known_linear status");
     CHK_I16(1, out[0], "polymul_known_linear o0");
     CHK_I16(2, out[1], "polymul_known_linear o1");
@@ -312,7 +332,8 @@ static void test_ntt_reduce_noop_in_range(void)
 {
     numx_q15_t f[256];
     int i;
-    for (i = 0; i < 256; i++) f[i] = (numx_q15_t)(i % NTT_Q);
+    for (i = 0; i < 256; i++)
+        f[i] = (numx_q15_t)(i % NTT_Q);
     CHK_STATUS(NUMX_OK, numx_ntt_reduce(f), "reduce_noop status");
     for (i = 0; i < 256; i++)
         CHK_I16((numx_q15_t)(i % NTT_Q), f[i], "reduce_noop value");
@@ -325,9 +346,9 @@ static void test_ntt_reduce_boundary(void)
     f[1] = 3328;
     f[2] = 0;
     CHK_STATUS(NUMX_OK, numx_ntt_reduce(f), "reduce_boundary status");
-    CHK_I16(0,    f[0], "reduce_boundary f0");
+    CHK_I16(0, f[0], "reduce_boundary f0");
     CHK_I16(3328, f[1], "reduce_boundary f1");
-    CHK_I16(0,    f[2], "reduce_boundary f2");
+    CHK_I16(0, f[2], "reduce_boundary f2");
 }
 
 static void test_ntt_reduce_null(void)
@@ -343,8 +364,10 @@ static void test_ntt_poly_add_basic(void)
     numx_q15_t b[256] = {0};
     numx_q15_t out[256];
 
-    a[0] = 1; a[1] = 2;
-    b[0] = 3; b[1] = 1;
+    a[0] = 1;
+    a[1] = 2;
+    b[0] = 3;
+    b[1] = 1;
     CHK_STATUS(NUMX_OK, numx_ntt_poly_add(a, b, out), "poly_add_basic status");
     CHK_I16(4, out[0], "poly_add_basic o0");
     CHK_I16(3, out[1], "poly_add_basic o1");
@@ -377,8 +400,10 @@ static void test_ntt_poly_sub_basic(void)
     numx_q15_t b[256] = {0};
     numx_q15_t out[256];
 
-    a[0] = 5; a[1] = 3;
-    b[0] = 2; b[1] = 1;
+    a[0] = 5;
+    a[1] = 3;
+    b[0] = 2;
+    b[1] = 1;
     CHK_STATUS(NUMX_OK, numx_ntt_poly_sub(a, b, out), "poly_sub_basic status");
     CHK_I16(3, out[0], "poly_sub_basic o0");
     CHK_I16(2, out[1], "poly_sub_basic o1");
@@ -404,8 +429,14 @@ static void test_ntt_poly_add_sub_inverse(void)
     numx_q15_t sum[256], result[256];
     int i;
 
-    a[0] = 100; a[1] = 200; a[100] = 3000; a[255] = 1;
-    b[0] = 999; b[1] =  42; b[100] =  500; b[200] = 7;
+    a[0] = 100;
+    a[1] = 200;
+    a[100] = 3000;
+    a[255] = 1;
+    b[0] = 999;
+    b[1] = 42;
+    b[100] = 500;
+    b[200] = 7;
 
     CHK_STATUS(NUMX_OK, numx_ntt_poly_add(a, b, sum), "poly_add_sub_inverse add status");
     CHK_STATUS(NUMX_OK, numx_ntt_poly_sub(sum, b, result), "poly_add_sub_inverse sub status");
@@ -465,30 +496,39 @@ static void run_all_tests(void)
 
 #define BENCH_N 1000 /* watchdog-safe on ESP32-S3, see validation/results/ntt/ntt.md */
 
-#define BENCH(lbl, n, body) do { \
-    int64_t _t0 = esp_timer_get_time(); \
-    for (int _i = 0; _i < (n); _i++) { body; } \
-    int64_t _t1 = esp_timer_get_time(); \
-    int64_t _us = _t1 - _t0; \
-    int64_t _ns_per_call = (_us * 1000LL) / (n); \
-    printf("| %-20s | %6d | %10lld us | %10lld ns |\n", \
-           (lbl), (n), (long long)_us, (long long)_ns_per_call); \
-} while (0)
+#define BENCH(lbl, n, body)                                          \
+    do                                                               \
+    {                                                                \
+        int64_t _t0 = esp_timer_get_time();                          \
+        for (int _i = 0; _i < (n); _i++)                             \
+        {                                                            \
+            body;                                                    \
+        }                                                            \
+        int64_t _t1 = esp_timer_get_time();                          \
+        int64_t _us = _t1 - _t0;                                     \
+        int64_t _ns_per_call = (_us * 1000LL) / (n);                 \
+        printf("| %-20s | %6d | %10lld us | %10lld ns |\n",          \
+               (lbl), (n), (long long)_us, (long long)_ns_per_call); \
+    } while (0)
 
 static void run_benchmarks(void)
 {
     numx_q15_t a[256] = {0}, b[256] = {0}, out[256];
     int i;
-    for (i = 0; i < 256; i++) { a[i] = (numx_q15_t)(i % NTT_Q); b[i] = (numx_q15_t)((255 - i) % NTT_Q); }
+    for (i = 0; i < 256; i++)
+    {
+        a[i] = (numx_q15_t)(i % NTT_Q);
+        b[i] = (numx_q15_t)((255 - i) % NTT_Q);
+    }
 
     printf("\n| %-20s | N      | Total          | Per call   |\n", "Function");
     printf("|----------------------|--------|----------------|------------|\n");
 
-    BENCH("numx_ntt_forward",    BENCH_N, numx_ntt_forward(a));
-    BENCH("numx_ntt_inverse",    BENCH_N, numx_ntt_inverse(a));
-    BENCH("numx_ntt_polymul",    BENCH_N, numx_ntt_polymul(a, b, out));
-    BENCH("numx_ntt_poly_add",   BENCH_N, numx_ntt_poly_add(a, b, out));
-    BENCH("numx_ntt_poly_sub",   BENCH_N, numx_ntt_poly_sub(a, b, out));
+    BENCH("numx_ntt_forward", BENCH_N, numx_ntt_forward(a));
+    BENCH("numx_ntt_inverse", BENCH_N, numx_ntt_inverse(a));
+    BENCH("numx_ntt_polymul", BENCH_N, numx_ntt_polymul(a, b, out));
+    BENCH("numx_ntt_poly_add", BENCH_N, numx_ntt_poly_add(a, b, out));
+    BENCH("numx_ntt_poly_sub", BENCH_N, numx_ntt_poly_sub(a, b, out));
 }
 
 void app_main(void)
