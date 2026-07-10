@@ -14,6 +14,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) — versioning:
   ARM64/Apple M4 Pro (float32 and float64, ASan/UBSan clean); full platform sweep
   pending.
 
+### Security
+- `ntt`: rewrote `priv_barrett`'s canonicalization step (`src/ntt.c`) to be
+  branchless, resolving the module's one known constant-time gap flagged in
+  `docs/algorithms/ntt.md`. The previous version's `if (r < 0) ... if (r >= q) ...`
+  used data-dependent branches; the new version uses only unsigned arithmetic and
+  a well-defined C99 boolean comparison. Fix contributed by u/robchroma
+  (r/C_Programming); exhaustively verified against `a % q` for all 22,164,483
+  valid inputs before adoption. No known data-dependent branches remain in the
+  transform.
+
 ---
 
 ## [1.0.0] — 2026-07-03

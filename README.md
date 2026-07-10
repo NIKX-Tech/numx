@@ -49,11 +49,12 @@ Every function is reentrant, allocation-free, and returns a typed status code. T
 | [**autodiff**](docs/algorithms/autodiff.md) | forward-mode (dual numbers), reverse-mode (static tape) | ✅ complete |
 | [**compressed_sensing**](docs/algorithms/compressed_sensing.md) | OMP, ISTA | ✅ complete |
 | [**sketch**](docs/algorithms/sketch.md) | randomized SVD (Halko-Martinsson-Tropp) | ✅ complete |
-| [**ntt**](docs/algorithms/ntt.md) | Number Theoretic Transform (Kyber/Dilithium params) | ✅ complete ⚠️ |
+| [**ntt**](docs/algorithms/ntt.md) | Number Theoretic Transform (Kyber/Dilithium params) | ✅ complete |
 
-> ⚠️ `ntt` is not fully constant-time — see the warning at the top of
-> [`docs/algorithms/ntt.md`](docs/algorithms/ntt.md) before using it for secret key
-> material.
+> No known data-dependent branches remain in `ntt` as of 2026-07-10 (see
+> [`docs/algorithms/ntt.md`](docs/algorithms/ntt.md#barrett-reduction)), but it is
+> not a formally audited cryptographic primitive, get independent review before
+> production use with real secret key material.
 
 ---
 

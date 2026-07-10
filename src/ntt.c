@@ -19,11 +19,12 @@
 
 /* ── Domain constants ──────────────────────────────────────────────── */
 
-#define NTT_Q       3329
-#define NTT_N       256
-#define NTT_N_INV   3303   /* 128^{-1} mod 3329 */
-#define NTT_BVAL    20159  /* ceil(2^26 / 3329) for Barrett reduction  */
-#define NTT_BSHIFT  26
+#define NTT_Q          3329
+#define NTT_N          256
+#define NTT_N_INV      3303   /* 128^{-1} mod 3329 */
+#define NTT_BVAL       10079  /* Barrett multiplier, branchless reduction below */
+#define NTT_BPRESHIFT  10
+#define NTT_BSHIFT     15
 
 /* ── Precomputed twiddle tables ────────────────────────────────────── */
 
@@ -91,22 +92,23 @@ static const int16_t priv_basemul[128] = {
 
 /*
  * Barrett reduction mod 3329 for inputs in [0, 2*q^2].
- * v = ceil(2^26/3329) = 20159.
  *
- * Note: the canonicalization branches below are data-dependent and not
- * guaranteed constant-time on branch-predicting CPUs. See "Side-channel
- * note" in docs/algorithms/ntt.md if you need timing-attack resistance
- * for secret-dependent inputs.
+ * Branchless canonicalization: uses only unsigned arithmetic and a boolean
+ * comparison (well-defined in C99), not the reference Kyber technique's
+ * `a += (a >> 15) & q`, which relies on arithmetic right-shift of a negative
+ * signed int, implementation-defined behavior. Exhaustively verified correct
+ * against a % q for all 22,164,483 inputs in [0, 2*q^2] before adoption.
+ * Contributed by u/robchroma (r/C_Programming), 2026-07-10.
  */
 static int16_t priv_barrett(int32_t a)
 {
-    int32_t t;
-    int16_t r;
-    t = (int32_t)(((uint64_t)(uint32_t)a * 20159u) >> 26u);
-    r = (int16_t)(a - t * 3329);
-    if (r < 0)     r = (int16_t)(r + 3329);
-    if (r >= 3329) r = (int16_t)(r - 3329);
-    return r;
+    int32_t  t;
+    uint16_t r, b;
+    t = (int32_t)(((a >> NTT_BPRESHIFT) * NTT_BVAL) >> NTT_BSHIFT);
+    r = (uint16_t)(a - t * NTT_Q);
+    b = (uint16_t)((1 << 15) - (r >= NTT_Q));
+    r = (uint16_t)(r - (NTT_Q & b));
+    return (int16_t)r;
 }
 
 /* Single field multiplication reduced to [0, q-1]. */
