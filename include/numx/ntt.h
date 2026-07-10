@@ -83,8 +83,7 @@ numx_status_t numx_ntt_inverse(numx_q15_t *f);
 numx_status_t numx_ntt_pointwise_mul(
     const numx_q15_t *a,
     const numx_q15_t *b,
-    numx_q15_t       *out
-);
+    numx_q15_t *out);
 
 /**
  * @brief Full polynomial multiplication in Z_3329[x]/(x^256 + 1).
@@ -109,8 +108,7 @@ numx_status_t numx_ntt_pointwise_mul(
 numx_status_t numx_ntt_polymul(
     const numx_q15_t *a,
     const numx_q15_t *b,
-    numx_q15_t       *out
-);
+    numx_q15_t *out);
 
 /**
  * @brief Reduce all coefficients of a polynomial modulo q = 3329.
@@ -143,8 +141,7 @@ numx_status_t numx_ntt_reduce(numx_q15_t *f);
 numx_status_t numx_ntt_poly_add(
     const numx_q15_t *a,
     const numx_q15_t *b,
-    numx_q15_t       *out
-);
+    numx_q15_t *out);
 
 /**
  * @brief Coefficient-wise subtraction of two polynomials modulo q = 3329.
@@ -163,7 +160,6 @@ numx_status_t numx_ntt_poly_add(
 numx_status_t numx_ntt_poly_sub(
     const numx_q15_t *a,
     const numx_q15_t *b,
-    numx_q15_t       *out
-);
+    numx_q15_t *out);
 
 #endif /* NUMX_NTT_H */

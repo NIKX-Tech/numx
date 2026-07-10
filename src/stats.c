@@ -53,16 +53,24 @@ numx_status_t numx_stats_mean(
     numx_real_t *result)
 {
     numx_size_t i;
-    numx_real_t sum;
+    numx_real_t sum, c, y, t;
 
     if (!a || !result)
         return NUMX_ERR_NULL_PTR;
     if (n == 0 || n > NUMX_MAX_VEC_SIZE)
         return NUMX_ERR_INVALID_ARG;
 
+    /* Kahan (compensated) summation, keeps accumulated rounding error
+     * from growing with n, matters once n approaches NUMX_MAX_VEC_SIZE. */
     sum = (numx_real_t)0.0;
+    c = (numx_real_t)0.0;
     for (i = 0; i < n; i++)
-        sum += a[i];
+    {
+        y = a[i] - c;
+        t = sum + y;
+        c = (t - sum) - y;
+        sum = t;
+    }
     *result = sum / (numx_real_t)n;
     return NUMX_OK;
 }
@@ -83,7 +91,7 @@ numx_status_t numx_stats_variance(
     if (type == NUMX_VAR_SAMPLE && n < 2)
         return NUMX_ERR_INVALID_ARG;
 
-    /* Welford's online algorithm — numerically stable. */
+    /* Welford's online algorithm, numerically stable. */
     mean = (numx_real_t)0.0;
     M2 = (numx_real_t)0.0;
     for (i = 0; i < n; i++)

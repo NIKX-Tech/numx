@@ -19,16 +19,16 @@ static numx_real_t priv_cos_core(numx_real_t x)
     sign = (numx_real_t)1.0;
     if (x > NUMX_PI * (numx_real_t)0.5)
     {
-        x    = NUMX_PI - x;
+        x = NUMX_PI - x;
         sign = -(numx_real_t)1.0;
     }
-    x2   = x * x;
+    x2 = x * x;
     term = (numx_real_t)1.0;
-    sum  = term;
+    sum = term;
     for (k = 1; k <= 12; k++)
     {
         term *= -x2 / (numx_real_t)((2 * k - 1) * (2 * k));
-        sum  += term;
+        sum += term;
     }
     return sign * sum;
 }
@@ -54,17 +54,17 @@ static numx_real_t priv_sin_ad(numx_real_t x)
 {
     numx_real_t two_pi, sign, arg;
     two_pi = (numx_real_t)2.0 * NUMX_PI;
-    sign   = (numx_real_t)1.0;
+    sign = (numx_real_t)1.0;
     if (x < (numx_real_t)0.0)
     {
-        x    = -x;
+        x = -x;
         sign = -(numx_real_t)1.0;
     }
     while (x > two_pi)
         x -= two_pi;
     if (x > NUMX_PI)
     {
-        x    = two_pi - x;
+        x = two_pi - x;
         sign = -sign;
     }
     arg = NUMX_PI * (numx_real_t)0.5 - x;
@@ -92,12 +92,12 @@ static numx_real_t priv_exp_ad(numx_real_t x)
 {
     numx_real_t y, term, result;
     int k;
-    y      = x * (numx_real_t)(1.0 / 128.0);
-    term   = (numx_real_t)1.0;
+    y = x * (numx_real_t)(1.0 / 128.0);
+    term = (numx_real_t)1.0;
     result = term;
     for (k = 1; k <= 20; k++)
     {
-        term   *= y / (numx_real_t)k;
+        term *= y / (numx_real_t)k;
         result += term;
     }
     for (k = 0; k < 7; k++)
@@ -126,13 +126,13 @@ static numx_real_t priv_log_ad(numx_real_t x)
         n--;
     }
     /* x now in [1, 2): atanh((x-1)/(x+1)) */
-    u      = (x - (numx_real_t)1.0) / (x + (numx_real_t)1.0);
-    u2     = u * u;
-    term   = u;
+    u = (x - (numx_real_t)1.0) / (x + (numx_real_t)1.0);
+    u2 = u * u;
+    term = u;
     result = term;
     for (k = 1; k <= 20; k++)
     {
-        term   *= u2;
+        term *= u2;
         result += term / (numx_real_t)(2 * k + 1);
     }
     return (numx_real_t)2.0 * result + (numx_real_t)n * LN2;
@@ -252,7 +252,7 @@ numx_dual_t numx_dual_sqrt(numx_dual_t a)
         r.du = (numx_real_t)0.0;
         return r;
     }
-    sv   = priv_sqrt_ad(a.re);
+    sv = priv_sqrt_ad(a.re);
     r.re = sv;
     r.du = a.du / ((numx_real_t)2.0 * sv);
     return r;
@@ -265,21 +265,21 @@ numx_dual_t numx_dual_sqrt(numx_dual_t a)
 /* Push a new node onto the tape and return its index. */
 static numx_status_t priv_tape_push(
     numx_ad_tape_t *tape,
-    numx_ad_op_t    op,
-    numx_size_t     arg0,
-    numx_size_t     arg1,
-    numx_real_t     val,
-    numx_size_t    *out_idx)
+    numx_ad_op_t op,
+    numx_size_t arg0,
+    numx_size_t arg1,
+    numx_real_t val,
+    numx_size_t *out_idx)
 {
     numx_ad_node_t *nd;
     if (tape->len >= NUMX_MAX_AD_TAPE_LEN)
         return NUMX_ERR_BUFFER_SMALL;
-    nd       = &tape->nodes[tape->len];
-    nd->op   = op;
+    nd = &tape->nodes[tape->len];
+    nd->op = op;
     nd->arg0 = arg0;
     nd->arg1 = arg1;
-    nd->val  = val;
-    nd->adj  = (numx_real_t)0.0;
+    nd->val = val;
+    nd->adj = (numx_real_t)0.0;
     *out_idx = tape->len;
     tape->len++;
     return NUMX_OK;
@@ -297,7 +297,7 @@ numx_status_t numx_ad_init(numx_ad_tape_t *tape)
 }
 
 numx_status_t numx_ad_var(numx_ad_tape_t *tape, numx_real_t val,
-                           numx_size_t *out_idx)
+                          numx_size_t *out_idx)
 {
     if (!tape || !out_idx)
         return NUMX_ERR_NULL_PTR;
@@ -305,8 +305,8 @@ numx_status_t numx_ad_var(numx_ad_tape_t *tape, numx_real_t val,
 }
 
 numx_status_t numx_ad_add(numx_ad_tape_t *tape,
-                           numx_size_t a, numx_size_t b,
-                           numx_size_t *out_idx)
+                          numx_size_t a, numx_size_t b,
+                          numx_size_t *out_idx)
 {
     if (!tape || !out_idx)
         return NUMX_ERR_NULL_PTR;
@@ -317,8 +317,8 @@ numx_status_t numx_ad_add(numx_ad_tape_t *tape,
 }
 
 numx_status_t numx_ad_sub(numx_ad_tape_t *tape,
-                           numx_size_t a, numx_size_t b,
-                           numx_size_t *out_idx)
+                          numx_size_t a, numx_size_t b,
+                          numx_size_t *out_idx)
 {
     if (!tape || !out_idx)
         return NUMX_ERR_NULL_PTR;
@@ -329,8 +329,8 @@ numx_status_t numx_ad_sub(numx_ad_tape_t *tape,
 }
 
 numx_status_t numx_ad_mul(numx_ad_tape_t *tape,
-                           numx_size_t a, numx_size_t b,
-                           numx_size_t *out_idx)
+                          numx_size_t a, numx_size_t b,
+                          numx_size_t *out_idx)
 {
     if (!tape || !out_idx)
         return NUMX_ERR_NULL_PTR;
@@ -341,8 +341,8 @@ numx_status_t numx_ad_mul(numx_ad_tape_t *tape,
 }
 
 numx_status_t numx_ad_div(numx_ad_tape_t *tape,
-                           numx_size_t a, numx_size_t b,
-                           numx_size_t *out_idx)
+                          numx_size_t a, numx_size_t b,
+                          numx_size_t *out_idx)
 {
     if (!tape || !out_idx)
         return NUMX_ERR_NULL_PTR;
@@ -355,8 +355,8 @@ numx_status_t numx_ad_div(numx_ad_tape_t *tape,
 }
 
 numx_status_t numx_ad_neg(numx_ad_tape_t *tape,
-                           numx_size_t a,
-                           numx_size_t *out_idx)
+                          numx_size_t a,
+                          numx_size_t *out_idx)
 {
     if (!tape || !out_idx)
         return NUMX_ERR_NULL_PTR;
@@ -367,8 +367,8 @@ numx_status_t numx_ad_neg(numx_ad_tape_t *tape,
 }
 
 numx_status_t numx_ad_sin(numx_ad_tape_t *tape,
-                           numx_size_t a,
-                           numx_size_t *out_idx)
+                          numx_size_t a,
+                          numx_size_t *out_idx)
 {
     if (!tape || !out_idx)
         return NUMX_ERR_NULL_PTR;
@@ -379,8 +379,8 @@ numx_status_t numx_ad_sin(numx_ad_tape_t *tape,
 }
 
 numx_status_t numx_ad_cos(numx_ad_tape_t *tape,
-                           numx_size_t a,
-                           numx_size_t *out_idx)
+                          numx_size_t a,
+                          numx_size_t *out_idx)
 {
     if (!tape || !out_idx)
         return NUMX_ERR_NULL_PTR;
@@ -391,8 +391,8 @@ numx_status_t numx_ad_cos(numx_ad_tape_t *tape,
 }
 
 numx_status_t numx_ad_exp(numx_ad_tape_t *tape,
-                           numx_size_t a,
-                           numx_size_t *out_idx)
+                          numx_size_t a,
+                          numx_size_t *out_idx)
 {
     if (!tape || !out_idx)
         return NUMX_ERR_NULL_PTR;
@@ -403,8 +403,8 @@ numx_status_t numx_ad_exp(numx_ad_tape_t *tape,
 }
 
 numx_status_t numx_ad_log(numx_ad_tape_t *tape,
-                           numx_size_t a,
-                           numx_size_t *out_idx)
+                          numx_size_t a,
+                          numx_size_t *out_idx)
 {
     if (!tape || !out_idx)
         return NUMX_ERR_NULL_PTR;
@@ -417,8 +417,8 @@ numx_status_t numx_ad_log(numx_ad_tape_t *tape,
 }
 
 numx_status_t numx_ad_sqrt(numx_ad_tape_t *tape,
-                            numx_size_t a,
-                            numx_size_t *out_idx)
+                           numx_size_t a,
+                           numx_size_t *out_idx)
 {
     if (!tape || !out_idx)
         return NUMX_ERR_NULL_PTR;
@@ -452,7 +452,7 @@ numx_status_t numx_ad_backward(numx_ad_tape_t *tape, numx_size_t output_idx)
     while (i-- > 0)
     {
         nd = &tape->nodes[i];
-        g  = nd->adj;
+        g = nd->adj;
         if (g == (numx_real_t)0.0)
             continue;
 

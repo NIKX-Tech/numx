@@ -82,7 +82,6 @@ numx_status_t numx_fft_q15(numx_q15_t *inout, numx_size_t n);
  */
 numx_status_t numx_fft_magnitude(
     const numx_real_t *fft_out, numx_size_t n,
-    numx_real_t       *mag
-);
+    numx_real_t *mag);
 
 #endif /* NUMX_FFT_H */

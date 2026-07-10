@@ -31,16 +31,16 @@ static numx_real_t priv_cos_core_sk(numx_real_t x)
     sign = (numx_real_t)1.0;
     if (x > NUMX_PI * (numx_real_t)0.5)
     {
-        x    = NUMX_PI - x;
+        x = NUMX_PI - x;
         sign = -(numx_real_t)1.0;
     }
-    x2   = x * x;
+    x2 = x * x;
     term = (numx_real_t)1.0;
-    sum  = term;
+    sum = term;
     for (k = 1; k <= 12; k++)
     {
         term *= -x2 / (numx_real_t)((2 * k - 1) * (2 * k));
-        sum  += term;
+        sum += term;
     }
     return sign * sum;
 }
@@ -68,15 +68,23 @@ static numx_real_t priv_log_sk(numx_real_t x)
     if (x <= (numx_real_t)0.0)
         return (numx_real_t)0.0;
     n = 0;
-    while (x >= (numx_real_t)2.0) { x *= (numx_real_t)0.5; n++; }
-    while (x < (numx_real_t)1.0)  { x *= (numx_real_t)2.0; n--; }
-    u      = (x - (numx_real_t)1.0) / (x + (numx_real_t)1.0);
-    u2     = u * u;
-    term   = u;
+    while (x >= (numx_real_t)2.0)
+    {
+        x *= (numx_real_t)0.5;
+        n++;
+    }
+    while (x < (numx_real_t)1.0)
+    {
+        x *= (numx_real_t)2.0;
+        n--;
+    }
+    u = (x - (numx_real_t)1.0) / (x + (numx_real_t)1.0);
+    u2 = u * u;
+    term = u;
     result = term;
     for (k = 1; k <= 20; k++)
     {
-        term   *= u2;
+        term *= u2;
         result += term / (numx_real_t)(2 * k + 1);
     }
     return (numx_real_t)2.0 * result + (numx_real_t)n * LN2;
@@ -104,8 +112,7 @@ static numx_real_t priv_randn_sk(uint32_t *state)
     if (u1 < NUMX_EPSILON)
         u1 = NUMX_EPSILON;
     u2 = (numx_real_t)priv_xorshift32(state) * (numx_real_t)(1.0 / 4294967296.0);
-    return priv_sqrt_sk(-(numx_real_t)2.0 * priv_log_sk(u1))
-           * priv_cos_sk((numx_real_t)2.0 * NUMX_PI * u2);
+    return priv_sqrt_sk(-(numx_real_t)2.0 * priv_log_sk(u1)) * priv_cos_sk((numx_real_t)2.0 * NUMX_PI * u2);
 }
 
 /* ── Jacobi EVD for a symmetric k×k matrix (stride NUMX_MAX_SKETCH_RANK) ─ */
@@ -131,27 +138,22 @@ static void priv_jacobi_evd(numx_real_t *G, numx_real_t *V, numx_size_t k)
                 if (gpq == (numx_real_t)0.0)
                     continue;
 
-                theta = (G[q * NUMX_MAX_SKETCH_RANK + q]
-                         - G[p * NUMX_MAX_SKETCH_RANK + p])
-                      / ((numx_real_t)2.0 * gpq);
+                theta = (G[q * NUMX_MAX_SKETCH_RANK + q] - G[p * NUMX_MAX_SKETCH_RANK + p]) / ((numx_real_t)2.0 * gpq);
                 /* t = sign(θ) / (|θ| + sqrt(1+θ²)) — the small-angle root */
                 if (theta >= (numx_real_t)0.0)
-                    t = (numx_real_t)1.0
-                      / (theta + priv_sqrt_sk((numx_real_t)1.0 + theta * theta));
+                    t = (numx_real_t)1.0 / (theta + priv_sqrt_sk((numx_real_t)1.0 + theta * theta));
                 else
-                    t = -(numx_real_t)1.0
-                      / (-theta + priv_sqrt_sk((numx_real_t)1.0 + theta * theta));
+                    t = -(numx_real_t)1.0 / (-theta + priv_sqrt_sk((numx_real_t)1.0 + theta * theta));
 
-                c   = (numx_real_t)1.0
-                    / priv_sqrt_sk((numx_real_t)1.0 + t * t);
-                s   = c * t;
+                c = (numx_real_t)1.0 / priv_sqrt_sk((numx_real_t)1.0 + t * t);
+                s = c * t;
                 tau = s / ((numx_real_t)1.0 + c);
 
                 /* Zero the (p,q) and (q,p) entries. */
                 G[p * NUMX_MAX_SKETCH_RANK + p] -= t * gpq;
                 G[q * NUMX_MAX_SKETCH_RANK + q] += t * gpq;
-                G[p * NUMX_MAX_SKETCH_RANK + q]  = (numx_real_t)0.0;
-                G[q * NUMX_MAX_SKETCH_RANK + p]  = (numx_real_t)0.0;
+                G[p * NUMX_MAX_SKETCH_RANK + q] = (numx_real_t)0.0;
+                G[q * NUMX_MAX_SKETCH_RANK + p] = (numx_real_t)0.0;
 
                 /* Update the remaining rows/columns. */
                 for (r = 0; r < k; r++)
@@ -190,17 +192,17 @@ numx_status_t numx_sketch_rsvd(
     numx_real_t *S,
     numx_real_t *Vt)
 {
-    numx_real_t Omega[NUMX_MAX_SKETCH_N    * NUMX_MAX_SKETCH_RANK]; /* n  × k_ext */
-    numx_real_t Y    [NUMX_MAX_SKETCH_M    * NUMX_MAX_SKETCH_RANK]; /* m  × k_ext (→Q) */
-    numx_real_t B    [NUMX_MAX_SKETCH_RANK * NUMX_MAX_SKETCH_N];    /* k_ext × n  */
-    numx_real_t G    [NUMX_MAX_SKETCH_RANK * NUMX_MAX_SKETCH_RANK]; /* k_ext × k_ext */
-    numx_real_t Ehat [NUMX_MAX_SKETCH_RANK * NUMX_MAX_SKETCH_RANK]; /* eigenvectors */
+    numx_real_t Omega[NUMX_MAX_SKETCH_N * NUMX_MAX_SKETCH_RANK];   /* n  × k_ext */
+    numx_real_t Y[NUMX_MAX_SKETCH_M * NUMX_MAX_SKETCH_RANK];       /* m  × k_ext (→Q) */
+    numx_real_t B[NUMX_MAX_SKETCH_RANK * NUMX_MAX_SKETCH_N];       /* k_ext × n  */
+    numx_real_t G[NUMX_MAX_SKETCH_RANK * NUMX_MAX_SKETCH_RANK];    /* k_ext × k_ext */
+    numx_real_t Ehat[NUMX_MAX_SKETCH_RANK * NUMX_MAX_SKETCH_RANK]; /* eigenvectors */
     numx_real_t sigma[NUMX_MAX_SKETCH_RANK];
-    numx_size_t ord  [NUMX_MAX_SKETCH_RANK];
+    numx_size_t ord[NUMX_MAX_SKETCH_RANK];
     numx_size_t k_ext, min_mn, i, j, r, p, q;
     numx_real_t dot, norm, val, sigma_inv, tmp_val;
     numx_size_t tmp_idx;
-    uint32_t    rng;
+    uint32_t rng;
 
     if (!A || !U || !S || !Vt)
         return NUMX_ERR_NULL_PTR;
@@ -213,7 +215,7 @@ numx_status_t numx_sketch_rsvd(
 
     /* Cap k_ext to min(m, n) so the range finder is never over-sized. */
     min_mn = (m < n) ? m : n;
-    k_ext  = rank + oversample;
+    k_ext = rank + oversample;
     if (k_ext > min_mn)
         k_ext = min_mn;
     if (rank > k_ext)
@@ -250,8 +252,7 @@ numx_status_t numx_sketch_rsvd(
         {
             dot = (numx_real_t)0.0;
             for (r = 0; r < m; r++)
-                dot += Y[r * NUMX_MAX_SKETCH_RANK + p]
-                     * Y[r * NUMX_MAX_SKETCH_RANK + i];
+                dot += Y[r * NUMX_MAX_SKETCH_RANK + p] * Y[r * NUMX_MAX_SKETCH_RANK + i];
             for (r = 0; r < m; r++)
                 Y[r * NUMX_MAX_SKETCH_RANK + i] -=
                     dot * Y[r * NUMX_MAX_SKETCH_RANK + p];
@@ -291,8 +292,7 @@ numx_status_t numx_sketch_rsvd(
         {
             dot = (numx_real_t)0.0;
             for (j = 0; j < n; j++)
-                dot += B[p * NUMX_MAX_SKETCH_N + j]
-                     * B[q * NUMX_MAX_SKETCH_N + j];
+                dot += B[p * NUMX_MAX_SKETCH_N + j] * B[q * NUMX_MAX_SKETCH_N + j];
             G[p * NUMX_MAX_SKETCH_RANK + q] = dot;
         }
 
@@ -302,9 +302,9 @@ numx_status_t numx_sketch_rsvd(
     /* 7. Singular values σ_i = sqrt(λ_i); sort descending. */
     for (i = 0; i < k_ext; i++)
     {
-        val      = G[i * NUMX_MAX_SKETCH_RANK + i];
+        val = G[i * NUMX_MAX_SKETCH_RANK + i];
         sigma[i] = (val > (numx_real_t)0.0) ? priv_sqrt_sk(val) : (numx_real_t)0.0;
-        ord[i]   = i;
+        ord[i] = i;
     }
     for (i = 1; i < k_ext; i++) /* insertion sort descending */
     {
@@ -314,11 +314,11 @@ numx_status_t numx_sketch_rsvd(
         while (j > 0 && sigma[j - 1] < tmp_val)
         {
             sigma[j] = sigma[j - 1];
-            ord[j]   = ord[j - 1];
+            ord[j] = ord[j - 1];
             j--;
         }
         sigma[j] = tmp_val;
-        ord[j]   = tmp_idx;
+        ord[j] = tmp_idx;
     }
 
     /* 8. Fill S. */
@@ -331,8 +331,7 @@ numx_status_t numx_sketch_rsvd(
         {
             dot = (numx_real_t)0.0;
             for (p = 0; p < k_ext; p++)
-                dot += Y[r * NUMX_MAX_SKETCH_RANK + p]
-                     * Ehat[p * NUMX_MAX_SKETCH_RANK + ord[i]];
+                dot += Y[r * NUMX_MAX_SKETCH_RANK + p] * Ehat[p * NUMX_MAX_SKETCH_RANK + ord[i]];
             U[r * rank + i] = dot;
         }
 
@@ -340,14 +339,13 @@ numx_status_t numx_sketch_rsvd(
     for (i = 0; i < rank; i++)
     {
         sigma_inv = (sigma[i] > NUMX_EPSILON)
-                  ? (numx_real_t)1.0 / sigma[i]
-                  : (numx_real_t)0.0;
+                        ? (numx_real_t)1.0 / sigma[i]
+                        : (numx_real_t)0.0;
         for (j = 0; j < n; j++)
         {
             dot = (numx_real_t)0.0;
             for (p = 0; p < k_ext; p++)
-                dot += Ehat[p * NUMX_MAX_SKETCH_RANK + ord[i]]
-                     * B[p * NUMX_MAX_SKETCH_N + j];
+                dot += Ehat[p * NUMX_MAX_SKETCH_RANK + ord[i]] * B[p * NUMX_MAX_SKETCH_N + j];
             Vt[i * n + j] = sigma_inv * dot;
         }
     }

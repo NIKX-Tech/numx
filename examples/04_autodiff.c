@@ -17,14 +17,14 @@ int main(void)
 {
     /* ── Forward-mode: df/dx ─────────────────────────────────────── */
     {
-        numx_dual_t x = numx_dual_var(1.5f);   /* differentiate w.r.t. x */
+        numx_dual_t x = numx_dual_var(1.5f); /* differentiate w.r.t. x */
         numx_dual_t y = numx_dual_const(2.0f);
 
         /* f = x^2 * y + sin(x) */
-        numx_dual_t x2   = numx_dual_mul(x, x);
-        numx_dual_t x2y  = numx_dual_mul(x2, y);
+        numx_dual_t x2 = numx_dual_mul(x, x);
+        numx_dual_t x2y = numx_dual_mul(x2, y);
         numx_dual_t sinx = numx_dual_sin(x);
-        numx_dual_t f    = numx_dual_add(x2y, sinx);
+        numx_dual_t f = numx_dual_add(x2y, sinx);
 
         printf("Forward-mode:\n");
         printf("  f(1.5, 2.0) = %.6f  (expect ~5.4975)\n", (double)f.re);
@@ -38,18 +38,30 @@ int main(void)
         numx_status_t s;
 
         s = numx_ad_init(&tape);
-        if (s != NUMX_OK) { printf("ad_init failed\n"); return 1; }
+        if (s != NUMX_OK)
+        {
+            printf("ad_init failed\n");
+            return 1;
+        }
 
-        s  = numx_ad_var(&tape, 1.5f, &ix);
+        s = numx_ad_var(&tape, 1.5f, &ix);
         s |= numx_ad_var(&tape, 2.0f, &iy);
-        s |= numx_ad_mul(&tape, ix, ix,   &ix2);
-        s |= numx_ad_mul(&tape, ix2, iy,  &ix2y);
-        s |= numx_ad_sin(&tape, ix,        &isinx);
+        s |= numx_ad_mul(&tape, ix, ix, &ix2);
+        s |= numx_ad_mul(&tape, ix2, iy, &ix2y);
+        s |= numx_ad_sin(&tape, ix, &isinx);
         s |= numx_ad_add(&tape, ix2y, isinx, &iout);
-        if (s != NUMX_OK) { printf("tape build failed\n"); return 1; }
+        if (s != NUMX_OK)
+        {
+            printf("tape build failed\n");
+            return 1;
+        }
 
         s = numx_ad_backward(&tape, iout);
-        if (s != NUMX_OK) { printf("backward failed\n"); return 1; }
+        if (s != NUMX_OK)
+        {
+            printf("backward failed\n");
+            return 1;
+        }
 
         printf("\nReverse-mode:\n");
         printf("  f(1.5, 2.0) = %.6f  (expect ~5.4975)\n",

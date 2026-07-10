@@ -17,28 +17,33 @@
 #define G_OVER_L 9.81f
 
 static numx_status_t pendulum(numx_real_t t, const numx_real_t *y,
-                               numx_size_t n, numx_real_t *dydt)
+                              numx_size_t n, numx_real_t *dydt)
 {
-    (void)t; (void)n;
+    (void)t;
+    (void)n;
     /* sin approximation: sin(x) ≈ x - x^3/6 + x^5/120 (good for |x| < 0.5) */
     numx_real_t th = y[0];
     numx_real_t th3 = th * th * th;
     numx_real_t th5 = th3 * th * th;
     numx_real_t sin_th = th - th3 / 6.0f + th5 / 120.0f;
 
-    dydt[0] =  y[1];
+    dydt[0] = y[1];
     dydt[1] = -G_OVER_L * sin_th;
     return NUMX_OK;
 }
 
 int main(void)
 {
-    numx_real_t y0[2] = { 0.2f, 0.0f };
+    numx_real_t y0[2] = {0.2f, 0.0f};
     numx_real_t y[2];
     numx_status_t s;
 
     s = numx_ode_rk45(pendulum, 0.0f, 2.0f, y0, 2, 1e-5f, y);
-    if (s != NUMX_OK) { printf("rk45 failed: %d\n", (int)s); return 1; }
+    if (s != NUMX_OK)
+    {
+        printf("rk45 failed: %d\n", (int)s);
+        return 1;
+    }
 
     printf("t=2.0 s:  theta=%.6f rad  omega=%.6f rad/s\n",
            (double)y[0], (double)y[1]);

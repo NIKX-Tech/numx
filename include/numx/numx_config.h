@@ -50,7 +50,7 @@
 /* ── Signal processing ─────────────────────────────────────────────── */
 
 #ifndef NUMX_MAX_FFT_SIZE
-#define NUMX_MAX_FFT_SIZE 512  /* max FFT length (must be power-of-2) */
+#define NUMX_MAX_FFT_SIZE 512 /* max FFT length (must be power-of-2) */
 #endif
 
 #ifndef NUMX_MAX_FIR_TAPS
@@ -70,21 +70,21 @@
 #endif
 
 #ifndef NUMX_MAX_CS_SIGNAL_DIM
-#define NUMX_MAX_CS_SIGNAL_DIM 256   /* max cols of A (signal dimension)  */
+#define NUMX_MAX_CS_SIGNAL_DIM 256 /* max cols of A (signal dimension)  */
 #endif
 
 #ifndef NUMX_MAX_CS_SPARSITY
-#define NUMX_MAX_CS_SPARSITY 32      /* max sparsity level for OMP        */
+#define NUMX_MAX_CS_SPARSITY 32 /* max sparsity level for OMP        */
 #endif
 
 /* ── Randomized sketch ─────────────────────────────────────────────── */
 
 #ifndef NUMX_MAX_SKETCH_M
-#define NUMX_MAX_SKETCH_M 64    /* max rows of input matrix              */
+#define NUMX_MAX_SKETCH_M 64 /* max rows of input matrix              */
 #endif
 
 #ifndef NUMX_MAX_SKETCH_N
-#define NUMX_MAX_SKETCH_N 64    /* max cols of input matrix              */
+#define NUMX_MAX_SKETCH_N 64 /* max cols of input matrix              */
 #endif
 
 #ifndef NUMX_MAX_SKETCH_RANK
@@ -100,7 +100,7 @@
 /* ── NTT (post-quantum) ────────────────────────────────────────────── */
 
 #ifndef NUMX_NTT_N
-#define NUMX_NTT_N 256  /* CRYSTALS-Kyber/Dilithium ring dim */
+#define NUMX_NTT_N 256 /* CRYSTALS-Kyber/Dilithium ring dim */
 #endif
 
 #ifndef NUMX_NTT_Q

@@ -17,7 +17,7 @@
  */
 
 #ifndef _WIN32
-#  define _POSIX_C_SOURCE 199309L
+#define _POSIX_C_SOURCE 199309L
 #endif
 
 #include <stdio.h>
@@ -26,7 +26,7 @@
 #include <string.h>
 #include <stdint.h>
 #ifdef _WIN32
-#  include <windows.h>
+#include <windows.h>
 #endif
 
 #include "numx/linalg.h"
@@ -88,15 +88,16 @@ static int chk(const char *label, float computed, float ref)
 static void chk_vec(const char *label, const numx_real_t *v, const float *ref, int n)
 {
     printf("  │  %-48s  [", label);
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
+    {
         float err = fabsf((float)v[i] - ref[i]);
-        printf("%10.6f%s", (float)v[i], i < n-1 ? ", " : "");
+        printf("%10.6f%s", (float)v[i], i < n - 1 ? ", " : "");
         (void)err;
     }
     printf("]\n");
     printf("  │  %-48s  ref=[", "");
     for (int i = 0; i < n; i++)
-        printf("%10.6f%s", ref[i], i < n-1 ? ", " : "");
+        printf("%10.6f%s", ref[i], i < n - 1 ? ", " : "");
     printf("]\n");
 }
 
@@ -122,19 +123,23 @@ static void val_linalg(void)
     /* ── vec_dot ──────────────────────────────────────────────────── */
     sub("numx_vec_dot");
     {
-        numx_real_t a[] = {1,2,3,4};
-        numx_real_t b[] = {5,6,7,8};
+        numx_real_t a[] = {1, 2, 3, 4};
+        numx_real_t b[] = {5, 6, 7, 8};
         numx_vec_dot(a, b, 4, &result);
         chk("[1,2,3,4]·[5,6,7,8]", (float)result, 70.0f);
 
-        numx_real_t a2[] = {1,0,0};
-        numx_real_t b2[] = {0,1,0};
+        numx_real_t a2[] = {1, 0, 0};
+        numx_real_t b2[] = {0, 1, 0};
         numx_vec_dot(a2, b2, 3, &result);
         chk("[1,0,0]·[0,1,0]  (orthogonal → 0)", (float)result, 0.0f);
 
         N = 100000;
         t0 = now_ns();
-        for (int i = 0; i < N; i++) { numx_vec_dot(a, b, 4, &result); g_sink = result; }
+        for (int i = 0; i < N; i++)
+        {
+            numx_vec_dot(a, b, 4, &result);
+            g_sink = result;
+        }
         dt = now_ns() - t0;
         timing("vec_dot n=4", N, dt);
     }
@@ -143,18 +148,25 @@ static void val_linalg(void)
     /* ── vec_norm ─────────────────────────────────────────────────── */
     sub("numx_vec_norm");
     {
-        numx_real_t v[] = {3,4};
-        numx_vec_norm(v, 2, NUMX_NORM_L2,  &result); chk("[3,4] L2  → 5.0", (float)result, 5.0f);
-        numx_vec_norm(v, 2, NUMX_NORM_L1,  &result); chk("[3,4] L1  → 7.0", (float)result, 7.0f);
-        numx_vec_norm(v, 2, NUMX_NORM_INF, &result); chk("[3,4] Linf → 4.0", (float)result, 4.0f);
+        numx_real_t v[] = {3, 4};
+        numx_vec_norm(v, 2, NUMX_NORM_L2, &result);
+        chk("[3,4] L2  → 5.0", (float)result, 5.0f);
+        numx_vec_norm(v, 2, NUMX_NORM_L1, &result);
+        chk("[3,4] L1  → 7.0", (float)result, 7.0f);
+        numx_vec_norm(v, 2, NUMX_NORM_INF, &result);
+        chk("[3,4] Linf → 4.0", (float)result, 4.0f);
 
-        numx_real_t v2[] = {1,2,3,4,5};
+        numx_real_t v2[] = {1, 2, 3, 4, 5};
         numx_vec_norm(v2, 5, NUMX_NORM_L2, &result);
         chk("[1..5] L2 → sqrt(55)=7.41619849", (float)result, 7.41619849f);
 
         N = 100000;
         t0 = now_ns();
-        for (int i = 0; i < N; i++) { numx_vec_norm(v, 2, NUMX_NORM_L2, &result); g_sink = result; }
+        for (int i = 0; i < N; i++)
+        {
+            numx_vec_norm(v, 2, NUMX_NORM_L2, &result);
+            g_sink = result;
+        }
         dt = now_ns() - t0;
         timing("vec_norm L2 n=2", N, dt);
     }
@@ -164,19 +176,23 @@ static void val_linalg(void)
     sub("numx_vec_cross3");
     {
         numx_real_t out[3];
-        numx_real_t ax[] = {1,0,0}, ay[] = {0,1,0};
+        numx_real_t ax[] = {1, 0, 0}, ay[] = {0, 1, 0};
         numx_vec_cross3(ax, ay, out);
-        float ref1[] = {0,0,1};
+        float ref1[] = {0, 0, 1};
         chk_vec("x×y = [0,0,1]", out, ref1, 3);
 
-        numx_real_t a3[] = {1,2,3}, b3[] = {4,5,6};
+        numx_real_t a3[] = {1, 2, 3}, b3[] = {4, 5, 6};
         numx_vec_cross3(a3, b3, out);
-        float ref2[] = {-3,6,-3};
+        float ref2[] = {-3, 6, -3};
         chk_vec("[1,2,3]×[4,5,6] = [-3,6,-3]", out, ref2, 3);
 
         N = 100000;
         t0 = now_ns();
-        for (int i = 0; i < N; i++) { numx_vec_cross3(a3, b3, out); g_sink = out[0]; }
+        for (int i = 0; i < N; i++)
+        {
+            numx_vec_cross3(a3, b3, out);
+            g_sink = out[0];
+        }
         dt = now_ns() - t0;
         timing("vec_cross3", N, dt);
     }
@@ -185,24 +201,28 @@ static void val_linalg(void)
     /* ── mat_mul ──────────────────────────────────────────────────── */
     sub("numx_mat_mul");
     {
-        numx_real_t A[] = {1,2,3,4};
-        numx_real_t B[] = {5,6,7,8};
+        numx_real_t A[] = {1, 2, 3, 4};
+        numx_real_t B[] = {5, 6, 7, 8};
         numx_real_t C[4];
-        numx_mat_mul(A,2,2, B,2,2, C);
-        float ref[] = {19,22,43,50};
+        numx_mat_mul(A, 2, 2, B, 2, 2, C);
+        float ref[] = {19, 22, 43, 50};
         chk_vec("2×2: A@B = [[19,22],[43,50]]", C, ref, 4);
 
         /* 2×3 @ 3×2 */
-        numx_real_t A2[] = {1,2,3,4,5,6};
-        numx_real_t B2[] = {7,8,9,10,11,12};
+        numx_real_t A2[] = {1, 2, 3, 4, 5, 6};
+        numx_real_t B2[] = {7, 8, 9, 10, 11, 12};
         numx_real_t C2[4];
-        numx_mat_mul(A2,2,3, B2,3,2, C2);
-        float ref2[] = {58,64,139,154};
+        numx_mat_mul(A2, 2, 3, B2, 3, 2, C2);
+        float ref2[] = {58, 64, 139, 154};
         chk_vec("2×3 @ 3×2 = [[58,64],[139,154]]", C2, ref2, 4);
 
         N = 100000;
         t0 = now_ns();
-        for (int i = 0; i < N; i++) { numx_mat_mul(A,2,2,B,2,2,C); g_sink = C[0]; }
+        for (int i = 0; i < N; i++)
+        {
+            numx_mat_mul(A, 2, 2, B, 2, 2, C);
+            g_sink = C[0];
+        }
         dt = now_ns() - t0;
         timing("mat_mul 2×2", N, dt);
     }
@@ -212,20 +232,28 @@ static void val_linalg(void)
     sub("numx_mat_det");
     {
         numx_real_t M1[] = {5};
-        numx_mat_det(M1, 1, &result); chk("1×1 [[5]] → 5.0", (float)result, 5.0f);
+        numx_mat_det(M1, 1, &result);
+        chk("1×1 [[5]] → 5.0", (float)result, 5.0f);
 
-        numx_real_t M2[] = {1,2,3,4};
-        numx_mat_det(M2, 2, &result); chk("2×2 [[1,2],[3,4]] → -2.0", (float)result, -2.0f);
+        numx_real_t M2[] = {1, 2, 3, 4};
+        numx_mat_det(M2, 2, &result);
+        chk("2×2 [[1,2],[3,4]] → -2.0", (float)result, -2.0f);
 
-        numx_real_t M3[] = {2,1,1, 4,3,3, 8,7,9};
-        numx_mat_det(M3, 3, &result); chk("3×3 textbook → 4.0", (float)result, 4.0f);
+        numx_real_t M3[] = {2, 1, 1, 4, 3, 3, 8, 7, 9};
+        numx_mat_det(M3, 3, &result);
+        chk("3×3 textbook → 4.0", (float)result, 4.0f);
 
-        numx_real_t M4[] = {4,3,2,1, 3,4,3,2, 2,3,4,3, 1,2,3,4};
-        numx_mat_det(M4, 4, &result); chk("4×4 symmetric → 20.0", (float)result, 20.0f);
+        numx_real_t M4[] = {4, 3, 2, 1, 3, 4, 3, 2, 2, 3, 4, 3, 1, 2, 3, 4};
+        numx_mat_det(M4, 4, &result);
+        chk("4×4 symmetric → 20.0", (float)result, 20.0f);
 
         N = 100000;
         t0 = now_ns();
-        for (int i = 0; i < N; i++) { numx_mat_det(M4, 4, &result); g_sink = result; }
+        for (int i = 0; i < N; i++)
+        {
+            numx_mat_det(M4, 4, &result);
+            g_sink = result;
+        }
         dt = now_ns() - t0;
         timing("mat_det 4×4", N, dt);
     }
@@ -234,21 +262,22 @@ static void val_linalg(void)
     /* ── lu_decompose + lu_solve ──────────────────────────────────── */
     sub("numx_lu_decompose + numx_lu_solve");
     {
-        numx_real_t A[] = {2,1,1,0, 4,3,3,1, 8,7,9,5, 6,7,9,8};
-        numx_real_t b[] = {1,2,4,5};
+        numx_real_t A[] = {2, 1, 1, 0, 4, 3, 3, 1, 8, 7, 9, 5, 6, 7, 9, 8};
+        numx_real_t b[] = {1, 2, 4, 5};
         numx_real_t LU[16], x[4];
-        numx_idx_t  pivot[4];
+        numx_idx_t pivot[4];
         numx_lu_decompose(A, 4, LU, pivot);
         numx_lu_solve(LU, pivot, 4, b, x);
         /* exact solution: x = [1, 0, -1, 1] */
-        chk("x[0] = 1.0", (float)x[0],  1.0f);
-        chk("x[1] = 0.0", (float)x[1],  0.0f);
-        chk("x[2] = -1.0",(float)x[2], -1.0f);
-        chk("x[3] = 1.0", (float)x[3],  1.0f);
+        chk("x[0] = 1.0", (float)x[0], 1.0f);
+        chk("x[1] = 0.0", (float)x[1], 0.0f);
+        chk("x[2] = -1.0", (float)x[2], -1.0f);
+        chk("x[3] = 1.0", (float)x[3], 1.0f);
 
         N = 100000;
         t0 = now_ns();
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < N; i++)
+        {
             numx_lu_decompose(A, 4, LU, pivot);
             numx_lu_solve(LU, pivot, 4, b, x);
             g_sink = x[0];
@@ -262,19 +291,23 @@ static void val_linalg(void)
     sub("numx_cholesky_decompose");
     {
         /* textbook SPD example: A = L*L^T, L = [2,0,0; 6,1,0; -8,5,3] */
-        numx_real_t A[] = {4,12,-16, 12,37,-43, -16,-43,98};
+        numx_real_t A[] = {4, 12, -16, 12, 37, -43, -16, -43, 98};
         numx_real_t L[9];
         numx_cholesky_decompose(A, 3, L);
-        chk("L[0][0] = 2.0",  (float)L[0], 2.0f);
-        chk("L[1][0] = 6.0",  (float)L[3], 6.0f);
-        chk("L[1][1] = 1.0",  (float)L[4], 1.0f);
+        chk("L[0][0] = 2.0", (float)L[0], 2.0f);
+        chk("L[1][0] = 6.0", (float)L[3], 6.0f);
+        chk("L[1][1] = 1.0", (float)L[4], 1.0f);
         chk("L[2][0] = -8.0", (float)L[6], -8.0f);
-        chk("L[2][1] = 5.0",  (float)L[7], 5.0f);
-        chk("L[2][2] = 3.0",  (float)L[8], 3.0f);
+        chk("L[2][1] = 5.0", (float)L[7], 5.0f);
+        chk("L[2][2] = 3.0", (float)L[8], 3.0f);
 
         N = 100000;
         t0 = now_ns();
-        for (int i = 0; i < N; i++) { numx_cholesky_decompose(A, 3, L); g_sink = L[0]; }
+        for (int i = 0; i < N; i++)
+        {
+            numx_cholesky_decompose(A, 3, L);
+            g_sink = L[0];
+        }
         dt = now_ns() - t0;
         timing("cholesky_decompose 3×3", N, dt);
     }
@@ -289,7 +322,7 @@ static void val_stats(void)
     banner("2. STATS");
 
     /* Reference dataset: [2, 4, 4, 4, 5, 5, 7, 9] */
-    numx_real_t data[] = {2,4,4,4,5,5,7,9};
+    numx_real_t data[] = {2, 4, 4, 4, 5, 5, 7, 9};
     numx_size_t n = 8;
     numx_real_t result;
     long long t0, dt;
@@ -300,7 +333,11 @@ static void val_stats(void)
     chk("mean([2,4,4,4,5,5,7,9]) → 5.0", (float)result, 5.0f);
     N = 100000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_stats_mean(data, n, &result); g_sink = result; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_stats_mean(data, n, &result);
+        g_sink = result;
+    }
     dt = now_ns() - t0;
     timing("stats_mean n=8", N, dt);
     end_sub();
@@ -312,7 +349,11 @@ static void val_stats(void)
     chk("variance_samp → 4.571429", (float)result, 4.5714286f);
     N = 100000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_stats_variance(data, n, NUMX_VAR_POPULATION, &result); g_sink = result; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_stats_variance(data, n, NUMX_VAR_POPULATION, &result);
+        g_sink = result;
+    }
     dt = now_ns() - t0;
     timing("stats_variance_pop n=8", N, dt);
     end_sub();
@@ -322,7 +363,11 @@ static void val_stats(void)
     chk("median([2,4,4,4,5,5,7,9]) → 4.5", (float)result, 4.5f);
     N = 100000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_stats_median(data, n, &result); g_sink = result; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_stats_median(data, n, &result);
+        g_sink = result;
+    }
     dt = now_ns() - t0;
     timing("stats_median n=8", N, dt);
     end_sub();
@@ -335,14 +380,23 @@ static void val_stats(void)
      *   p75  → k=6 → sorted[6]=7
      * NOTE: the comment in stats.c says "ceil-1" but the code does floor;
      *       they differ at exact multiples. Document this. */
-    numx_stats_percentile(data, n,   0, &result); chk("p0   → 2.0", (float)result, 2.0f);
-    numx_stats_percentile(data, n,  25, &result); chk("p25  → 4.0", (float)result, 4.0f);
-    numx_stats_percentile(data, n,  50, &result); chk("p50  → 5.0 (floor method, k=4)", (float)result, 5.0f);
-    numx_stats_percentile(data, n,  75, &result); chk("p75  → 7.0 (floor method, k=6)", (float)result, 7.0f);
-    numx_stats_percentile(data, n, 100, &result); chk("p100 → 9.0", (float)result, 9.0f);
+    numx_stats_percentile(data, n, 0, &result);
+    chk("p0   → 2.0", (float)result, 2.0f);
+    numx_stats_percentile(data, n, 25, &result);
+    chk("p25  → 4.0", (float)result, 4.0f);
+    numx_stats_percentile(data, n, 50, &result);
+    chk("p50  → 5.0 (floor method, k=4)", (float)result, 5.0f);
+    numx_stats_percentile(data, n, 75, &result);
+    chk("p75  → 7.0 (floor method, k=6)", (float)result, 7.0f);
+    numx_stats_percentile(data, n, 100, &result);
+    chk("p100 → 9.0", (float)result, 9.0f);
     N = 100000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_stats_percentile(data, n, 50, &result); g_sink = result; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_stats_percentile(data, n, 50, &result);
+        g_sink = result;
+    }
     dt = now_ns() - t0;
     timing("stats_percentile p50 n=8", N, dt);
     end_sub();
@@ -351,9 +405,9 @@ static void val_stats(void)
 /* ════════════════════════════════════════════════════════════════════ */
 /*  3. roots                                                            */
 /* ════════════════════════════════════════════════════════════════════ */
-static numx_real_t f_quad(numx_real_t x)  { return x*x - 2; }
-static numx_real_t df_quad(numx_real_t x) { return 2*x; }
-static numx_real_t f_cubic(numx_real_t x) { return x*x*x - x - 2; }
+static numx_real_t f_quad(numx_real_t x) { return x * x - 2; }
+static numx_real_t df_quad(numx_real_t x) { return 2 * x; }
+static numx_real_t f_cubic(numx_real_t x) { return x * x * x - x - 2; }
 
 static void val_roots(void)
 {
@@ -372,7 +426,11 @@ static void val_roots(void)
     chk("bisect x²-2 on [1,2] tol=1e-6 → sqrt(2)", (float)root, sqrt2_f32);
     N = 10000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_root_bisect(f_quad,1,2,1e-6f,&root); g_sink=root; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_root_bisect(f_quad, 1, 2, 1e-6f, &root);
+        g_sink = root;
+    }
     dt = now_ns() - t0;
     timing("root_bisect x²-2", N, dt);
     end_sub();
@@ -382,7 +440,11 @@ static void val_roots(void)
     chk("newton x²-2 x0=1.5 tol=1e-6 → sqrt(2)", (float)root, sqrt2_f32);
     N = 10000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_root_newton(f_quad,df_quad,1.5f,1e-6f,&root); g_sink=root; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_root_newton(f_quad, df_quad, 1.5f, 1e-6f, &root);
+        g_sink = root;
+    }
     dt = now_ns() - t0;
     timing("root_newton x²-2", N, dt);
     end_sub();
@@ -394,7 +456,11 @@ static void val_roots(void)
     chk("brent x³-x-2 on [1,2] → 1.52137971", (float)root, root_cubic);
     N = 10000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_root_brent(f_quad,1,2,1e-6f,&root); g_sink=root; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_root_brent(f_quad, 1, 2, 1e-6f, &root);
+        g_sink = root;
+    }
     dt = now_ns() - t0;
     timing("root_brent x²-2", N, dt);
     end_sub();
@@ -403,7 +469,7 @@ static void val_roots(void)
 /* ════════════════════════════════════════════════════════════════════ */
 /*  4. integrate                                                        */
 /* ════════════════════════════════════════════════════════════════════ */
-static numx_real_t f_x3p1(numx_real_t x) { return x*x*x + 1.0f; }
+static numx_real_t f_x3p1(numx_real_t x) { return x * x * x + 1.0f; }
 
 static void val_integrate(void)
 {
@@ -425,7 +491,11 @@ static void val_integrate(void)
     chk("trap n=1000 → 1.2500003", (float)result, 1.2500003f);
     N = 50000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_integrate_trap(f_x3p1,0,1,100,&result); g_sink=result; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_integrate_trap(f_x3p1, 0, 1, 100, &result);
+        g_sink = result;
+    }
     dt = now_ns() - t0;
     timing("integrate_trap n=100", N, dt);
     end_sub();
@@ -435,7 +505,11 @@ static void val_integrate(void)
     chk("simpson n=100 → 1.25000000", (float)result, exact);
     N = 50000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_integrate_simpson(f_x3p1,0,1,100,&result); g_sink=result; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_integrate_simpson(f_x3p1, 0, 1, 100, &result);
+        g_sink = result;
+    }
     dt = now_ns() - t0;
     timing("integrate_simpson n=100", N, dt);
     end_sub();
@@ -449,7 +523,11 @@ static void val_integrate(void)
     chk("gauss npts=8 → 1.25000000", (float)result, exact);
     N = 50000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_integrate_gauss(f_x3p1,0,1,2,&result); g_sink=result; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_integrate_gauss(f_x3p1, 0, 1, 2, &result);
+        g_sink = result;
+    }
     dt = now_ns() - t0;
     timing("integrate_gauss npts=2", N, dt);
     end_sub();
@@ -458,7 +536,7 @@ static void val_integrate(void)
 /* ════════════════════════════════════════════════════════════════════ */
 /*  5. differentiate                                                    */
 /* ════════════════════════════════════════════════════════════════════ */
-static numx_real_t f_x3(numx_real_t x) { return x*x*x; }
+static numx_real_t f_x3(numx_real_t x) { return x * x * x; }
 
 static void val_differentiate(void)
 {
@@ -481,7 +559,11 @@ static void val_differentiate(void)
            fabsf((float)result - exact));
     N = 100000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_diff_forward(f_x3,2,h,&result); g_sink=result; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_diff_forward(f_x3, 2, h, &result);
+        g_sink = result;
+    }
     dt = now_ns() - t0;
     timing("diff_forward", N, dt);
     end_sub();
@@ -493,7 +575,11 @@ static void val_differentiate(void)
            fabsf((float)result - exact));
     N = 100000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_diff_central(f_x3,2,h,&result); g_sink=result; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_diff_central(f_x3, 2, h, &result);
+        g_sink = result;
+    }
     dt = now_ns() - t0;
     timing("diff_central", N, dt);
     end_sub();
@@ -505,7 +591,11 @@ static void val_differentiate(void)
            fabsf((float)result - exact));
     N = 100000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_diff_richardson(f_x3,2,h,&result); g_sink=result; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_diff_richardson(f_x3, 2, h, &result);
+        g_sink = result;
+    }
     dt = now_ns() - t0;
     timing("diff_richardson", N, dt);
     end_sub();
@@ -524,15 +614,15 @@ static void val_differentiate(void)
 /* ════════════════════════════════════════════════════════════════════ */
 /*  6. interpolate                                                      */
 /* ════════════════════════════════════════════════════════════════════ */
-static numx_real_t f_x2(numx_real_t x) { return x*x; }
+static numx_real_t f_x2(numx_real_t x) { return x * x; }
 
 static void val_interpolate(void)
 {
     banner("6. INTERPOLATE");
 
     /* nodes: y = x² on x = [0,1,2,3,4] */
-    numx_real_t xs[] = {0,1,2,3,4};
-    numx_real_t ys[] = {0,1,4,9,16};
+    numx_real_t xs[] = {0, 1, 2, 3, 4};
+    numx_real_t ys[] = {0, 1, 4, 9, 16};
     numx_size_t n = 5;
     numx_real_t result;
     long long t0, dt;
@@ -545,7 +635,11 @@ static void val_interpolate(void)
     chk("linear x² nodes at x=2.5 → 6.5", (float)result, 6.5f);
     N = 50000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_interp_linear(xs,ys,n,1.5f,&result); g_sink=result; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_interp_linear(xs, ys, n, 1.5f, &result);
+        g_sink = result;
+    }
     dt = now_ns() - t0;
     timing("interp_linear n=5", N, dt);
     end_sub();
@@ -564,7 +658,11 @@ static void val_interpolate(void)
            (float)result, 6.23214293f, fabsf((float)result - 6.23214293f));
     N = 50000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_interp_spline_cubic(xs,ys,n,1.5f,&result); g_sink=result; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_interp_spline_cubic(xs, ys, n, 1.5f, &result);
+        g_sink = result;
+    }
     dt = now_ns() - t0;
     timing("interp_spline_cubic n=5 (one-shot)", N, dt);
 
@@ -572,7 +670,11 @@ static void val_interpolate(void)
     numx_interp_spline_precompute(xs, ys, n, m);
     N = 50000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_interp_spline_eval(xs,ys,m,n,1.5f,&result); g_sink=result; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_interp_spline_eval(xs, ys, m, n, 1.5f, &result);
+        g_sink = result;
+    }
     dt = now_ns() - t0;
     timing("interp_spline_eval n=5 (pre-built)", N, dt);
     end_sub();
@@ -584,7 +686,11 @@ static void val_interpolate(void)
     chk("chebyshev n=16 x² at 1.5 → 2.25", (float)result, 2.25f);
     N = 50000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_interp_chebyshev(f_x2,8,0,4,1.5f,&result); g_sink=result; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_interp_chebyshev(f_x2, 8, 0, 4, 1.5f, &result);
+        g_sink = result;
+    }
     dt = now_ns() - t0;
     timing("interp_chebyshev n=8", N, dt);
     end_sub();
@@ -604,17 +710,27 @@ static void val_poly(void)
     int N;
 
     sub("numx_poly_eval (Horner)");
-    numx_poly_eval(coeffs, 3, 1.0f, &result); chk("p(1) → 0.0", (float)result, 0.0f);
-    numx_poly_eval(coeffs, 3, 2.0f, &result); chk("p(2) → 0.0", (float)result, 0.0f);
-    numx_poly_eval(coeffs, 3, 3.0f, &result); chk("p(3) → 0.0", (float)result, 0.0f);
-    numx_poly_eval(coeffs, 3, 2.5f, &result); chk("p(2.5) → -0.375", (float)result, -0.375f);
-    numx_poly_eval(coeffs, 3, 0.0f, &result); chk("p(0) → -6.0", (float)result, -6.0f);
+    numx_poly_eval(coeffs, 3, 1.0f, &result);
+    chk("p(1) → 0.0", (float)result, 0.0f);
+    numx_poly_eval(coeffs, 3, 2.0f, &result);
+    chk("p(2) → 0.0", (float)result, 0.0f);
+    numx_poly_eval(coeffs, 3, 3.0f, &result);
+    chk("p(3) → 0.0", (float)result, 0.0f);
+    numx_poly_eval(coeffs, 3, 2.5f, &result);
+    chk("p(2.5) → -0.375", (float)result, -0.375f);
+    numx_poly_eval(coeffs, 3, 0.0f, &result);
+    chk("p(0) → -6.0", (float)result, -6.0f);
     /* degree-8 */
-    numx_real_t c8[] = {1,0,0,0,-3,0,0,0,2};
-    numx_poly_eval(c8, 8, 1.5f, &result); chk("p8(1.5) → 12.44140625", (float)result, 12.44140625f);
+    numx_real_t c8[] = {1, 0, 0, 0, -3, 0, 0, 0, 2};
+    numx_poly_eval(c8, 8, 1.5f, &result);
+    chk("p8(1.5) → 12.44140625", (float)result, 12.44140625f);
     N = 100000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_poly_eval(coeffs,3,2.5f,&result); g_sink=result; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_poly_eval(coeffs, 3, 2.5f, &result);
+        g_sink = result;
+    }
     dt = now_ns() - t0;
     timing("poly_eval degree=3", N, dt);
     end_sub();
@@ -625,17 +741,27 @@ static void val_poly(void)
     numx_poly_roots(coeffs, 3, roots, &nroots, 1e-6f);
     printf("  │  roots found: %u\n", (unsigned)nroots);
     /* sort for stable comparison */
-    for (int i = 0; i < (int)nroots-1; i++)
-        for (int j = i+1; j < (int)nroots; j++)
-            if (roots[i] > roots[j]) {
-                numx_real_t tmp = roots[i]; roots[i]=roots[j]; roots[j]=tmp;
+    for (int i = 0; i < (int)nroots - 1; i++)
+        for (int j = i + 1; j < (int)nroots; j++)
+            if (roots[i] > roots[j])
+            {
+                numx_real_t tmp = roots[i];
+                roots[i] = roots[j];
+                roots[j] = tmp;
             }
-    if (nroots >= 1) chk("root[0] → 1.0", (float)roots[0], 1.0f);
-    if (nroots >= 2) chk("root[1] → 2.0", (float)roots[1], 2.0f);
-    if (nroots >= 3) chk("root[2] → 3.0", (float)roots[2], 3.0f);
+    if (nroots >= 1)
+        chk("root[0] → 1.0", (float)roots[0], 1.0f);
+    if (nroots >= 2)
+        chk("root[1] → 2.0", (float)roots[1], 2.0f);
+    if (nroots >= 3)
+        chk("root[2] → 3.0", (float)roots[2], 3.0f);
     N = 1000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) { numx_poly_roots(coeffs,3,roots,&nroots,1e-6f); g_sink=roots[0]; }
+    for (int i = 0; i < N; i++)
+    {
+        numx_poly_roots(coeffs, 3, roots, &nroots, 1e-6f);
+        g_sink = roots[0];
+    }
     dt = now_ns() - t0;
     timing("poly_roots degree=3", N, dt);
     end_sub();
@@ -645,18 +771,20 @@ static void val_poly(void)
 /*  8. ode                                                              */
 /* ════════════════════════════════════════════════════════════════════ */
 static numx_status_t ode_decay(numx_real_t t, const numx_real_t *y,
-                                numx_size_t n, numx_real_t *dydt)
+                               numx_size_t n, numx_real_t *dydt)
 {
-    (void)t; (void)n;
+    (void)t;
+    (void)n;
     dydt[0] = -y[0];
     return NUMX_OK;
 }
 
 static numx_status_t ode_harmonic(numx_real_t t, const numx_real_t *y,
-                                   numx_size_t n, numx_real_t *dydt)
+                                  numx_size_t n, numx_real_t *dydt)
 {
-    (void)t; (void)n;
-    dydt[0] =  y[1];
+    (void)t;
+    (void)n;
+    dydt[0] = y[1];
     dydt[1] = -y[0];
     return NUMX_OK;
 }
@@ -670,9 +798,9 @@ static void val_ode(void)
     int N;
 
     /* Exact references (double precision): */
-    const float exact_decay  = 0.36787944f;   /* e^{-1} */
-    const float exact_harm_x = 0.54030231f;   /* cos(1) */
-    const float exact_harm_v = -0.84147098f;  /* -sin(1) */
+    const float exact_decay = 0.36787944f;   /* e^{-1} */
+    const float exact_harm_x = 0.54030231f;  /* cos(1) */
+    const float exact_harm_v = -0.84147098f; /* -sin(1) */
 
     sub("numx_ode_rk4");
     /* decay: dy/dt = -y, y(0)=1, t=0→1, h=0.01, 100 steps */
@@ -685,15 +813,16 @@ static void val_ode(void)
     numx_ode_rk4(ode_harmonic, 0, y0_harm, 2, 0.01f, 100, y);
     chk("rk4 harmonic x(1.0) → cos(1) = 0.54030231", (float)y[0], exact_harm_x);
     chk("rk4 harmonic v(1.0) → -sin(1) = -0.84147098", (float)y[1], exact_harm_v);
-    float energy = 0.5f*((float)y[0]*(float)y[0] + (float)y[1]*(float)y[1]);
+    float energy = 0.5f * ((float)y[0] * (float)y[0] + (float)y[1] * (float)y[1]);
     printf("  │  energy at t=1: %.10f  ref=0.5  err=%.2e  (energy conservation)\n",
            energy, fabsf(energy - 0.5f));
 
     N = 10000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < N; i++)
+    {
         numx_real_t yi[] = {1.0f};
-        numx_ode_rk4(ode_decay,0,yi,1,0.01f,100,y);
+        numx_ode_rk4(ode_decay, 0, yi, 1, 0.01f, 100, y);
         g_sink = y[0];
     }
     dt = now_ns() - t0;
@@ -708,15 +837,16 @@ static void val_ode(void)
     numx_real_t y0h[] = {1.0f, 0.0f};
     numx_ode_rk45(ode_harmonic, 0, 1.0f, y0h, 2, 1e-4f, y);
     chk("rk45 harmonic x(1.0) → cos(1)", (float)y[0], exact_harm_x);
-    energy = 0.5f*((float)y[0]*(float)y[0] + (float)y[1]*(float)y[1]);
+    energy = 0.5f * ((float)y[0] * (float)y[0] + (float)y[1] * (float)y[1]);
     printf("  │  energy at t=1: %.10f  ref=0.5  err=%.2e\n",
            energy, fabsf(energy - 0.5f));
 
     N = 10000;
     t0 = now_ns();
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < N; i++)
+    {
         numx_real_t yi[] = {1.0f};
-        numx_ode_rk45(ode_decay,0,1.0f,yi,1,1e-4f,y);
+        numx_ode_rk45(ode_decay, 0, 1.0f, yi, 1, 1e-4f, y);
         g_sink = y[0];
     }
     dt = now_ns() - t0;

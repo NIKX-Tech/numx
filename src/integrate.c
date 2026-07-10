@@ -39,7 +39,7 @@ numx_status_t numx_integrate_trap(
     numx_size_t n,
     numx_real_t *result)
 {
-    numx_real_t h, sum, x;
+    numx_real_t h, sum, x, c, y, t;
     numx_size_t i;
 
     if (!f || !result)
@@ -47,12 +47,25 @@ numx_status_t numx_integrate_trap(
     if (n == 0 || b <= a)
         return NUMX_ERR_INVALID_ARG;
 
+    /* Kahan (compensated) summation, trap has no compile-time cap on n,
+     * so accumulated rounding error can grow unboundedly with naive
+     * summation for large n. */
     h = (b - a) / (numx_real_t)n;
-    sum = f(a) + f(b);
+    sum = (numx_real_t)0.0;
+    c = (numx_real_t)0.0;
+
+    y = (f(a) + f(b)) - c;
+    t = sum + y;
+    c = (t - sum) - y;
+    sum = t;
+
     for (i = 1; i < n; i++)
     {
         x = a + (numx_real_t)i * h;
-        sum += (numx_real_t)2.0 * f(x);
+        y = (numx_real_t)2.0 * f(x) - c;
+        t = sum + y;
+        c = (t - sum) - y;
+        sum = t;
     }
     *result = sum * h * (numx_real_t)0.5;
     return NUMX_OK;
@@ -65,7 +78,7 @@ numx_status_t numx_integrate_simpson(
     numx_size_t n,
     numx_real_t *result)
 {
-    numx_real_t h, sum, x;
+    numx_real_t h, sum, x, c, y, t;
     numx_size_t i;
 
     if (!f || !result)
@@ -73,13 +86,27 @@ numx_status_t numx_integrate_simpson(
     if (n < 2 || (n & 1u) || b <= a)
         return NUMX_ERR_INVALID_ARG;
 
+    /* Kahan (compensated) summation, simpson has no compile-time cap on n,
+     * so accumulated rounding error can grow unboundedly with naive
+     * summation for large n. */
     h = (b - a) / (numx_real_t)n;
-    sum = f(a) + f(b);
+    sum = (numx_real_t)0.0;
+    c = (numx_real_t)0.0;
+
+    y = (f(a) + f(b)) - c;
+    t = sum + y;
+    c = (t - sum) - y;
+    sum = t;
+
     for (i = 1; i < n; i++)
     {
         x = a + (numx_real_t)i * h;
-        sum += (i & 1u) ? (numx_real_t)4.0 * f(x)
-                        : (numx_real_t)2.0 * f(x);
+        y = ((i & 1u) ? (numx_real_t)4.0 * f(x)
+                      : (numx_real_t)2.0 * f(x)) -
+            c;
+        t = sum + y;
+        c = (t - sum) - y;
+        sum = t;
     }
     *result = sum * h / (numx_real_t)3.0;
     return NUMX_OK;

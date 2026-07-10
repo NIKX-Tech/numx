@@ -40,7 +40,8 @@
  *   numx_dual_t c = numx_dual_const(5.0f); // constant
  * @endcode
  */
-typedef struct {
+typedef struct
+{
     numx_real_t re; /**< Primal value.     */
     numx_real_t du; /**< Derivative value. */
 } numx_dual_t;
@@ -108,7 +109,8 @@ numx_dual_t numx_dual_sqrt(numx_dual_t a);
 /**
  * @brief Operation codes stored in each tape node.
  */
-typedef enum {
+typedef enum
+{
     NUMX_AD_OP_LEAF, /**< Input variable — no parents. */
     NUMX_AD_OP_ADD,
     NUMX_AD_OP_SUB,
@@ -129,20 +131,22 @@ typedef enum {
  * @c adj  is filled during the backward pass (adjoint / gradient).
  * @c arg0 and @c arg1 are tape indices of parent nodes (undefined for LEAF).
  */
-typedef struct {
+typedef struct
+{
     numx_ad_op_t op;
-    numx_size_t  arg0;
-    numx_size_t  arg1;
-    numx_real_t  val;
-    numx_real_t  adj;
+    numx_size_t arg0;
+    numx_size_t arg1;
+    numx_real_t val;
+    numx_real_t adj;
 } numx_ad_node_t;
 
 /**
  * @brief The static Wengert tape — at most @c NUMX_MAX_AD_TAPE_LEN nodes.
  */
-typedef struct {
+typedef struct
+{
     numx_ad_node_t nodes[NUMX_MAX_AD_TAPE_LEN];
-    numx_size_t    len;
+    numx_size_t len;
 } numx_ad_tape_t;
 
 /**
@@ -160,7 +164,7 @@ numx_status_t numx_ad_init(numx_ad_tape_t *tape);
  * @return @c NUMX_OK, @c NUMX_ERR_NULL_PTR, or @c NUMX_ERR_BUFFER_SMALL.
  */
 numx_status_t numx_ad_var(numx_ad_tape_t *tape, numx_real_t val,
-                           numx_size_t *out_idx);
+                          numx_size_t *out_idx);
 
 /**
  * @brief Record @c nodes[a].val + nodes[b].val on the tape.
@@ -168,62 +172,62 @@ numx_status_t numx_ad_var(numx_ad_tape_t *tape, numx_real_t val,
  *         or @c NUMX_ERR_BUFFER_SMALL.
  */
 numx_status_t numx_ad_add(numx_ad_tape_t *tape,
-                           numx_size_t a, numx_size_t b,
-                           numx_size_t *out_idx);
+                          numx_size_t a, numx_size_t b,
+                          numx_size_t *out_idx);
 
 /** @brief Record @c nodes[a].val - nodes[b].val on the tape. */
 numx_status_t numx_ad_sub(numx_ad_tape_t *tape,
-                           numx_size_t a, numx_size_t b,
-                           numx_size_t *out_idx);
+                          numx_size_t a, numx_size_t b,
+                          numx_size_t *out_idx);
 
 /** @brief Record @c nodes[a].val * nodes[b].val on the tape. */
 numx_status_t numx_ad_mul(numx_ad_tape_t *tape,
-                           numx_size_t a, numx_size_t b,
-                           numx_size_t *out_idx);
+                          numx_size_t a, numx_size_t b,
+                          numx_size_t *out_idx);
 
 /**
  * @brief Record @c nodes[a].val / nodes[b].val on the tape.
  * @return @c NUMX_ERR_SINGULAR if @c nodes[b].val == 0.
  */
 numx_status_t numx_ad_div(numx_ad_tape_t *tape,
-                           numx_size_t a, numx_size_t b,
-                           numx_size_t *out_idx);
+                          numx_size_t a, numx_size_t b,
+                          numx_size_t *out_idx);
 
 /** @brief Record negation of @c nodes[a].val on the tape. */
 numx_status_t numx_ad_neg(numx_ad_tape_t *tape,
-                           numx_size_t a,
-                           numx_size_t *out_idx);
+                          numx_size_t a,
+                          numx_size_t *out_idx);
 
 /** @brief Record @c sin(nodes[a].val) on the tape. */
 numx_status_t numx_ad_sin(numx_ad_tape_t *tape,
-                           numx_size_t a,
-                           numx_size_t *out_idx);
+                          numx_size_t a,
+                          numx_size_t *out_idx);
 
 /** @brief Record @c cos(nodes[a].val) on the tape. */
 numx_status_t numx_ad_cos(numx_ad_tape_t *tape,
-                           numx_size_t a,
-                           numx_size_t *out_idx);
+                          numx_size_t a,
+                          numx_size_t *out_idx);
 
 /** @brief Record @c exp(nodes[a].val) on the tape. */
 numx_status_t numx_ad_exp(numx_ad_tape_t *tape,
-                           numx_size_t a,
-                           numx_size_t *out_idx);
+                          numx_size_t a,
+                          numx_size_t *out_idx);
 
 /**
  * @brief Record @c log(nodes[a].val) on the tape.
  * @return @c NUMX_ERR_INVALID_ARG if @c nodes[a].val <= 0.
  */
 numx_status_t numx_ad_log(numx_ad_tape_t *tape,
-                           numx_size_t a,
-                           numx_size_t *out_idx);
+                          numx_size_t a,
+                          numx_size_t *out_idx);
 
 /**
  * @brief Record @c sqrt(nodes[a].val) on the tape.
  * @return @c NUMX_ERR_INVALID_ARG if @c nodes[a].val < 0.
  */
 numx_status_t numx_ad_sqrt(numx_ad_tape_t *tape,
-                            numx_size_t a,
-                            numx_size_t *out_idx);
+                           numx_size_t a,
+                           numx_size_t *out_idx);
 
 /**
  * @brief Run the backward pass from @p output_idx.

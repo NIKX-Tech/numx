@@ -31,12 +31,11 @@
  *         NUMX_ERR_INVALID_ARG if n == 0 or b <= a.
  */
 numx_status_t numx_integrate_trap(
-    numx_func1d_t  f,
-    numx_real_t    a,
-    numx_real_t    b,
-    numx_size_t    n,
-    numx_real_t   *result
-);
+    numx_func1d_t f,
+    numx_real_t a,
+    numx_real_t b,
+    numx_size_t n,
+    numx_real_t *result);
 
 /**
  * @brief Integrate f over [a, b] using Simpson's 1/3 rule.
@@ -58,12 +57,11 @@ numx_status_t numx_integrate_trap(
  *         NUMX_ERR_INVALID_ARG if n == 0, n is odd, or b <= a.
  */
 numx_status_t numx_integrate_simpson(
-    numx_func1d_t  f,
-    numx_real_t    a,
-    numx_real_t    b,
-    numx_size_t    n,
-    numx_real_t   *result
-);
+    numx_func1d_t f,
+    numx_real_t a,
+    numx_real_t b,
+    numx_size_t n,
+    numx_real_t *result);
 
 /**
  * @brief Integrate f over [a, b] using Gauss-Legendre quadrature.
@@ -85,11 +83,10 @@ numx_status_t numx_integrate_simpson(
  * @note npts=2 is exact for cubics; npts=8 is exact for degree-15 polynomials.
  */
 numx_status_t numx_integrate_gauss(
-    numx_func1d_t  f,
-    numx_real_t    a,
-    numx_real_t    b,
-    numx_size_t    npts,
-    numx_real_t   *result
-);
+    numx_func1d_t f,
+    numx_real_t a,
+    numx_real_t b,
+    numx_size_t npts,
+    numx_real_t *result);
 
 #endif /* NUMX_INTEGRATE_H */

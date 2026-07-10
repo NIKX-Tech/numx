@@ -242,14 +242,13 @@ numx_status_t numx_lu_solve(
     const numx_real_t *b,
     numx_real_t *x);
 
-
 /* ── Cholesky decomposition ────────────────────────────────────────── */
 
 /**
  * @brief Computes the Cholesky Decomposition of a symmetric positive-definite matrix: A = L*L^T.
  *
- * Factors a real symmetric positive-definite matrix into the product of a 
- * lower triangular matrix L and its transpose. L is stored fully as an 
+ * Factors a real symmetric positive-definite matrix into the product of a
+ * lower triangular matrix L and its transpose. L is stored fully as an
  * n x n matrix, with its upper triangle explicitly zeroed out.
  *
  * @param[in]  A  Symmetric positive-definite input matrix, n x n elements. Must not be NULL.
@@ -267,5 +266,3 @@ numx_status_t numx_cholesky_decompose(
     numx_real_t *L);
 
 #endif /* NUMX_LINALG_H */
-
-
