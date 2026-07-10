@@ -4,13 +4,16 @@
 
 ---
 
-> ⚠️ **Not fully constant-time. Do not use for production handling of secret key
-> material without independent review.** The transform stages (butterfly network,
-> table lookups) are data-independent, but the Barrett-reduction canonicalization
-> step uses a conditional branch that is not guaranteed constant-time on
-> branch-predicting CPUs. See [Barrett reduction](#barrett-reduction) below for the
-> full explanation. This is a numerical implementation of the NTT, not an audited
-> cryptographic primitive.
+> ℹ️ **Constant-time status (updated 2026-07-10):** no data-dependent branches are
+> known in this implementation. The transform stages (butterfly network, table
+> lookups) were always data-independent; the Barrett-reduction canonicalization
+> step (previously the one known exception) was rewritten to a branchless form
+> using only unsigned arithmetic and exhaustively verified correct against
+> `a % q` for all 22,164,483 valid inputs. See
+> [Barrett reduction](#barrett-reduction) below for detail. This is still a
+> numerical implementation of the NTT, not a formally audited cryptographic
+> primitive, independent review is recommended before production use with real
+> secret key material.
 
 ---
 
@@ -123,21 +126,28 @@ $$(a_0 + a_1 x)(b_0 + b_1 x) \bmod (x^2 - c_i) = (a_0 b_0 + c_i a_1 b_1) + (a_0 
 All modular multiplications use Barrett reduction to avoid the hardware division
 instruction, which is slow or absent on embedded processors:
 
-$$\text{barrett}(a) = a - \left\lfloor \frac{a \cdot v}{2^{26}} \right\rfloor \cdot q, \qquad v = \left\lceil \frac{2^{26}}{3329} \right\rceil = 20159$$
+$$\text{barrett}(a) = a - \left\lfloor \frac{(a \ggg 10) \cdot v}{2^{15}} \right\rfloor \cdot q, \qquad v = 10079$$
 
-For inputs in $[0,\, 2q^2] \approx [0,\, 22\text{M}]$, a single conditional subtract
-brings the result into $[0, q-1]$. The 32-bit intermediate product fits in a 64-bit
-integer (available as `uint64_t` in C99).
+For inputs in $[0,\, 2q^2] \approx [0,\, 22\text{M}]$, this always lands within
+$[0, 2q)$, so a single branchless canonicalization step brings the result into
+$[0, q-1]$:
 
-> **Side-channel note:** the canonicalization step (`if (r < 0) r += q; if (r >= q)
-> r -= q;` in `priv_barrett`) uses data-dependent conditional branches. On CPUs with
-> branch prediction (most x86-64 and ARM Cortex-A cores), this is not guaranteed to
-> execute in constant time, unlike the branchless technique used in the reference
-> CRYSTALS-Kyber implementation (`a -= q; a += (a >> 15) & q;`). Every other stage of
-> the transform (butterfly network, twiddle-table lookups) has fixed, data-independent
-> control flow. This distinction only matters if you are handling secret polynomial
-> coefficients (e.g. a private key) and need timing-attack resistance — for general
-> numerical use the results are identical either way.
+```c
+uint16_t r = (uint16_t)(a - t * q);
+uint16_t b = (uint16_t)((1 << 15) - (r >= q));
+r = (uint16_t)(r - (q & b));
+```
+
+`b` is `0x7FFF` when `r >= q` and `0x8000` otherwise; ANDing with `q` (which has no
+bit set at position 15) selects `q` or `0` without a branch. This uses only unsigned
+arithmetic and a boolean comparison (`r >= q` evaluates to exactly 0 or 1, well-defined
+in C99), unlike the reference CRYSTALS-Kyber technique (`a -= q; a += (a >> 15) & q;`),
+which relies on arithmetic right-shift of a negative signed int, implementation-defined
+behavior. Combined with the transform stages (butterfly network, twiddle-table lookups),
+which have always had fixed, data-independent control flow, this implementation has no
+known data-dependent branches. Contributed by u/robchroma (r/C_Programming, 2026-07-10)
+and exhaustively verified against `a % q` for all 22,164,483 valid inputs before
+adoption.
 
 ---
 
