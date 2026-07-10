@@ -27,7 +27,7 @@ static numx_real_t priv_sqrt_cs(numx_real_t x)
 static numx_status_t priv_lu_solve(
     numx_real_t *LU,
     numx_real_t *b,
-    numx_size_t  ss)
+    numx_size_t ss)
 {
     numx_size_t i, j, k, max_row;
     numx_real_t max_val, val, factor;
@@ -60,19 +60,18 @@ static numx_status_t priv_lu_solve(
             for (j = 0; j < ss; j++)
             {
                 val = LU[k * NUMX_MAX_CS_SPARSITY + j];
-                LU[k * NUMX_MAX_CS_SPARSITY + j]       = LU[max_row * NUMX_MAX_CS_SPARSITY + j];
+                LU[k * NUMX_MAX_CS_SPARSITY + j] = LU[max_row * NUMX_MAX_CS_SPARSITY + j];
                 LU[max_row * NUMX_MAX_CS_SPARSITY + j] = val;
             }
-            val      = b[k];
-            b[k]     = b[max_row];
+            val = b[k];
+            b[k] = b[max_row];
             b[max_row] = val;
         }
 
         /* Eliminate entries below the pivot. */
         for (i = k + 1; i < ss; i++)
         {
-            factor = LU[i * NUMX_MAX_CS_SPARSITY + k]
-                   / LU[k * NUMX_MAX_CS_SPARSITY + k];
+            factor = LU[i * NUMX_MAX_CS_SPARSITY + k] / LU[k * NUMX_MAX_CS_SPARSITY + k];
             for (j = k; j < ss; j++)
                 LU[i * NUMX_MAX_CS_SPARSITY + j] -=
                     factor * LU[k * NUMX_MAX_CS_SPARSITY + j];
@@ -81,7 +80,7 @@ static numx_status_t priv_lu_solve(
     }
 
     /* Back-substitution (column-oriented). */
-    for (k = ss; k-- > 0; )
+    for (k = ss; k-- > 0;)
     {
         b[k] /= LU[k * NUMX_MAX_CS_SPARSITY + k];
         for (j = 0; j < k; j++)
@@ -99,7 +98,7 @@ numx_status_t numx_cs_omp(
     numx_real_t *x)
 {
     numx_size_t support[NUMX_MAX_CS_SPARSITY];
-    int         selected[NUMX_MAX_CS_SIGNAL_DIM];
+    int selected[NUMX_MAX_CS_SIGNAL_DIM];
     numx_real_t G[NUMX_MAX_CS_SPARSITY * NUMX_MAX_CS_SPARSITY];
     numx_real_t LU_ws[NUMX_MAX_CS_SPARSITY * NUMX_MAX_CS_SPARSITY];
     numx_real_t b[NUMX_MAX_CS_SPARSITY];
@@ -124,14 +123,14 @@ numx_status_t numx_cs_omp(
         residual[i] = y[i];
     for (i = 0; i < n; i++)
     {
-        x[i]        = (numx_real_t)0.0;
+        x[i] = (numx_real_t)0.0;
         selected[i] = 0;
     }
 
     for (s = 0; s < k; s++)
     {
         /* Find the unselected column most correlated with the residual. */
-        j_best    = n; /* sentinel: n is out-of-range */
+        j_best = n; /* sentinel: n is out-of-range */
         best_corr = (numx_real_t)0.0;
         for (j = 0; j < n; j++)
         {
@@ -144,15 +143,15 @@ numx_status_t numx_cs_omp(
             if (corr > best_corr)
             {
                 best_corr = corr;
-                j_best    = j;
+                j_best = j;
             }
         }
         if (j_best == n || best_corr < NUMX_EPSILON)
             break; /* residual orthogonal to all remaining atoms */
 
-        support[s]       = j_best;
+        support[s] = j_best;
         selected[j_best] = 1;
-        ss               = s + 1;
+        ss = s + 1;
 
         /* Extend the Gram matrix by one row and column for atom s. */
         for (i = 0; i < ss; i++)

@@ -15,7 +15,7 @@ static numx_real_t priv_abs(numx_real_t x)
     return x < (numx_real_t)0.0 ? -x : x;
 }
 
-/* Newton-Raphson square root — no <math.h> dependency. */
+/* Newton-Raphson square root, no <math.h> dependency. */
 static numx_real_t priv_sqrt(numx_real_t x)
 {
     numx_real_t g, ng;
@@ -57,16 +57,24 @@ numx_status_t numx_vec_dot(
     numx_real_t *result)
 {
     numx_size_t i;
-    numx_real_t sum;
+    numx_real_t sum, c, y, t;
 
     if (!a || !b || !result)
         return NUMX_ERR_NULL_PTR;
     if (n == 0 || n > NUMX_MAX_VEC_SIZE)
         return NUMX_ERR_INVALID_ARG;
 
+    /* Kahan (compensated) summation, keeps accumulated rounding error
+     * from growing with n, matters once n approaches NUMX_MAX_VEC_SIZE. */
     sum = (numx_real_t)0.0;
+    c = (numx_real_t)0.0;
     for (i = 0; i < n; i++)
-        sum += a[i] * b[i];
+    {
+        y = a[i] * b[i] - c;
+        t = sum + y;
+        c = (t - sum) - y;
+        sum = t;
+    }
 
     *result = sum;
     return NUMX_OK;
@@ -79,23 +87,37 @@ numx_status_t numx_vec_norm(
     numx_real_t *result)
 {
     numx_size_t i;
-    numx_real_t acc, v;
+    numx_real_t acc, v, c, y, t;
 
     if (!a || !result)
         return NUMX_ERR_NULL_PTR;
     if (n == 0 || n > NUMX_MAX_VEC_SIZE)
         return NUMX_ERR_INVALID_ARG;
 
+    /* L1/L2 use Kahan (compensated) summation, keeps accumulated rounding
+     * error from growing with n. NORM_INF tracks a running max, not a sum,
+     * so it's exact regardless of n and needs no compensation. */
     acc = (numx_real_t)0.0;
+    c = (numx_real_t)0.0;
     switch (type)
     {
     case NUMX_NORM_L1:
         for (i = 0; i < n; i++)
-            acc += priv_abs(a[i]);
+        {
+            y = priv_abs(a[i]) - c;
+            t = acc + y;
+            c = (t - acc) - y;
+            acc = t;
+        }
         break;
     case NUMX_NORM_L2:
         for (i = 0; i < n; i++)
-            acc += a[i] * a[i];
+        {
+            y = a[i] * a[i] - c;
+            t = acc + y;
+            c = (t - acc) - y;
+            acc = t;
+        }
         acc = priv_sqrt(acc);
         break;
     case NUMX_NORM_INF:
@@ -405,48 +427,56 @@ numx_status_t numx_lu_solve(
 
 /* ── Cholesky decomposition ──────────────────────────────────────────────── */
 
-
-
 numx_status_t numx_cholesky_decompose(
     const numx_real_t *A,
     numx_size_t n,
-    numx_real_t *L) 
+    numx_real_t *L)
 {
     // 1. Null pointer defensive checks
-    if (!A || !L) {
+    if (!A || !L)
+    {
         return NUMX_ERR_NULL_PTR;
     }
 
     // 2. Bound validation checks matching NUMX constraints
-    if (n == 0 || n > NUMX_MAX_MAT_ROWS) {
+    if (n == 0 || n > NUMX_MAX_MAT_ROWS)
+    {
         return NUMX_ERR_INVALID_ARG;
     }
 
     // 3. Initialize output matrix L to zero
-    for (numx_size_t i = 0; i < n * n; i++) {
+    for (numx_size_t i = 0; i < n * n; i++)
+    {
         L[i] = 0.0f;
     }
 
     // 4. Compute Cholesky factorization (Row-major layout)
-    for (numx_size_t i = 0; i < n; i++) {
-        for (numx_size_t j = 0; j <= i; j++) {
+    for (numx_size_t i = 0; i < n; i++)
+    {
+        for (numx_size_t j = 0; j <= i; j++)
+        {
             numx_real_t sum = 0.0f;
 
             // Dot product of components computed so far
-            for (numx_size_t k = 0; k < j; k++) {
+            for (numx_size_t k = 0; k < j; k++)
+            {
                 sum += L[i * n + k] * L[j * n + k];
             }
 
-            if (i == j) {
+            if (i == j)
+            {
                 // Diagonal elements evaluation
                 numx_real_t val = A[i * n + i] - sum;
-                
+
                 // Matrix must be positive-definite
-                if (val <= 0.0f) {
-                    return NUMX_ERR_SINGULAR; 
+                if (val <= 0.0f)
+                {
+                    return NUMX_ERR_SINGULAR;
                 }
                 L[i * n + j] = priv_sqrt(val);
-            } else {
+            }
+            else
+            {
                 // Lower triangular elements evaluation (i > j)
                 L[i * n + j] = (A[i * n + j] - sum) / L[j * n + j];
             }

@@ -63,6 +63,22 @@ void test_stats_mean_single_element(void)
     TEST_ASSERT_FLOAT_WITHIN(TOL, 42.0f, r);
 }
 
+/* L2 -- Kahan summation regression test. Naive summation loses every one
+ * of the 255 trailing 1.0f terms here (float32 ULP at 2^24 is 2.0, so
+ * 1.0f increments vanish entirely), producing 16777216.0f / 256 instead
+ * of the true mean. Kahan summation should land within 1 ULP. */
+void test_stats_mean_kahan_stress(void)
+{
+    numx_real_t a[256];
+    numx_real_t r;
+    numx_size_t i;
+    a[0] = 16777216.0f; /* 2^24 */
+    for (i = 1; i < 256; i++)
+        a[i] = 1.0f;
+    TEST_ASSERT_EQUAL(NUMX_OK, numx_stats_mean(a, 256, &r));
+    TEST_ASSERT_FLOAT_WITHIN(0.02f, 16777471.0f / 256.0f, r);
+}
+
 /* L4 */
 void test_stats_mean_null_a(void)
 {
@@ -269,6 +285,7 @@ void numx_test_stats(void)
     RUN_TEST(test_stats_mean_arithmetic_sequence);
     RUN_TEST(test_stats_mean_constant_array);
     RUN_TEST(test_stats_mean_single_element);
+    RUN_TEST(test_stats_mean_kahan_stress);
     RUN_TEST(test_stats_mean_null_a);
     RUN_TEST(test_stats_mean_null_result);
     RUN_TEST(test_stats_mean_n_zero);

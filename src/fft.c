@@ -15,16 +15,16 @@ static numx_real_t priv_cos(numx_real_t x)
     sign = (numx_real_t)1.0;
     if (x > NUMX_PI * (numx_real_t)0.5)
     {
-        x    = NUMX_PI - x;
+        x = NUMX_PI - x;
         sign = -(numx_real_t)1.0;
     }
-    x2   = x * x;
+    x2 = x * x;
     term = (numx_real_t)1.0;
-    sum  = term;
+    sum = term;
     for (k = 1; k <= 12; k++)
     {
         term *= -x2 / (numx_real_t)((2 * k - 1) * (2 * k));
-        sum  += term;
+        sum += term;
     }
     return sign * sum;
 }
@@ -62,15 +62,18 @@ static void priv_bit_reverse_f32(numx_real_t *x, numx_size_t n)
         bit = n >> 1;
         while (j & bit)
         {
-            j   ^= bit;
+            j ^= bit;
             bit >>= 1;
         }
         j ^= bit;
         if (i < j)
         {
-            tr = x[2 * i];     ti = x[2 * i + 1];
-            x[2 * i]     = x[2 * j];     x[2 * i + 1] = x[2 * j + 1];
-            x[2 * j]     = tr;            x[2 * j + 1] = ti;
+            tr = x[2 * i];
+            ti = x[2 * i + 1];
+            x[2 * i] = x[2 * j];
+            x[2 * i + 1] = x[2 * j + 1];
+            x[2 * j] = tr;
+            x[2 * j + 1] = ti;
         }
     }
 }
@@ -86,15 +89,18 @@ static void priv_bit_reverse_q15(numx_q15_t *x, numx_size_t n)
         bit = n >> 1;
         while (j & bit)
         {
-            j   ^= bit;
+            j ^= bit;
             bit >>= 1;
         }
         j ^= bit;
         if (i < j)
         {
-            tr = x[2 * i];     ti = x[2 * i + 1];
-            x[2 * i]     = x[2 * j];     x[2 * i + 1] = x[2 * j + 1];
-            x[2 * j]     = tr;            x[2 * j + 1] = ti;
+            tr = x[2 * i];
+            ti = x[2 * i + 1];
+            x[2 * i] = x[2 * j];
+            x[2 * i + 1] = x[2 * j + 1];
+            x[2 * j] = tr;
+            x[2 * j + 1] = ti;
         }
     }
 }
@@ -127,8 +133,8 @@ numx_status_t numx_fft_f32(numx_real_t *inout, numx_size_t n)
 
     for (s = 1; ((numx_size_t)1 << s) <= n; s++)
     {
-        m          = (numx_size_t)1 << s;
-        half_m     = m >> 1;
+        m = (numx_size_t)1 << s;
+        half_m = m >> 1;
         base_angle = NUMX_PI / (numx_real_t)half_m;
 
         for (k = 0; k < n; k += m)
@@ -136,21 +142,21 @@ numx_status_t numx_fft_f32(numx_real_t *inout, numx_size_t n)
             for (j = 0; j < half_m; j++)
             {
                 angle = (numx_real_t)j * base_angle;
-                w_re  =  priv_cos(angle);
-                w_im  = -priv_sin(angle);
+                w_re = priv_cos(angle);
+                w_im = -priv_sin(angle);
 
-                u     = k + j;
-                v     = k + j + half_m;
+                u = k + j;
+                v = k + j + half_m;
 
-                t_re  = w_re * inout[2 * v]     - w_im * inout[2 * v + 1];
-                t_im  = w_re * inout[2 * v + 1] + w_im * inout[2 * v];
+                t_re = w_re * inout[2 * v] - w_im * inout[2 * v + 1];
+                t_im = w_re * inout[2 * v + 1] + w_im * inout[2 * v];
 
-                u_re  = inout[2 * u];
-                u_im  = inout[2 * u + 1];
+                u_re = inout[2 * u];
+                u_im = inout[2 * u + 1];
 
-                inout[2 * v]     = u_re - t_re;
+                inout[2 * v] = u_re - t_re;
                 inout[2 * v + 1] = u_im - t_im;
-                inout[2 * u]     = u_re + t_re;
+                inout[2 * u] = u_re + t_re;
                 inout[2 * u + 1] = u_im + t_im;
             }
         }
@@ -183,7 +189,7 @@ numx_status_t numx_ifft_f32(numx_real_t *inout, numx_size_t n)
     inv_n = (numx_real_t)1.0 / (numx_real_t)n;
     for (i = 0; i < n; i++)
     {
-        inout[2 * i]     =  inout[2 * i]     * inv_n;
+        inout[2 * i] = inout[2 * i] * inv_n;
         inout[2 * i + 1] = -inout[2 * i + 1] * inv_n;
     }
     return NUMX_OK;
@@ -195,7 +201,7 @@ numx_status_t numx_fft_q15(numx_q15_t *inout, numx_size_t n)
 {
     numx_size_t s, m, half_m, k, j, u, v;
     numx_real_t base_angle, angle;
-    numx_q15_t  w_re, w_im, t_re, t_im, u_re, u_im;
+    numx_q15_t w_re, w_im, t_re, t_im, u_re, u_im;
     if (!inout)
         return NUMX_ERR_NULL_PTR;
     if (!priv_valid_n(n))
@@ -205,8 +211,8 @@ numx_status_t numx_fft_q15(numx_q15_t *inout, numx_size_t n)
 
     for (s = 1; ((numx_size_t)1 << s) <= n; s++)
     {
-        m          = (numx_size_t)1 << s;
-        half_m     = m >> 1;
+        m = (numx_size_t)1 << s;
+        half_m = m >> 1;
         base_angle = NUMX_PI / (numx_real_t)half_m;
 
         for (k = 0; k < n; k += m)
@@ -214,24 +220,22 @@ numx_status_t numx_fft_q15(numx_q15_t *inout, numx_size_t n)
             for (j = 0; j < half_m; j++)
             {
                 angle = (numx_real_t)j * base_angle;
-                w_re  = (numx_q15_t)( priv_cos(angle) * (numx_real_t)32767.0);
-                w_im  = (numx_q15_t)(-priv_sin(angle) * (numx_real_t)32767.0);
+                w_re = (numx_q15_t)(priv_cos(angle) * (numx_real_t)32767.0);
+                w_im = (numx_q15_t)(-priv_sin(angle) * (numx_real_t)32767.0);
 
                 u = k + j;
                 v = k + j + half_m;
 
-                t_re = (numx_q15_t)((int32_t)priv_q15_mul(w_re, inout[2 * v])
-                                  - (int32_t)priv_q15_mul(w_im, inout[2 * v + 1]));
-                t_im = (numx_q15_t)((int32_t)priv_q15_mul(w_re, inout[2 * v + 1])
-                                  + (int32_t)priv_q15_mul(w_im, inout[2 * v]));
+                t_re = (numx_q15_t)((int32_t)priv_q15_mul(w_re, inout[2 * v]) - (int32_t)priv_q15_mul(w_im, inout[2 * v + 1]));
+                t_im = (numx_q15_t)((int32_t)priv_q15_mul(w_re, inout[2 * v + 1]) + (int32_t)priv_q15_mul(w_im, inout[2 * v]));
 
                 u_re = inout[2 * u];
                 u_im = inout[2 * u + 1];
 
                 /* Right-shift by 1 at each stage prevents overflow. */
-                inout[2 * v]     = (numx_q15_t)(((int32_t)u_re - (int32_t)t_re) >> 1);
+                inout[2 * v] = (numx_q15_t)(((int32_t)u_re - (int32_t)t_re) >> 1);
                 inout[2 * v + 1] = (numx_q15_t)(((int32_t)u_im - (int32_t)t_im) >> 1);
-                inout[2 * u]     = (numx_q15_t)(((int32_t)u_re + (int32_t)t_re) >> 1);
+                inout[2 * u] = (numx_q15_t)(((int32_t)u_re + (int32_t)t_re) >> 1);
                 inout[2 * u + 1] = (numx_q15_t)(((int32_t)u_im + (int32_t)t_im) >> 1);
             }
         }
@@ -243,7 +247,7 @@ numx_status_t numx_fft_q15(numx_q15_t *inout, numx_size_t n)
 
 numx_status_t numx_fft_magnitude(
     const numx_real_t *fft_out, numx_size_t n,
-    numx_real_t       *mag)
+    numx_real_t *mag)
 {
     numx_size_t k;
     numx_real_t re, im;
@@ -253,8 +257,8 @@ numx_status_t numx_fft_magnitude(
         return NUMX_ERR_INVALID_ARG;
     for (k = 0; k <= n / 2; k++)
     {
-        re     = fft_out[2 * k];
-        im     = fft_out[2 * k + 1];
+        re = fft_out[2 * k];
+        im = fft_out[2 * k + 1];
         mag[k] = priv_sqrt(re * re + im * im);
     }
     return NUMX_OK;

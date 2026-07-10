@@ -28,27 +28,36 @@ int main(void)
     };
 
     /* 2-sparse: nonzero at indices 0 and 1 */
-    numx_real_t x_true[N] = { 3.0f, -1.5f, 0, 0, 0, 0, 0, 0 };
+    numx_real_t x_true[N] = {3.0f, -1.5f, 0, 0, 0, 0, 0, 0};
 
     /* Compute measurements y = A * x_true */
-    numx_real_t y[M] = { 0.0f };
+    numx_real_t y[M] = {0.0f};
     numx_size_t i, j;
-    for (i = 0; i < M; i++) {
-        for (j = 0; j < N; j++) {
+    for (i = 0; i < M; i++)
+    {
+        for (j = 0; j < N; j++)
+        {
             y[i] += A[i * N + j] * x_true[j];
         }
     }
 
     /* Recover x via OMP with sparsity k=2 */
-    numx_real_t x_rec[N] = { 0.0f };
+    numx_real_t x_rec[N] = {0.0f};
     numx_status_t s = numx_cs_omp(A, y, M, N, 2, x_rec);
-    if (s != NUMX_OK) { printf("OMP failed: %d\n", (int)s); return 1; }
+    if (s != NUMX_OK)
+    {
+        printf("OMP failed: %d\n", (int)s);
+        return 1;
+    }
 
     printf("Index  True     Recovered\n");
-    for (i = 0; i < N; i++) {
+    for (i = 0; i < N; i++)
+    {
         numx_real_t diff = x_rec[i] - x_true[i];
-        if (diff < 0.0f) diff = -diff;
-        if (x_true[i] != 0.0f || diff > 0.01f) {
+        if (diff < 0.0f)
+            diff = -diff;
+        if (x_true[i] != 0.0f || diff > 0.01f)
+        {
             printf("  %u    %6.3f    %6.3f\n",
                    (unsigned)i, (double)x_true[i], (double)x_rec[i]);
         }

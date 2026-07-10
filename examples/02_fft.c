@@ -25,22 +25,36 @@ int main(void)
     numx_size_t i;
 
     /* cos(2*pi * 4 * n / N): 4 complete cycles over 64 samples */
-    for (i = 0; i < N; i++) {
-        buf[2 * i]     = (numx_real_t)cos(2.0 * NUMX_PI * 4.0 * i / N);
+    for (i = 0; i < N; i++)
+    {
+        buf[2 * i] = (numx_real_t)cos(2.0 * NUMX_PI * 4.0 * i / N);
         buf[2 * i + 1] = 0.0f;
     }
 
     s = numx_fft_f32(buf, N);
-    if (s != NUMX_OK) { printf("fft_f32 failed: %d\n", (int)s); return 1; }
+    if (s != NUMX_OK)
+    {
+        printf("fft_f32 failed: %d\n", (int)s);
+        return 1;
+    }
 
     s = numx_fft_magnitude(buf, N, mag);
-    if (s != NUMX_OK) { printf("fft_magnitude failed: %d\n", (int)s); return 1; }
+    if (s != NUMX_OK)
+    {
+        printf("fft_magnitude failed: %d\n", (int)s);
+        return 1;
+    }
 
     /* Find peak bin (DC excluded) */
     numx_size_t peak_bin = 1;
     numx_real_t peak_val = mag[1];
-    for (i = 2; i <= N / 2; i++) {
-        if (mag[i] > peak_val) { peak_val = mag[i]; peak_bin = i; }
+    for (i = 2; i <= N / 2; i++)
+    {
+        if (mag[i] > peak_val)
+        {
+            peak_val = mag[i];
+            peak_bin = i;
+        }
     }
 
     printf("Peak bin: %u  magnitude: %.2f  (expect bin 4, magnitude ~32)\n",

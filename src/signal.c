@@ -21,16 +21,16 @@ static numx_real_t priv_cos_full(numx_real_t x)
     sign = (numx_real_t)1.0;
     if (x > NUMX_PI * (numx_real_t)0.5)
     {
-        x    = NUMX_PI - x;
+        x = NUMX_PI - x;
         sign = -(numx_real_t)1.0;
     }
-    x2   = x * x;
+    x2 = x * x;
     term = (numx_real_t)1.0;
-    sum  = term;
+    sum = term;
     for (k = 1; k <= 12; k++)
     {
         term *= -x2 / (numx_real_t)((2 * k - 1) * (2 * k));
-        sum  += term;
+        sum += term;
     }
     return sign * sum;
 }
@@ -65,7 +65,7 @@ numx_status_t numx_signal_window_hann(numx_size_t n, numx_real_t *out)
     nm1 = (numx_real_t)(n - 1);
     for (i = 0; i < n; i++)
     {
-        arg    = (numx_real_t)2.0 * NUMX_PI * (numx_real_t)i / nm1;
+        arg = (numx_real_t)2.0 * NUMX_PI * (numx_real_t)i / nm1;
         out[i] = (numx_real_t)0.5 * ((numx_real_t)1.0 - priv_cos_full(arg));
     }
     return NUMX_OK;
@@ -87,7 +87,7 @@ numx_status_t numx_signal_window_hamming(numx_size_t n, numx_real_t *out)
     nm1 = (numx_real_t)(n - 1);
     for (i = 0; i < n; i++)
     {
-        arg    = (numx_real_t)2.0 * NUMX_PI * (numx_real_t)i / nm1;
+        arg = (numx_real_t)2.0 * NUMX_PI * (numx_real_t)i / nm1;
         out[i] = (numx_real_t)0.54 - (numx_real_t)0.46 * priv_cos_full(arg);
     }
     return NUMX_OK;
@@ -109,11 +109,9 @@ numx_status_t numx_signal_window_blackman(numx_size_t n, numx_real_t *out)
     nm1 = (numx_real_t)(n - 1);
     for (i = 0; i < n; i++)
     {
-        arg1   = (numx_real_t)2.0 * NUMX_PI * (numx_real_t)i / nm1;
-        arg2   = (numx_real_t)2.0 * arg1;
-        out[i] = (numx_real_t)0.42
-               - (numx_real_t)0.5  * priv_cos_full(arg1)
-               + (numx_real_t)0.08 * priv_cos_full(arg2);
+        arg1 = (numx_real_t)2.0 * NUMX_PI * (numx_real_t)i / nm1;
+        arg2 = (numx_real_t)2.0 * arg1;
+        out[i] = (numx_real_t)0.42 - (numx_real_t)0.5 * priv_cos_full(arg1) + (numx_real_t)0.08 * priv_cos_full(arg2);
     }
     return NUMX_OK;
 }
@@ -123,10 +121,10 @@ numx_status_t numx_signal_window_blackman(numx_size_t n, numx_real_t *out)
 numx_status_t numx_signal_convolve(
     const numx_real_t *x, numx_size_t xn,
     const numx_real_t *h, numx_size_t hn,
-    numx_real_t       *out)
+    numx_real_t *out)
 {
     numx_size_t k, j, jmin, jmax, out_n;
-    numx_real_t sum;
+    numx_real_t sum, c, y, t;
     if (!x || !h || !out)
         return NUMX_ERR_NULL_PTR;
     if (xn == 0 || hn == 0)
@@ -134,11 +132,20 @@ numx_status_t numx_signal_convolve(
     out_n = xn + hn - 1;
     for (k = 0; k < out_n; k++)
     {
-        sum  = (numx_real_t)0.0;
+        /* Kahan (compensated) summation, the inner loop has no
+         * compile-time cap, so accumulated rounding error can grow
+         * unboundedly with naive summation for large xn/hn. */
+        sum = (numx_real_t)0.0;
+        c = (numx_real_t)0.0;
         jmin = (k >= hn - 1) ? k - (hn - 1) : 0;
-        jmax = (k < xn)      ? k             : xn - 1;
+        jmax = (k < xn) ? k : xn - 1;
         for (j = jmin; j <= jmax; j++)
-            sum += x[j] * h[k - j];
+        {
+            y = x[j] * h[k - j] - c;
+            t = sum + y;
+            c = (t - sum) - y;
+            sum = t;
+        }
         out[k] = sum;
     }
     return NUMX_OK;
@@ -149,10 +156,10 @@ numx_status_t numx_signal_convolve(
 numx_status_t numx_signal_correlate(
     const numx_real_t *x, numx_size_t xn,
     const numx_real_t *y, numx_size_t yn,
-    numx_real_t       *out)
+    numx_real_t *out)
 {
     numx_size_t k, j, jmin, jmax, out_n;
-    numx_real_t sum;
+    numx_real_t sum, c, term, t;
     if (!x || !y || !out)
         return NUMX_ERR_NULL_PTR;
     if (xn == 0 || yn == 0)
@@ -160,11 +167,21 @@ numx_status_t numx_signal_correlate(
     out_n = xn + yn - 1;
     for (k = 0; k < out_n; k++)
     {
-        sum  = (numx_real_t)0.0;
+        /* Kahan (compensated) summation, the inner loop has no
+         * compile-time cap, so accumulated rounding error can grow
+         * unboundedly with naive summation for large xn/yn. */
+        sum = (numx_real_t)0.0;
+        c = (numx_real_t)0.0;
         jmin = (k >= yn - 1) ? k - (yn - 1) : 0;
-        jmax = (k < xn)      ? k             : xn - 1;
+        jmax = (k < xn) ? k : xn - 1;
         for (j = jmin; j <= jmax; j++)
-            sum += x[j] * y[j + yn - 1 - k]; /* yi always in [0, yn-1] here */
+        {
+            /* yi always in [0, yn-1] here */
+            term = x[j] * y[j + yn - 1 - k] - c;
+            t = sum + term;
+            c = (t - sum) - term;
+            sum = t;
+        }
         out[k] = sum;
     }
     return NUMX_OK;
@@ -173,23 +190,31 @@ numx_status_t numx_signal_correlate(
 /* ── FIR filter ────────────────────────────────────────────────────── */
 
 numx_status_t numx_signal_fir(
-    const numx_real_t *x,    numx_size_t xn,
+    const numx_real_t *x, numx_size_t xn,
     const numx_real_t *taps, numx_size_t ntaps,
-    numx_real_t       *out)
+    numx_real_t *out)
 {
     numx_size_t n, k;
-    numx_real_t acc;
+    numx_real_t acc, c, y, t;
     if (!x || !taps || !out)
         return NUMX_ERR_NULL_PTR;
     if (xn == 0 || ntaps == 0 || ntaps > NUMX_MAX_FIR_TAPS)
         return NUMX_ERR_INVALID_ARG;
     for (n = 0; n < xn; n++)
     {
+        /* Kahan (compensated) summation, keeps accumulated rounding
+         * error from growing as ntaps approaches NUMX_MAX_FIR_TAPS. */
         acc = (numx_real_t)0.0;
+        c = (numx_real_t)0.0;
         for (k = 0; k < ntaps; k++)
         {
             if (n >= k)
-                acc += taps[k] * x[n - k];
+            {
+                y = taps[k] * x[n - k] - c;
+                t = acc + y;
+                c = (t - acc) - y;
+                acc = t;
+            }
         }
         out[n] = acc;
     }
@@ -200,9 +225,9 @@ numx_status_t numx_signal_fir(
 
 numx_status_t numx_signal_iir_biquad(
     const numx_real_t *x, numx_size_t n,
-    const numx_real_t  b[3],
-    const numx_real_t  a[2],
-    numx_real_t       *out)
+    const numx_real_t b[3],
+    const numx_real_t a[2],
+    numx_real_t *out)
 {
     numx_size_t i;
     numx_real_t d0, d1, d2;
@@ -214,10 +239,10 @@ numx_status_t numx_signal_iir_biquad(
     d2 = (numx_real_t)0.0;
     for (i = 0; i < n; i++)
     {
-        d0     = x[i] - a[0] * d1 - a[1] * d2;
+        d0 = x[i] - a[0] * d1 - a[1] * d2;
         out[i] = b[0] * d0 + b[1] * d1 + b[2] * d2;
-        d2     = d1;
-        d1     = d0;
+        d2 = d1;
+        d1 = d0;
     }
     return NUMX_OK;
 }
@@ -226,8 +251,8 @@ numx_status_t numx_signal_iir_biquad(
 
 numx_status_t numx_signal_peaks(
     const numx_real_t *x, numx_size_t n,
-    numx_size_t       *peaks, numx_size_t max_peaks,
-    numx_size_t       *npeaks)
+    numx_size_t *peaks, numx_size_t max_peaks,
+    numx_size_t *npeaks)
 {
     numx_size_t i;
     if (!x || !peaks || !npeaks)
@@ -251,8 +276,8 @@ numx_status_t numx_signal_peaks(
 
 numx_status_t numx_signal_ema(
     const numx_real_t *x, numx_size_t n,
-    numx_real_t        alpha,
-    numx_real_t       *out)
+    numx_real_t alpha,
+    numx_real_t *out)
 {
     numx_size_t i;
     numx_real_t one_minus;
@@ -261,7 +286,7 @@ numx_status_t numx_signal_ema(
     if (n == 0 || alpha < (numx_real_t)0.0 || alpha > (numx_real_t)1.0)
         return NUMX_ERR_INVALID_ARG;
     one_minus = (numx_real_t)1.0 - alpha;
-    out[0]    = x[0];
+    out[0] = x[0];
     for (i = 1; i < n; i++)
         out[i] = alpha * x[i] + one_minus * out[i - 1];
     return NUMX_OK;

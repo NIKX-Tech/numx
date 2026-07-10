@@ -77,6 +77,27 @@ void test_vec_dot_zero_vector(void)
     TEST_ASSERT_FLOAT_WITHIN(TOL, 0.0f, r);
 }
 
+/* L2 -- Kahan summation regression test. Naive summation loses every one
+ * of the 255 trailing 1.0f terms here (float32 ULP at 2^24 is 2.0, so
+ * 1.0f increments vanish entirely). Kahan summation should land within
+ * 1 ULP. b is all 1.0f so this reduces to the same sum as the mean stress
+ * test in test_stats.c. */
+void test_vec_dot_kahan_stress(void)
+{
+    numx_real_t a[256], b[256];
+    numx_real_t r;
+    numx_size_t i;
+    a[0] = 16777216.0f; /* 2^24 */
+    b[0] = 1.0f;
+    for (i = 1; i < 256; i++)
+    {
+        a[i] = 1.0f;
+        b[i] = 1.0f;
+    }
+    TEST_ASSERT_EQUAL(NUMX_OK, numx_vec_dot(a, b, 256, &r));
+    TEST_ASSERT_FLOAT_WITHIN(2.0f, 16777471.0f, r);
+}
+
 /* L4 */
 void test_vec_dot_null_a(void)
 {
@@ -614,6 +635,7 @@ void numx_test_linalg(void)
     RUN_TEST(test_vec_dot_self_equals_sq_norm);
     RUN_TEST(test_vec_dot_single_element);
     RUN_TEST(test_vec_dot_zero_vector);
+    RUN_TEST(test_vec_dot_kahan_stress);
     RUN_TEST(test_vec_dot_null_a);
     RUN_TEST(test_vec_dot_null_b);
     RUN_TEST(test_vec_dot_null_result);

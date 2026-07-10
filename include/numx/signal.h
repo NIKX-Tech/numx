@@ -92,8 +92,7 @@ numx_status_t numx_signal_window_blackman(numx_size_t n, numx_real_t *out);
 numx_status_t numx_signal_convolve(
     const numx_real_t *x, numx_size_t xn,
     const numx_real_t *h, numx_size_t hn,
-    numx_real_t       *out
-);
+    numx_real_t *out);
 
 /**
  * @brief Cross-correlation of x[xn] with y[yn].
@@ -115,8 +114,7 @@ numx_status_t numx_signal_convolve(
 numx_status_t numx_signal_correlate(
     const numx_real_t *x, numx_size_t xn,
     const numx_real_t *y, numx_size_t yn,
-    numx_real_t       *out
-);
+    numx_real_t *out);
 
 /* ── FIR filter ────────────────────────────────────────────────────── */
 
@@ -137,10 +135,9 @@ numx_status_t numx_signal_correlate(
  *         NUMX_ERR_INVALID_ARG if xn == 0 or ntaps == 0 or ntaps > NUMX_MAX_FIR_TAPS.
  */
 numx_status_t numx_signal_fir(
-    const numx_real_t *x,    numx_size_t xn,
+    const numx_real_t *x, numx_size_t xn,
     const numx_real_t *taps, numx_size_t ntaps,
-    numx_real_t       *out
-);
+    numx_real_t *out);
 
 /* ── IIR biquad filter ─────────────────────────────────────────────── */
 
@@ -165,10 +162,9 @@ numx_status_t numx_signal_fir(
  */
 numx_status_t numx_signal_iir_biquad(
     const numx_real_t *x, numx_size_t n,
-    const numx_real_t  b[3],
-    const numx_real_t  a[2],
-    numx_real_t       *out
-);
+    const numx_real_t b[3],
+    const numx_real_t a[2],
+    numx_real_t *out);
 
 /* ── Peak detection ────────────────────────────────────────────────── */
 
@@ -190,9 +186,8 @@ numx_status_t numx_signal_iir_biquad(
  */
 numx_status_t numx_signal_peaks(
     const numx_real_t *x, numx_size_t n,
-    numx_size_t       *peaks, numx_size_t max_peaks,
-    numx_size_t       *npeaks
-);
+    numx_size_t *peaks, numx_size_t max_peaks,
+    numx_size_t *npeaks);
 
 /* ── Exponential moving average ────────────────────────────────────── */
 
@@ -213,8 +208,7 @@ numx_status_t numx_signal_peaks(
  */
 numx_status_t numx_signal_ema(
     const numx_real_t *x, numx_size_t n,
-    numx_real_t        alpha,
-    numx_real_t       *out
-);
+    numx_real_t alpha,
+    numx_real_t *out);
 
 #endif /* NUMX_SIGNAL_H */
