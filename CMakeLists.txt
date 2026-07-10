@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(numx VERSION 0.1.0 LANGUAGES C)
+project(numx VERSION 1.0.0 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -11,6 +11,31 @@ if(MSVC)
 else()
   add_compile_options(-Wall -Wextra -Wpedantic -Werror
                       -Wno-unused-parameter)
+endif()
+
+# ── Function/data-section garbage collection ──────────────────────────
+# Puts each function and variable in its own linker section so that, combined
+# with the equivalent dead-stripping flag at final link time, unused code is
+# dropped at function granularity rather than whole-object-file granularity.
+# This only takes full effect in the executables built by this file
+# (numx_tests, numx_bench, etc.) -- consumers linking against the numx static
+# library elsewhere need to pass the same flags at their own final link step
+# to get the same benefit, since a static library archive doesn't control its
+# consumer's link flags.
+#
+# Apple's linker (macOS default) does not understand GNU ld/lld's
+# --gc-sections syntax and fails outright if you pass it; it uses -dead_strip
+# instead. GNU ld, lld, and every embedded cross-toolchain tested (arm-none-
+# eabi-gcc, xtensa-esp32s3-elf-gcc) accept --gc-sections normally.
+if(MSVC)
+  add_compile_options(/Gy)
+  add_link_options(/OPT:REF /OPT:ICF)
+elseif(APPLE)
+  add_compile_options(-ffunction-sections -fdata-sections)
+  add_link_options(-Wl,-dead_strip)
+else()
+  add_compile_options(-ffunction-sections -fdata-sections)
+  add_link_options(-Wl,--gc-sections)
 endif()
 
 # ── numx static library ───────────────────────────────────────────────
