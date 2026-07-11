@@ -34,6 +34,8 @@ Every function is reentrant, allocation-free, and returns a typed status code. T
 
 ## Module status
 
+See [`ROADMAP.md`](ROADMAP.md) for what shipped, what's in progress, and what's next.
+
 | Module | Functions | Status |
 |---|---|---|
 | [**linalg**](docs/algorithms/linalg.md) | dot, norm, cross, mat_mul, transpose, det, LU, Cholesky | ✅ complete |
