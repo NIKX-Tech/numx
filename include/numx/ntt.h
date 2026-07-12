@@ -36,6 +36,9 @@
  * The output is 128 pairs (f[2i], f[2i+1]) representing f mod (x^2 - c_i).
  * All coefficients are reduced to [0, q-1] after the transform.
  *
+ * References: Cooley & Tukey, 1965; Longa & Naehrig, CANS 2016 (NTT-specific
+ * speedup). Full citations: docs/algorithms/ntt.md#references.
+ *
  * @param[in,out] f  Array of NUMX_NTT_N coefficients. Must not be NULL.
  *                   Each value must be in [0, NUMX_NTT_Q - 1] on entry.
  *
@@ -51,6 +54,10 @@ numx_status_t numx_ntt_forward(numx_q15_t *f);
  * Gentleman-Sande butterfly stages followed by multiplication by the
  * normalization constant 128^{-1} = 3303 (mod 3329). The output coefficients
  * are reduced to [0, q-1].
+ *
+ * References: Gentleman & Sande, AFIPS 1966; Avanzi et al. (Kyber spec),
+ * NIST PQC Round 3, 2021, for the normalization constant. Full citations:
+ * docs/algorithms/ntt.md#references.
  *
  * @param[in,out] f  Array of NUMX_NTT_N NTT-domain coefficients. Must not be NULL.
  *
@@ -71,6 +78,9 @@ numx_status_t numx_ntt_inverse(numx_q15_t *f);
  *
  * Combined with numx_ntt_inverse, this implements polynomial multiplication
  * in Z_3329[x]/(x^256 + 1) in O(n) time after the O(n log n) NTT steps.
+ *
+ * Reference: Avanzi et al. (Kyber spec), NIST PQC Round 3, 2021, degree-2
+ * ring basemul formula. Full citation: docs/algorithms/ntt.md#references.
  *
  * @param[in]  a    First NTT-domain array of NUMX_NTT_N coefficients. Must not be NULL.
  * @param[in]  b    Second NTT-domain array of NUMX_NTT_N coefficients. Must not be NULL.
@@ -98,6 +108,10 @@ numx_status_t numx_ntt_pointwise_mul(
  * All temporaries are stack-allocated (512 bytes). The caller must supply
  * distinct output buffer out; a and b may be the same pointer.
  *
+ * Cross-validated bit-for-bit against PQClean's ml-kem-512 reference
+ * implementation (FIPS 203), not just numx's own naive reference multiply.
+ * See validation/reference/ntt/README.md for provenance.
+ *
  * @param[in]  a    First polynomial: NUMX_NTT_N coefficients in [0, q-1]. Must not be NULL.
  * @param[in]  b    Second polynomial: NUMX_NTT_N coefficients in [0, q-1]. Must not be NULL.
  * @param[out] out  Product polynomial: NUMX_NTT_N coefficients in [0, q-1]. Must not be NULL.
@@ -116,6 +130,9 @@ numx_status_t numx_ntt_polymul(
  * Applies Barrett reduction to each of the NUMX_NTT_N coefficients, mapping
  * values in [0, 2*q-1] to the canonical range [0, q-1]. Useful after
  * external coefficient arithmetic before passing to numx_ntt_forward.
+ *
+ * Reference: Barrett, CRYPTO 1986. Full citation:
+ * docs/algorithms/ntt.md#references.
  *
  * @param[in,out] f  Array of NUMX_NTT_N coefficients. Must not be NULL.
  *

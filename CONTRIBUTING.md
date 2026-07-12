@@ -48,6 +48,9 @@ and in `tests/test_runner.c` and `benchmarks/bench_runner.c`.
  * Mathematical definition:
  *   result = integral from a to b of f(x) dx
  *
+ * Reference: Author, Title, Venue, Year. Full citation:
+ * docs/algorithms/[module].md#references.
+ *
  * @param[in]  param1  Description, valid range.
  * @param[out] result  Pointer to store result. Must not be NULL.
  *
@@ -68,11 +71,39 @@ numx_status_t numx_function(numx_real_t param1, numx_real_t *result);
 
 ---
 
+## Citing sources
+
+Every function implementing a published algorithm cites that source inline in its
+docstring (short form, per the template above); the full bibliographic entry lives in
+the module's `docs/algorithms/[name].md#references`, not duplicated in the code. This
+applies equally to a function you wrote from a textbook and to a fix contributed by
+someone outside the core team (e.g. a community-submitted correctness or performance
+fix): the docstring should say what it's based on either way. `docs/algorithms/*.md`
+formula sections carry the same `[n]` marker inline, next to the formula, not only in
+a bottom References list, so a reader doesn't have to hunt for which citation backs
+which equation.
+
+Modules with an available external reference implementation or published dataset
+should include a `validation/reference/<module>/` directory: a small generator script
+(any language/tool) that produces a frozen test-vector fixture from that external
+source, checked into `tests/vectors/`, with a README documenting provenance (source,
+pinned commit/version, regeneration steps). This is validation tooling only; it is
+never a build or runtime dependency of the library itself. See
+`validation/reference/ntt/` for the reference instance of this pattern.
+
+---
+
 ## Test file structure
 
 Tests are organized into four levels:
 
-- **L1** — Known-answer tests: verified against analytical truth or a reference implementation.
+- **L1** — Known-answer tests: verified against analytical truth, or a reference
+  implementation. For crypto/security-critical modules, "reference implementation"
+  means an external, independently-citable one (published test vectors, or an
+  established third-party implementation), not code written for this project. An
+  internally-written reference (e.g. a naive O(n^2) implementation checked against an
+  optimized one) is still valid for general numerical modules, but is self-consistency,
+  not independent proof, and is not sufficient on its own for crypto modules.
 - **L2** — Property tests: mathematical invariants that must always hold.
 - **L3** — Edge cases: zero, negative, extremes, near-singular, empty input.
 - **L4** — Error handling: null pointers and invalid args return the correct error code.

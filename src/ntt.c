@@ -428,6 +428,7 @@ static const int16_t priv_basemul[128] = {
 
 /*
  * Barrett reduction mod 3329 for inputs in [0, 2*q^2].
+ * Reference: Barrett, CRYPTO 1986 (docs/algorithms/ntt.md#references [4]).
  *
  * Branchless canonicalization: uses only unsigned arithmetic and a boolean
  * comparison (well-defined in C99), not the reference Kyber technique's

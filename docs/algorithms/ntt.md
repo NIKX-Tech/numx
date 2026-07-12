@@ -74,10 +74,11 @@ $$x^{256} + 1 = \prod_{k=0}^{127} (x^2 - \omega^{2k+1})$$
 
 Each factor $\mathbb{Z}_q[x]/(x^2 - c_k)$ is a degree-2 ring with modulus $c_k = \omega^{2k+1} \bmod q$.
 
-### Forward NTT (Cooley-Tukey)
+### Forward NTT (Cooley-Tukey) [2, 5]
 
 The forward NTT maps $f \in R_q$ to its 128 CRT residues in seven Cooley-Tukey
-butterfly stages. Each butterfly with twiddle factor $\zeta$:
+butterfly stages [5], specialized for negacyclic lattice-based cryptography
+following Longa & Naehrig [2]. Each butterfly with twiddle factor $\zeta$:
 
 $$f[j]       \leftarrow f[j] + \zeta \cdot f[j + \ell] \pmod{q}$$
 $$f[j + \ell] \leftarrow f[j] - \zeta \cdot f[j + \ell] \pmod{q}$$
@@ -85,9 +86,9 @@ $$f[j + \ell] \leftarrow f[j] - \zeta \cdot f[j + \ell] \pmod{q}$$
 where $\ell$ is the current half-group length (128, 64, 32, 16, 8, 4, 2 across stages).
 The output pairs $(f[2i], f[2i+1])$ represent $f \bmod (x^2 - c_i)$ for $i = 0, \ldots, 127$.
 
-### Inverse NTT (Gentleman-Sande)
+### Inverse NTT (Gentleman-Sande) [1, 3]
 
-The inverse NTT uses Gentleman-Sande (decimation-in-frequency) butterflies, processing
+The inverse NTT uses Gentleman-Sande (decimation-in-frequency) butterflies [3], processing
 stages in reverse order ($\ell = 2, 4, \ldots, 128$). Each inverse butterfly:
 
 $$t           \leftarrow f[j]$$
@@ -95,7 +96,8 @@ $$f[j]        \leftarrow t + f[j + \ell] \pmod{q}$$
 $$f[j + \ell] \leftarrow \zeta^{-1} \cdot (t - f[j + \ell]) \pmod{q}$$
 
 After all stages, every coefficient is multiplied by the normalization constant
-$n^{-1} = 128^{-1} \equiv 3303 \pmod{3329}$, recovering the original polynomial.
+$n^{-1} = 128^{-1} \equiv 3303 \pmod{3329}$, recovering the original polynomial,
+following the Kyber specification's inverse-NTT algorithm [1].
 
 **Key invariant:** within each inverse stage, butterfly groups must use the same twiddle
 indices as the corresponding forward stage (FORWARD order within each stage, not
@@ -114,16 +116,17 @@ Because the NTT is a linear map over $\mathbb{Z}_q$, these operations are valid 
 
 Both functions apply Barrett reduction to keep outputs in $[0, q-1]$.
 
-### Pointwise multiplication (basemul)
+### Pointwise multiplication (basemul) [1]
 
 Once both polynomials are in NTT domain, their product is computed in O(n) time via
-128 independent degree-2 ring multiplications. For each pair $i$ with twiddle $c_i$:
+128 independent degree-2 ring multiplications, following the Kyber specification's
+basemul algorithm [1]. For each pair $i$ with twiddle $c_i$:
 
 $$(a_0 + a_1 x)(b_0 + b_1 x) \bmod (x^2 - c_i) = (a_0 b_0 + c_i a_1 b_1) + (a_0 b_1 + a_1 b_0)\, x$$
 
-### Barrett reduction
+### Barrett reduction [4]
 
-All modular multiplications use Barrett reduction to avoid the hardware division
+All modular multiplications use Barrett reduction [4] to avoid the hardware division
 instruction, which is slow or absent on embedded processors:
 
 $$\text{barrett}(a) = a - \left\lfloor \frac{(a \ggg 10) \cdot v}{2^{15}} \right\rfloor \cdot q, \qquad v = 10079$$
@@ -148,6 +151,18 @@ which have always had fixed, data-independent control flow, this implementation 
 known data-dependent branches. Contributed by u/robchroma (r/C_Programming, 2026-07-10)
 and exhaustively verified against `a % q` for all 22,164,483 valid inputs before
 adoption.
+
+### Validation provenance
+
+The known-answer tests in `tests/test_ntt.c` originally checked the fast NTT
+only against a naive O(n^2) reference multiplication written for this
+project: self-consistency, not proof against an independent ground truth.
+`numx_ntt_forward` and `numx_ntt_polymul` are now additionally cross-validated
+bit-for-bit against PQClean's `ml-kem-512` reference implementation (the
+FIPS 203-standardized successor to CRYSTALS-Kyber-512), an external,
+independently-citable implementation not written by this project. See
+`validation/reference/ntt/README.md` for the pinned commit, the Montgomery-
+domain reasoning, and regeneration steps.
 
 ---
 
@@ -214,6 +229,8 @@ $f \bmod (x^2 - c_i)$ for $i = 0, \ldots, 127$. Coefficients in $[0, q-1]$.
    *AFIPS Fall Joint Computing Conf.*, Vol. 29, pp. 563-578, 1966.
 4. Barrett, P. — "Implementing the Rivest Shamir and Adleman Public Key Encryption
    Algorithm on a Standard Digital Signal Processor", *CRYPTO 1986*, LNCS 263, 1987.
+5. Cooley, J. W. & Tukey, J. W. — "An Algorithm for the Machine Calculation of
+   Complex Fourier Series", *Mathematics of Computation*, 19(90), pp. 297-301, 1965.
 
 ---
 
