@@ -12,6 +12,7 @@
 
 #include "unity.h"
 #include "numx/ntt.h"
+#include "vectors/ntt_pqclean_kat.h"
 
 /* q = 3329 */
 #define NTT_Q 3329
@@ -86,6 +87,33 @@ void test_ntt_forward_zero(void)
     TEST_ASSERT_EQUAL(NUMX_OK, numx_ntt_forward(f));
     for (i = 0; i < 256; i++)
         TEST_ASSERT_EQUAL_INT16(0, f[i]);
+}
+
+/* L1 */
+void test_ntt_forward_vs_pqclean_reference(void)
+{
+    /* Cross-validated against PQClean's ml-kem-512 (FIPS 203) reference
+     * implementation, not numx's own code -- see
+     * validation/reference/ntt/README.md for provenance. */
+    static const numx_q15_t *const inputs[5] = {
+        ntt_pqclean_a_0, ntt_pqclean_a_1, ntt_pqclean_a_2,
+        ntt_pqclean_a_3, ntt_pqclean_a_4
+    };
+    static const numx_q15_t *const expected[5] = {
+        ntt_pqclean_ntt_a_0, ntt_pqclean_ntt_a_1, ntt_pqclean_ntt_a_2,
+        ntt_pqclean_ntt_a_3, ntt_pqclean_ntt_a_4
+    };
+    numx_q15_t f[256];
+    int v, i;
+
+    for (v = 0; v < 5; v++)
+    {
+        for (i = 0; i < 256; i++) f[i] = inputs[v][i];
+        TEST_ASSERT_EQUAL(NUMX_OK, numx_ntt_forward(f));
+        for (i = 0; i < 256; i++)
+            TEST_ASSERT_EQUAL_INT16_MESSAGE(expected[v][i], f[i],
+                                             "forward NTT != PQClean reference");
+    }
 }
 
 /* L4 */
@@ -335,6 +363,37 @@ void test_ntt_polymul_random_vs_ref(void)
     }
 }
 
+/* L1 */
+void test_ntt_polymul_vs_pqclean_reference(void)
+{
+    /* Full negacyclic polynomial multiply cross-validated against
+     * PQClean's ml-kem-512 (FIPS 203) reference implementation, not
+     * numx's own naive poly_mul_ref() -- see
+     * validation/reference/ntt/README.md for provenance. */
+    static const numx_q15_t *const inputs_a[5] = {
+        ntt_pqclean_a_0, ntt_pqclean_a_1, ntt_pqclean_a_2,
+        ntt_pqclean_a_3, ntt_pqclean_a_4
+    };
+    static const numx_q15_t *const inputs_b[5] = {
+        ntt_pqclean_b_0, ntt_pqclean_b_1, ntt_pqclean_b_2,
+        ntt_pqclean_b_3, ntt_pqclean_b_4
+    };
+    static const numx_q15_t *const expected[5] = {
+        ntt_pqclean_polymul_0, ntt_pqclean_polymul_1, ntt_pqclean_polymul_2,
+        ntt_pqclean_polymul_3, ntt_pqclean_polymul_4
+    };
+    numx_q15_t out[256];
+    int v, i;
+
+    for (v = 0; v < 5; v++)
+    {
+        TEST_ASSERT_EQUAL(NUMX_OK, numx_ntt_polymul(inputs_a[v], inputs_b[v], out));
+        for (i = 0; i < 256; i++)
+            TEST_ASSERT_EQUAL_INT16_MESSAGE(expected[v][i], out[i],
+                                             "NTT polymul != PQClean reference");
+    }
+}
+
 /* L4 */
 void test_ntt_polymul_null(void)
 {
@@ -485,6 +544,7 @@ void numx_test_ntt(void)
     /* Forward NTT */
     RUN_TEST(test_ntt_forward_delta);
     RUN_TEST(test_ntt_forward_zero);
+    RUN_TEST(test_ntt_forward_vs_pqclean_reference);
     RUN_TEST(test_ntt_forward_null);
 
     /* Inverse NTT */
@@ -507,6 +567,7 @@ void numx_test_ntt(void)
     RUN_TEST(test_ntt_polymul_commutativity);
     RUN_TEST(test_ntt_polymul_known_linear);
     RUN_TEST(test_ntt_polymul_random_vs_ref);
+    RUN_TEST(test_ntt_polymul_vs_pqclean_reference);
     RUN_TEST(test_ntt_polymul_null);
 
     /* Reduce */
