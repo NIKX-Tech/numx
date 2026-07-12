@@ -1,0 +1,5 @@
+# Self-contained cholesky_decompose test/bench harness for ESP32-S3.
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
+
+# UART console at a common baud rate for capturing test/bench output.
+CONFIG_ESP_CONSOLE_UART_BAUDRATE=115200
